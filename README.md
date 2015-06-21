@@ -10,9 +10,11 @@
 
 4.  git commit -m "chú thích commit gì"
 
-5.  git remote add origin tên_repositories_trên_github //vd:git@github.com:tên_user/tên_repositories.git
+5.  git push -u origin master
 
-6.  git push -u origin master
+
+//them một cái remote,lần đầu thì đặt tên là origin (thực hiện sau bước 4)
+    git remote add origin tên_repositories_trên_github //vd:git@github.com:tên_user/tên_repositories.git
 
 //clone:
 
