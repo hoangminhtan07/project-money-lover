@@ -81,8 +81,8 @@ CREATE TABLE IF NOT EXISTS `wallet` (
 -- Dumping data for table `wallet`
 --
 
-INSERT INTO `wallet` (`wallet_id`, `wallet_name`, `acc_id`, `total_money`, `created_at`) VALUES
-(1, NULL, NULL, NULL, NULL);
+--INSERT INTO `wallet` (`wallet_id`, `wallet_name`, `acc_id`, `total_money`, `created_at`) VALUES
+--(1, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -112,13 +112,7 @@ ALTER TABLE `use_money`
 ALTER TABLE `wallet`
  ADD PRIMARY KEY (`wallet_id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `account`
---
 ALTER TABLE `account`
 MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT;
 --
@@ -135,7 +129,7 @@ MODIFY `use_money_id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `wallet`
 --
 ALTER TABLE `wallet`
-MODIFY `wallet_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `wallet_id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
