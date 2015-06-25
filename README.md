@@ -1,4 +1,4 @@
-# readme first
+﻿# readme first
 0. git init //tại folder cần làm việc với git
 
 1.  git config --global user.name "your user name" //khai báo kết nối
@@ -31,3 +31,12 @@ Lệnh này sẽ tự động lấy toàn bộ dữ liệu từ remote repositor
 //git fetch:
 
 Lệnh này sẽ lấy toàn bộ dữ liệu từ remote repository nhưng sẽ cho phép bạn gộp thủ công vào một branch nào đó trên thư mục Git ở máy tính.
+
+
+Remove directory from git and local: xóa cả trên git và local (phải đồng bộ git và local trước khi xóa)
+
+git rm -r tên_file_or_folder_cần_xóa
+git commit -m "xxx"
+git push -u origin master
+
+
