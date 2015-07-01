@@ -1,0 +1,2 @@
+1435610056
+a:3:{i:0;b:0;s:4:"name";a:5:{s:32:"53e4b9b9e5a1d230e672e1838361a169";s:12:"`moneylover`";s:32:"47eb7bb09414c64f779510914712b6ee";s:7:"`count`";s:32:"f94a437fb7858e092079378f93ef2c71";s:7:"`users`";s:32:"84aed5ca7734df237971a8964bd0217a";s:11:"`User`.`id`";s:32:"eb9b37fa6fe3e5c49f921ddcd721b306";s:6:"`User`";}s:6:"fields";a:1:{s:32:"6610a69c09d0923ff4b0a7f152f874c1";a:1:{i:0;s:19:"COUNT(*) AS `count`";}}}

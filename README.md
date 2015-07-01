@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # CakePHP
+=======
+﻿# readme first
+0. git init //tại folder cần làm việc với git
+>>>>>>> 24c5aefc28933e1ccdf459e3acbcefeba8a04727
 
 [![Latest Stable Version](https://poser.pugx.org/cakephp/cakephp/v/stable.svg)](https://packagist.org/packages/cakephp/cakephp)
 [![License](https://poser.pugx.org/cakephp/cakephp/license.svg)](https://packagist.org/packages/cakephp/cakephp)
@@ -31,6 +36,7 @@ Our primary goal is to provide a structured framework that enables PHP users at 
 
 [Cake Software Foundation](http://cakefoundation.org) - Promoting development related to CakePHP
 
+<<<<<<< HEAD
 
 ## Get Support!
 
@@ -48,3 +54,15 @@ Our primary goal is to provide a structured framework that enables PHP users at 
 [CONTRIBUTING.md](CONTRIBUTING.md) - Quick pointers for contributing to the CakePHP project
 
 [CookBook "Contributing" Section (2.x)](http://book.cakephp.org/2.0/en/contributing.html) [(3.0)](http://book.cakephp.org/3.0/en/contributing.html) - Version-specific details about contributing to the project
+=======
+Lệnh này sẽ lấy toàn bộ dữ liệu từ remote repository nhưng sẽ cho phép bạn gộp thủ công vào một branch nào đó trên thư mục Git ở máy tính.
+
+
+Remove directory from git and local: xóa cả trên git và local (phải đồng bộ git và local trước khi xóa)
+
+git rm -r tên_file_or_folder_cần_xóa
+git commit -m "xxx"
+git push -u origin master
+
+
+>>>>>>> 24c5aefc28933e1ccdf459e3acbcefeba8a04727

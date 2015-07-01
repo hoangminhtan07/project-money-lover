@@ -1,0 +1,324 @@
+2015-06-29 19:05:29 Error: [MissingActionException] Action UsersController::login() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'login',
+)
+Request URL: /money/users/login
+Stack Trace:
+#0 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-06-29 19:09:39 Error: [MissingActionException] Action UsersController::login() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'login',
+)
+Request URL: /money/users/login
+Stack Trace:
+#0 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-06-29 19:10:01 Error: [MissingActionException] Action UsersController::login() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'login',
+)
+Request URL: /money/users/login
+Stack Trace:
+#0 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-06-29 19:21:29 Error: [MissingActionException] Action UsersController::login() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'login',
+)
+Request URL: /money/users/login
+Stack Trace:
+#0 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-06-29 20:10:03 Error: [PDOException] SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'invalidation' at line 1
+Request URL: /money/users/add
+Stack Trace:
+#0 C:\xampp\htdocs\money\lib\Cake\Model\Datasource\DboSource.php(461): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\money\lib\Cake\Model\Datasource\DboSource.php(427): DboSource->_execute('invalidation', Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Model\Datasource\DboSource.php(669): DboSource->execute('invalidation', Array, Array)
+#3 C:\xampp\htdocs\money\lib\Cake\Model\Datasource\DboSource.php(612): DboSource->fetchAll('invalidation', Array, Array)
+#4 C:\xampp\htdocs\money\lib\Cake\Model\Model.php(827): DboSource->query('invalidation', Array, Object(User))
+#5 C:\xampp\htdocs\money\app\Model\User.php(45): Model->__call('invalidation', Array)
+#6 C:\xampp\htdocs\money\app\Model\User.php(45): User->invalidation('password_confir...', 'Your passwords ...')
+#7 [internal function]: User->matchPasswords(Array, Array)
+#8 C:\xampp\htdocs\money\lib\Cake\Model\Validator\CakeValidationRule.php(275): call_user_func_array(Array, Array)
+#9 C:\xampp\htdocs\money\lib\Cake\Model\Validator\CakeValidationSet.php(135): CakeValidationRule->process('password_confir...', Array, Array)
+#10 C:\xampp\htdocs\money\lib\Cake\Model\ModelValidator.php(268): CakeValidationSet->validate(Array, false)
+#11 C:\xampp\htdocs\money\lib\Cake\Model\ModelValidator.php(99): ModelValidator->errors(Array)
+#12 C:\xampp\htdocs\money\lib\Cake\Model\Model.php(3460): ModelValidator->validates(Array)
+#13 C:\xampp\htdocs\money\lib\Cake\Model\Model.php(1829): Model->validates(Array)
+#14 C:\xampp\htdocs\money\lib\Cake\Model\Model.php(1751): Model->_doSave(Array, Array)
+#15 C:\xampp\htdocs\money\app\Controller\UsersController.php(42): Model->save(Array)
+#16 [internal function]: UsersController->add()
+#17 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#18 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#19 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#20 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#21 {main}
+2015-06-29 20:31:58 Error: Fatal Error (1): Function name must be a string in [C:\xampp\htdocs\money\app\View\Users\index.ctp, line 25]
+2015-06-29 20:31:58 Error: [FatalErrorException] Function name must be a string
+Request URL: /money/users
+Stack Trace:
+#0 C:\xampp\htdocs\money\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(1, 'Function name m...', 'C:\\xampp\\htdocs...', 25)
+#1 [internal function]: ErrorHandler::handleError(1, 'Function name m...', 'C:\\xampp\\htdocs...', 25, Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 1, 'Function name m...', 'C:\\xampp\\htdocs...', 25, Array)
+#3 C:\xampp\htdocs\money\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2015-06-29 20:35:08 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/1
+Stack Trace:
+#0 [internal function]: UsersController->view('1')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 20:35:11 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/2
+Stack Trace:
+#0 [internal function]: UsersController->view('2')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 20:35:57 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/1
+Stack Trace:
+#0 [internal function]: UsersController->view('1')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 20:38:48 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/1
+Stack Trace:
+#0 [internal function]: UsersController->view('1')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 20:47:04 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/3
+Stack Trace:
+#0 [internal function]: UsersController->view('3')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 20:47:35 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/4
+Stack Trace:
+#0 [internal function]: UsersController->view('4')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 20:47:37 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/4
+Stack Trace:
+#0 [internal function]: UsersController->view('4')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 21:12:05 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 21:14:29 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 21:17:57 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 21:25:11 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 21:35:52 Error: Fatal Error (4): syntax error, unexpected 'public' (T_PUBLIC) in [C:\xampp\htdocs\money\app\Controller\UsersController.php, line 2]
+2015-06-29 21:35:52 Error: [FatalErrorException] syntax error, unexpected 'public' (T_PUBLIC)
+Request URL: /money/users/view/5
+Stack Trace:
+#0 C:\xampp\htdocs\money\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(4, 'syntax error, u...', 'C:\\xampp\\htdocs...', 2)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', 'C:\\xampp\\htdocs...', 2, Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', 'C:\\xampp\\htdocs...', 2, Array)
+#3 C:\xampp\htdocs\money\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2015-06-29 21:36:41 Error: Fatal Error (4): syntax error, unexpected 'public' (T_PUBLIC) in [C:\xampp\htdocs\money\app\Controller\UsersController.php, line 2]
+2015-06-29 21:36:41 Error: [FatalErrorException] syntax error, unexpected 'public' (T_PUBLIC)
+Request URL: /money/users/view/5
+Stack Trace:
+#0 C:\xampp\htdocs\money\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(4, 'syntax error, u...', 'C:\\xampp\\htdocs...', 2)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', 'C:\\xampp\\htdocs...', 2, Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', 'C:\\xampp\\htdocs...', 2, Array)
+#3 C:\xampp\htdocs\money\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2015-06-29 21:37:28 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 21:37:52 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 21:37:58 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 21:44:33 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 22:11:08 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 22:11:17 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 22:11:59 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 22:12:03 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 22:12:11 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 22:15:43 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 22:15:47 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 22:30:25 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 22:33:52 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2015-06-29 22:34:10 Error: [NotFoundException] Invalid user
+Request URL: /money/users/view/5
+Stack Trace:
+#0 [internal function]: UsersController->view('5')
+#1 C:\xampp\htdocs\money\lib\Cake\Controller\Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#2 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
