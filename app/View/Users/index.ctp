@@ -23,7 +23,7 @@
             <?php echo $this->Html->link('View',array('action'=>'view',$user['User']['id'])); ?>
             <?php if($current_user['id']==$user['User']['id']): ?>
                 <?php echo $this->Html->link('Edit',array('action'=>'edit',$user['User']['id'])); ?>
-                <?php echo $this->Html->link('Delete',array('action'=>'delete',$user['User']['id']),null,sprintf('Are you suare?')); ?>
+                <?php echo $this->Form->postlink('Delete',array('action'=>'delete',$user['User']['id']),null,array('confirm'=>'Are you sure?')); ?>
             <?php endif; ?>
         </td>
     </tr>

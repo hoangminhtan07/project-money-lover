@@ -1,4 +1,5 @@
 <?php
+ App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 
 class User extends AppModel {
     public $name = 'User';
@@ -24,7 +25,7 @@ class User extends AppModel {
             'Not empty' => array(
                 'rule' => 'notBlank',
                 'message' => 'Please enter your password'
-            ),
+            )
         ),
         'password_confirmation' => array(
             'Not empty' => array(
@@ -35,7 +36,6 @@ class User extends AppModel {
                 'rule' => 'matchPasswords',
                 'message' => 'Your passwords do not match'
             )
-            
         ),
         'current_password'=>array(
             'Not empty' => array(
@@ -66,28 +66,32 @@ class User extends AppModel {
     );
  
     public function checkCurrentPassword($data){
-        return true;
+       // $this->data['User']['current_password']= AuthComponent::password($this->data['User']['current_password']);
+        //$user=$this->User->findById($this->Auth->user('id'));
+       // if($this->data['User']['current_password']==$user['User']['password']){
+            return true;
+       // } else {
+       //     return false;
+       // }
     }
 
     public function passwordsMatch($data){
-        if($this->data['User']['new_password']==$this->data['User']['retype_password']){
+        if($this->data['User']['password']==$this->data['User']['retype_password']){
             return true;
         }
-        $this->invalidate('retype_password','Your passwords do not match');
         return false;
     }
 
     public function matchPasswords($data){
-        if($data['password']==$this->data['User']['password_confirmation']){
+        if($this->data['User']['password']==$this->data['User']['password_confirmation']){
             return true;
         }
-        $this->invalidate('password_confirmaition','Your passwords do not match');
         return false;
     }
     
     public function beforeSave($options=array()) {
         if(isset($this->data['User']['password'])){
-            $this->data['User']['password']=  AuthComponent::password($this->data['User']['password']);
+            $this->data['User']['password']=  AuthComponent::password($this->data['User']['password']); //hash password before save
         }
         return true;
     }
