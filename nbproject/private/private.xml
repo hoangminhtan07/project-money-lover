@@ -3,15 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/projects/project-money-lover/app/Model/User.php</file>
-            <file>file:/D:/projects/project-money-lover/app/View/Users/view.ctp</file>
+            <file>file:/D:/projects/project-money-lover/app/View/Wallets/index.ctp</file>
             <file>file:/D:/projects/project-money-lover/app/View/Users/edit.ctp</file>
-            <file>file:/D:/projects/project-money-lover/app/Controller/UsersController.php</file>
-            <file>file:/D:/projects/project-money-lover/app/Controller/AppController.php</file>
+            <file>file:/D:/projects/project-money-lover/app/View/Wallets/view.ctp</file>
             <file>file:/D:/projects/project-money-lover/app/View/Users/change_password.ctp</file>
             <file>file:/D:/projects/project-money-lover/app/View/Users/add.ctp</file>
             <file>file:/D:/projects/project-money-lover/app/View/Users/index.ctp</file>
             <file>file:/D:/projects/project-money-lover/app/View/Users/login.ctp</file>
+            <file>file:/D:/projects/project-money-lover/app/Model/User.php</file>
+            <file>file:/D:/projects/project-money-lover/app/Controller/UsersController.php</file>
+            <file>file:/D:/projects/project-money-lover/app/Controller/AppController.php</file>
+            <file>file:/D:/projects/project-money-lover/app/Model/Transaction.php</file>
+            <file>file:/D:/projects/project-money-lover/app/Model/Category.php</file>
+            <file>file:/D:/projects/project-money-lover/app/Model/Wallet.php</file>
+            <file>file:/D:/projects/project-money-lover/app/Controller/WalletsController.php</file>
         </group>
     </open-files>
 </project-private>

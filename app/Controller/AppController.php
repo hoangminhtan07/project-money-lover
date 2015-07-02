@@ -40,21 +40,15 @@ class AppController extends Controller {
             ),
             'logoutRedirect' => array(
                 'controller' => 'users',
-                'action' => 'index'
+                'action' => 'login'
             ),
-            'authError'=>"You can't access that page",
-            'authorize'=>array('Controller')
         )
     );
-
-    public function isAuthorized($user) {
-        return true;
-    }
+    
     public function beforeFilter() {
-        $this->Auth->allow('index','view');
+        $this->Auth->allow('index');
         $this->set('logged_in',$this->Auth->loggedIn());
-        $this->set('current_user',$this->Auth->user());
-        $this->set('current_user_password',$this->Auth->user('password'));
-    }
+        $this->set('current_user',$this->Auth->user()); //use: $current_user['id']...
+    }  
     
 }
