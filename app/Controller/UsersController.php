@@ -9,7 +9,7 @@ class UsersController extends AppController {
         $id = $this->Auth->user('id');
         $this->set('user', $this->User->findById($id));
     }
-
+    
     public function login() {
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
@@ -43,17 +43,16 @@ class UsersController extends AppController {
 
     function change_password() {
         $id = $this->Auth->user('id');
-        $user = $this->User->findById($this->Auth->user('id'));
-        if (!empty($this->data['User'])) {
-            $data = $this->data['User'];
-            if ($this->User->save($data, $id)) {
-                $this->Session->setFlash('Password has been change.');
+        if ($this->request->is(array('post', 'put'))) {
+            $data = $this->request->data['User'];
+            if ($this->User->edit($data, $id)) {
+                $this->Session->setFlash('The password has been changed.');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Password could not be change.');
+                $this->Session->setFlash('The password cound not be change. Please try again.');
             }
         } else {
-            $this->data = $this->User->findById($this->Auth->user('id'));
+            $this->request->data = $this->User->read();
         }
     }
 

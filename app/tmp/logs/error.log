@@ -322,3 +322,224 @@ Stack Trace:
 #3 C:\xampp\htdocs\money\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
 #4 C:\xampp\htdocs\money\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
 #5 {main}
+2015-07-02 18:45:42 Error: [MissingActionException] Action UsersController::Wallets() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'Wallets',
+)
+Request URL: /project-money-lover/users/Wallets/index
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 18:53:20 Error: [MissingActionException] Action UsersController::Wallets() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'Wallets',
+)
+Request URL: /project-money-lover/users/Wallets/index
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 18:53:30 Error: [MissingActionException] Action UsersController::Wallets() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'Wallets',
+)
+Request URL: /project-money-lover/users/Wallets/index
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 18:53:39 Error: [MissingActionException] Action UsersController::Wallets() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'Wallets',
+)
+Request URL: /project-money-lover/users/Wallets/index
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 18:58:30 Error: Fatal Error (4): syntax error, unexpected ';' in [C:\xampp\htdocs\project-money-lover\app\View\Layouts\default.ctp, line 48]
+2015-07-02 18:58:30 Error: [FatalErrorException] syntax error, unexpected ';'
+Request URL: /project-money-lover/
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(4, 'syntax error, u...', 'C:\\xampp\\htdocs...', 48)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', 'C:\\xampp\\htdocs...', 48, Array)
+#2 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', 'C:\\xampp\\htdocs...', 48, Array)
+#3 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2015-07-02 19:22:54 Error: [MissingActionException] Action UsersController::homepage() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'homepage',
+)
+Request URL: /project-money-lover/
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 19:22:54 Error: [MissingActionException] Action UsersController::homepage() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'homepage',
+)
+Request URL: /project-money-lover/
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 19:24:21 Error: [MissingActionException] Action UsersController::login() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'login',
+)
+Request URL: /project-money-lover/users/login
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 19:41:40 Error: [MissingControllerException] Controller class HomepageController could not be found.
+Exception Attributes: array (
+  'class' => 'HomepageController',
+  'plugin' => NULL,
+)
+Request URL: /project-money-lover/homepage
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2015-07-02 20:09:05 Error: Fatal Error (1): Call to a member function check() on null in [C:\xampp\htdocs\project-money-lover\app\Model\User.php, line 68]
+2015-07-02 20:09:05 Error: [FatalErrorException] Call to a member function check() on null
+Request URL: /project-money-lover/users/change_password
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(1, 'Call to a membe...', 'C:\\xampp\\htdocs...', 68)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', 'C:\\xampp\\htdocs...', 68, Array)
+#2 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', 'C:\\xampp\\htdocs...', 68, Array)
+#3 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2015-07-02 20:12:40 Error: Fatal Error (1): Call to a member function check() on null in [C:\xampp\htdocs\project-money-lover\app\Model\User.php, line 68]
+2015-07-02 20:12:40 Error: [FatalErrorException] Call to a member function check() on null
+Request URL: /project-money-lover/users/change_password
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(1, 'Call to a membe...', 'C:\\xampp\\htdocs...', 68)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', 'C:\\xampp\\htdocs...', 68, Array)
+#2 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', 'C:\\xampp\\htdocs...', 68, Array)
+#3 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2015-07-02 20:28:26 Error: Fatal Error (1): Call to a member function check() on null in [C:\xampp\htdocs\project-money-lover\app\Model\User.php, line 68]
+2015-07-02 20:28:26 Error: [FatalErrorException] Call to a member function check() on null
+Request URL: /project-money-lover/users/change_password
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(1, 'Call to a membe...', 'C:\\xampp\\htdocs...', 68)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', 'C:\\xampp\\htdocs...', 68, Array)
+#2 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', 'C:\\xampp\\htdocs...', 68, Array)
+#3 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2015-07-02 20:36:57 Error: [MissingActionException] Action UsersController::Wallets() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'Wallets',
+)
+Request URL: /project-money-lover/users/Wallets/index
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 20:37:23 Error: [MissingActionException] Action UsersController::Wallets() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'Wallets',
+)
+Request URL: /project-money-lover/users/Wallets/index
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 20:38:25 Error: [MissingActionException] Action UsersController::Wallets() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'Wallets',
+)
+Request URL: /project-money-lover/users/Wallets/index
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 20:41:45 Error: [MissingActionException] Action UsersController::Wallets() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'Wallets',
+)
+Request URL: /project-money-lover/users/Wallets/index
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 20:41:49 Error: [MissingActionException] Action UsersController::Wallets() could not be found.
+Exception Attributes: array (
+  'controller' => 'UsersController',
+  'action' => 'Wallets',
+)
+Request URL: /project-money-lover/users/Wallets/index
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(193): Controller->invokeAction(Object(CakeRequest))
+#1 C:\xampp\htdocs\project-money-lover\lib\Cake\Routing\Dispatcher.php(167): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#2 C:\xampp\htdocs\project-money-lover\app\webroot\index.php(118): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2015-07-02 20:45:31 Error: Fatal Error (64): Cannot redeclare Transaction::$belongTo in [C:\xampp\htdocs\project-money-lover\app\Model\Transaction.php, line 5]
+2015-07-02 20:45:31 Error: [FatalErrorException] Cannot redeclare Transaction::$belongTo
+Request URL: /project-money-lover/wallets/view
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5)
+#1 [internal function]: ErrorHandler::handleError(64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5, Array)
+#2 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5, Array)
+#3 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2015-07-02 20:47:47 Error: Fatal Error (64): Cannot redeclare Transaction::$belongTo in [C:\xampp\htdocs\project-money-lover\app\Model\Transaction.php, line 5]
+2015-07-02 20:47:47 Error: [FatalErrorException] Cannot redeclare Transaction::$belongTo
+Request URL: /project-money-lover/wallets/view
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5)
+#1 [internal function]: ErrorHandler::handleError(64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5, Array)
+#2 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5, Array)
+#3 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2015-07-02 20:49:48 Error: Fatal Error (64): Cannot redeclare Transaction::$belongTo in [C:\xampp\htdocs\project-money-lover\app\Model\Transaction.php, line 5]
+2015-07-02 20:49:48 Error: [FatalErrorException] Cannot redeclare Transaction::$belongTo
+Request URL: /project-money-lover/wallets/view
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5)
+#1 [internal function]: ErrorHandler::handleError(64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5, Array)
+#2 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5, Array)
+#3 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2015-07-02 20:49:59 Error: Fatal Error (64): Cannot redeclare Transaction::$belongTo in [C:\xampp\htdocs\project-money-lover\app\Model\Transaction.php, line 5]
+2015-07-02 20:49:59 Error: [FatalErrorException] Cannot redeclare Transaction::$belongTo
+Request URL: /project-money-lover/wallets/view
+Stack Trace:
+#0 C:\xampp\htdocs\project-money-lover\lib\Cake\Error\ErrorHandler.php(213): ErrorHandler::handleFatalError(64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5)
+#1 [internal function]: ErrorHandler::handleError(64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5, Array)
+#2 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(933): call_user_func('ErrorHandler::h...', 64, 'Cannot redeclar...', 'C:\\xampp\\htdocs...', 5, Array)
+#3 C:\xampp\htdocs\project-money-lover\lib\Cake\Core\App.php(906): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}

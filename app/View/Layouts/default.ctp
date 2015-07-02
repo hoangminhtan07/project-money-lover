@@ -45,6 +45,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <?php if($logged_in): ?>
                             Welcome <?php echo $current_user['username']; ?> <?php echo $this->Html->link('Logout',array('controller'=>'users','action'=>'logout')); ?>
                         <?php else: ?>
+                            <?php echo $this->Html->link('Register',array('controller'=>'users','action'=>'add')); ?>
+                            <?php echo ' '?>
                             <?php echo $this->Html->link('Login',array('controller'=>'users','action'=>'login')); ?>
                         <?php endif; ?>
                     </div>

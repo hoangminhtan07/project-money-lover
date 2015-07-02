@@ -7,9 +7,9 @@ class WalletsController extends AppController{
     }
     
     public function view(){
-        $sql=array('Conditions'=>array(User.id=Wallet.user_id);
-            $current_user['id']==$this
-        ));
+        $sql=array('Conditions'=>array('User.id'=>'Wallet.user_id'));
+        
+        
         $this->set('wallets',$this->Wallet->find('all',$sql));
     }
 
