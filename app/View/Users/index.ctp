@@ -23,10 +23,10 @@
     <div class="actions">
         <h3>Actions</h3>
         <ul>
-            <li><?php echo $this->Html->link('Wallet', array('controller' => 'wallets', 'action' => 'index','full_base' => true)); ?></li>
+            <li><?php echo $this->Html->link('Wallet', array('controller' => 'wallets', 'action' => 'index', 'full_base' => true)); ?></li>
             <li><?php echo $this->Html->link('New User', array('action' => 'add')); ?></li>
         </ul>
     </div>
 <?php else: ?>
-<h3>Welcome to Project Money Lover</h3>
+    <h3>Welcome to Project Money Lover</h3>
 <?php endif; ?>

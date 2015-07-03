@@ -1,22 +1,26 @@
 <?php
 
-class WalletsController extends AppController {
+class WalletsController extends AppController
+{
 
-    public function index() {
+    public function index()
+    {
         
     }
 
-    public function view() {
-        $id = $this->Auth->user('id');
-        $data=$this->Wallet->view($id);
-        $this->set('wallets',$data );
+    public function view()
+    {
+        $id   = $this->Auth->user('id');
+        $data = $this->Wallet->view($id);
+        $this->set('wallets', $data);
     }
 
-    public function add() {
+    public function add()
+    {
         if ($this->request->is('post')) {
             $data = $this->request->data['Wallet'];
-            $idu = $this->Auth->user('id');
-            if ($this->Wallet->add($data,$idu)) {
+            $idu  = $this->Auth->user('id');
+            if ($this->Wallet->add($data, $idu)) {
                 $this->Session->setFlash('Wallet has been saved.');
                 $this->redirect(array('action' => 'view'));
             } else {
@@ -25,7 +29,8 @@ class WalletsController extends AppController {
         }
     }
 
-    public function delete() {
+    public function delete()
+    {
         if ($this->request->is('get')) {
             throw new MethodNotAllowedException();
         }
@@ -38,5 +43,22 @@ class WalletsController extends AppController {
         }
         $this->redirect(array('action' => 'index'));
     }
-    
+
+    public function edit($idw = 0)
+    {
+        $idu = $this->Auth->user('id');
+        if ($this->checkUserWallet($idu, $idw)) {
+            if ($this->request->is(array('post', 'put'))) {
+                $data = $this->request->data['Wallet'];
+                if ($this->Wallet->edit($data)) {
+                    $this->Session->setFlash('Wallet has been saved.');
+                    $this->redirect(array('action' => 'view'));
+                }
+            }
+        } else {
+            $this->Session->setFlash('You must not access.');
+            $this->redirect(array('action' => 'view'));
+        }
+    }
+
 }

@@ -20,9 +20,9 @@
                 <td><?php echo $wallet['Wallet']['balance']; ?>&nbsp;</td>
                 <td><?php echo $wallet['Wallet']['created']; ?>&nbsp;</td>
                 <td class="actions">
-                    <?php echo $this->Html->link('Edit', array('controller'=>'wallets','action' => 'edit')); ?>
-                    <?php echo $this->Form->postlink('Delete', array('controller'=>'wallets','action' => 'delete'), array('confirm' => 'Are you sure?')); ?>
-                    <?php echo $this->Html->link('Set Current',array('controller'=>'wallets','action'=>'set_current')); ?>
+                    <?php echo $this->Html->link('Edit', array('controller' => 'wallets', 'action' => 'edit', $wallet['Wallet']['id'])); ?>
+                    <?php echo $this->Form->postlink('Delete', array('controller' => 'wallets', 'action' => 'delete', $wallet['Waleet']['id']), array('confirm' => 'Are you sure?')); ?>
+                    <?php echo $this->Html->link('Set Current', array('controller' => 'wallets', 'action' => 'set_current', $wallet['Wallet']['id F'])); ?>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -31,7 +31,7 @@
 <div class="actions">
     <h3>Actions</h3>
     <ul>
-        <li><?php echo $this->Html->link('New Wallet', array('controller'=>'wallets','action' => 'add','full_base' => true)); ?></li>
-        <li><?php echo $this->Html->link('Back',array('controller'=>'wallets','action'=>'index','full_base' => true)); ?></li>
+        <li><?php echo $this->Html->link('New Wallet', array('controller' => 'wallets', 'action' => 'add', 'full_base' => true)); ?></li>
+        <li><?php echo $this->Html->link('Back', array('controller' => 'wallets', 'action' => 'index', 'full_base' => true)); ?></li>
     </ul>
 </div>

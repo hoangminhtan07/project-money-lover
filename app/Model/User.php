@@ -1,47 +1,48 @@
 <?php
 
-class User extends AppModel {
+class User extends AppModel
+{
 
-    public $name = 'User';
+    public $name         = 'User';
     public $displayField = 'name';
-    public $hasMany = array(
-        'Wallet' => array(
-            'className' => 'Wallet',
+    public $hasMany      = array(
+        'Wallet'   => array(
+            'className'  => 'Wallet',
             'foreignKey' => 'user_id',
-            'dependent' => 'true'
+            'dependent'  => 'true'
         ),
         'Category' => array(
-            'className' => 'Category',
+            'className'  => 'Category',
             'foreignKey' => 'user_id',
-            'dependent' => 'true',
+            'dependent'  => 'true',
         )
     );
-    public $validate = array(
-        'username' => array(
+    public $validate     = array(
+        'username'         => array(
             'length' => array(
-                'rule' => array('between', 5, 15),
+                'rule'    => array('between', 5, 15),
                 'message' => 'The username must be between 5 and 15 characters.'
             ),
             'unique' => array(
-                'rule' => 'isUnique',
+                'rule'    => 'isUnique',
                 'message' => 'That username already been taken.'
             ),
         ),
-        'email' => array(
+        'email'            => array(
             'validEmail' => array(
-                'rule' => array('email'),
+                'rule'    => array('email'),
                 'message' => 'Please enter a valid email dress'
             )
         ),
-        'password' => array(
+        'password'         => array(
             'notEmpty' => array(
-                'rule' => 'notBlank',
+                'rule'    => 'notBlank',
                 'message' => 'Please enter your password'
             )
         ),
         'current_password' => array(
             'notEmpty' => array(
-                'rule' => 'notBlank',
+                'rule'    => 'notBlank',
                 'message' => 'Please enter your password'
             ),
         /* 'valid' => array(
@@ -49,13 +50,13 @@ class User extends AppModel {
           'message' => 'Current password wrong'
           ) */
         ),
-        'retype_password' => array(
-            'notEmpty' => array(
-                'rule' => 'notBlank',
+        'retype_password'  => array(
+            'notEmpty'  => array(
+                'rule'    => 'notBlank',
                 'message' => 'Please retype your password'
             ),
             'matchPass' => array(
-                'rule' => 'passwordsMatch',
+                'rule'    => 'passwordsMatch',
                 'message' => 'password do not match'
             )
         )
@@ -69,21 +70,24 @@ class User extends AppModel {
       }
       } */
 
-    public function passwordsMatch($data) {
+    public function passwordsMatch($data)
+    {
         if ($this->data['User']['password'] == $this->data['User']['retype_password']) {
             return true;
         }
         return false;
     }
 
-    public function beforeSave($options = array()) {
+    public function beforeSave($options = array())
+    {
         if (isset($this->data['User']['password'])) {
             $this->data['User']['password'] = AuthComponent::password($this->data['User']['password']); //hash password before save
         }
         return true;
     }
 
-    public function add($data = null) {
+    public function add($data = null)
+    {
         $this->create();
         if ($this->save($data)) {
             return ($this->save($data));
@@ -92,7 +96,8 @@ class User extends AppModel {
         }
     }
 
-    public function edit($data = null, $id = 0) {
+    public function edit($data = null, $id = 0)
+    {
         $this->id = $id;
         if ($this->save($data)) {
             return ($this->save($data));

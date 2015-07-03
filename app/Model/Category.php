@@ -1,12 +1,16 @@
 <?php
-class Category extends AppModel{
-    public $name = 'Category';
+
+class Category extends AppModel
+{
+
+    public $name      = 'Category';
     public $belongsTo = 'User';
-    public $hasMany = array(
+    public $hasMany   = array(
         'Transaction' => array(
-            'name' => 'Transaction',
+            'name'       => 'Transaction',
             'foreignKey' => 'category_id',
-            'dependent' => 'true',
+            'dependent'  => 'true',
         )
     );
+
 }

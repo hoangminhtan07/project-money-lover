@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application level Controller
  *
@@ -18,7 +19,6 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 App::uses('Controller', 'Controller');
 
 /**
@@ -30,25 +30,28 @@ App::uses('Controller', 'Controller');
  * @package		app.Controller
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
-class AppController extends Controller {
-        public $components = array(
+class AppController extends Controller
+{
+
+    public $components = array(
         'Session',
         'Auth' => array(
-            'loginRedirect' => array(   //redirect apter click login button
+            'loginRedirect'  => array(//redirect apter click login button
                 'controller' => 'users',
-                'action' => 'index'
+                'action'     => 'index'
             ),
             'logoutRedirect' => array(
                 'controller' => 'users',
-                'action' => 'index'
+                'action'     => 'index'
             ),
         )
     );
-    
-    public function beforeFilter() {
+
+    public function beforeFilter()
+    {
         $this->Auth->allow('index');
-        $this->set('logged_in',$this->Auth->loggedIn());
-        $this->set('current_user',$this->Auth->user()); //use: $current_user['id']...
-    }  
-    
+        $this->set('logged_in', $this->Auth->loggedIn());
+        $this->set('current_user', $this->Auth->user()); //use: $current_user['id']...
+    }
+
 }

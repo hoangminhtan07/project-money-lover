@@ -12,6 +12,6 @@
 <div class="actions">
     <h3>Actions</h3>
     <ul>
-        <li><?php echo $this->Html->link('Back',array('controller'=>'wallets','action'=>'view')); ?></li>
+        <li><?php echo $this->Html->link('Back', array('controller' => 'wallets', 'action' => 'view')); ?></li>
     </ul>
 </div>

@@ -1,32 +1,34 @@
 <?php
 
-class Wallet extends AppModel {
+class Wallet extends AppModel
+{
 
-    public $name = 'Wallet';
+    public $name      = 'Wallet';
     public $belongsTo = 'User';
-    public $hasMany = array(
+    public $hasMany   = array(
         'Transaction' => array(
-            'name' => 'Transaction',
+            'name'       => 'Transaction',
             'foreignKey' => 'wallet_id',
-            'dependent' => 'true',
+            'dependent'  => 'true',
         )
     );
-    public $validate = array(
-        'name' => array(
-            'rule' => 'notBlank',
+    public $validate  = array(
+        'name'    => array(
+            'rule'    => 'notBlank',
             'message' => 'Please enter wallet name',
         ),
         'balance' => array(
             'integer' => array(
-                'rule' => 'numeric',
+                'rule'    => 'numeric',
                 'message' => 'Integer only.'
             )
         )
     );
 
-    public function add($data = null,$idu=0) {
+    public function add($data = null, $idu = 0)
+    {
         $this->create();
-        $this->saveField('user_id',$idu);
+        $this->saveField('user_id', $idu);
         if ($this->save($data)) {
             return ($this->save($data));
         } else {
@@ -34,9 +36,14 @@ class Wallet extends AppModel {
         }
     }
 
-    public function view($id = 0) {
+    public function view($id = 0)
+    {
         $data = $this->query("SELECT * from wallets AS Wallet WHERE user_id=$id");
         return $data;
     }
 
+    public function checkUserWallet($idu=0,$idw=0){
+        
+    }
+    
 }
