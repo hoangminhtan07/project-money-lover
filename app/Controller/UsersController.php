@@ -1,5 +1,7 @@
 <?php
 
+//App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
+
 class UsersController extends AppController {
 
     public $name = 'Users';
@@ -9,7 +11,7 @@ class UsersController extends AppController {
         $id = $this->Auth->user('id');
         $this->set('user', $this->User->findById($id));
     }
-    
+
     public function login() {
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
@@ -30,8 +32,6 @@ class UsersController extends AppController {
     }
 
     public function view($id = null) {
-        $this->User->id = $id;
-        $this->set('user', $this->User->findById($id));
         if (!$this->User->exists()) {
             throw new NotFoundException('Invalid user');
         }
@@ -39,11 +39,13 @@ class UsersController extends AppController {
             $this->Session->setFlash('Invalid user');
             $this->redirect(array('action' => 'index'));
         }
+        $this->User->id = $id;
+        $this->set('user', $this->User->findById($id));
     }
 
     function change_password() {
-        $id = $this->Auth->user('id');
         if ($this->request->is(array('post', 'put'))) {
+            $id = $this->Auth->user('id');
             $data = $this->request->data['User'];
             if ($this->User->edit($data, $id)) {
                 $this->Session->setFlash('The password has been changed.');
@@ -69,8 +71,8 @@ class UsersController extends AppController {
     }
 
     public function edit() {
-        $id = $this->Auth->user('id');
         if ($this->request->is(array('post', 'put'))) {
+            $id = $this->Auth->user('id');
             $data = $this->request->data['User'];
             if ($this->User->edit($data, $id)) {
                 $this->Session->setFlash('The user has been saved');
@@ -84,7 +86,6 @@ class UsersController extends AppController {
     }
 
     public function delete() {
-        $id = $this->Auth->User('id');
         if ($this->request->is('get')) {
             throw new MethodNotAllowedException();
         }
@@ -92,10 +93,10 @@ class UsersController extends AppController {
             $this->Session->setFlash('Invalid id for user');
             $this->redirect(array('action' => 'index'));
         }
+        $id = $this->Auth->User('id');
         if ($this->User->delete($id)) {
             $this->Session->setFlash('User deleted');
             $this->redirect($this->Auth->logout());
-            $this->redirect(array('action' => 'index'));
         } else {
             $this->Session->setFlash('User was not deleted');
         }

@@ -1,46 +1,42 @@
 <?php
 
-class WalletsController extends AppController{
-    
-    public function index(){
+class WalletsController extends AppController {
+
+    public function index() {
         
-    }
-    
-    public function view(){
-        $sql=array('Conditions'=>array('User.id'=>'Wallet.user_id'));
-        
-        
-        $this->set('wallets',$this->Wallet->find('all',$sql));
     }
 
-    public function add(){
-        
+    public function view() {
+        $id = $this->Auth->user('id');
+        $data=$this->Wallet->view($id);
+        $this->set('wallets',$data );
     }
-    
-    public function delete(){
-        if($this->request->is('get')){
-            throw new MethodNotAllowedException();
-        }
-        if(!$id){
-            $this->Session->setFlash('Invalid id for wallet');
-            $this->redirect(array('action'=>'index'));
-        }
-        if($this->Wallet->delete($id)){
-            $this->Session->setFlash('Wallet deleted');
-            $this->redirect(array('action'=>'index'));
-        } else{
-            $this->Session->setFlash('Wallet was not deleted');
-        }
-        $this->redirect(array('action'=>'index'));
-    }
-    
-    public function isAuthorized($user) {
-        if(in_array($this->action,array('edit','delete',))){     
-            if($user['id'] != $this->request->params['pass'][0]){ 
-                return false;
+
+    public function add() {
+        if ($this->request->is('post')) {
+            $data = $this->request->data['Wallet'];
+            $idu = $this->Auth->user('id');
+            if ($this->Wallet->add($data,$idu)) {
+                $this->Session->setFlash('Wallet has been saved.');
+                $this->redirect(array('action' => 'view'));
+            } else {
+                $this->Session->setFlash('Wallet cound not be saved. Please try again.');
             }
         }
-        return true;
-    }    
-}
+    }
 
+    public function delete() {
+        if ($this->request->is('get')) {
+            throw new MethodNotAllowedException();
+        }
+        $id = $this->Auth->user('id');
+        if ($this->Wallet->delete($id)) {
+            $this->Session->setFlash('Wallet deleted');
+            $this->redirect(array('action' => 'index'));
+        } else {
+            $this->Session->setFlash('Wallet was not deleted');
+        }
+        $this->redirect(array('action' => 'index'));
+    }
+    
+}

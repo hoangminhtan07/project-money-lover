@@ -1,6 +1,17 @@
 <?php
-class Transaction extends AppModel{
+
+class Transaction extends AppModel {
+
     public $name = 'Transaction';
-    public $belongTo = 'Wallet';
-    public $belongTo = 'Category';
+    public $belongsTo = array(
+        'Wallet' => array(
+            'className' => 'Wallet',
+            'foreignKey' => 'wallet_id'
+        ),
+        'Category' => array(
+            'className' => 'Category',
+            'foreignKey' => 'category_id'
+        )
+    );
+
 }

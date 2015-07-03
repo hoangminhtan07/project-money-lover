@@ -1,7 +1,7 @@
 <?php
 class Category extends AppModel{
     public $name = 'Category';
-    public $belongTo = 'User';
+    public $belongsTo = 'User';
     public $hasMany = array(
         'Transaction' => array(
             'name' => 'Transaction',

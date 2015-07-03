@@ -14,7 +14,7 @@
                 <td><?php echo $user['User']['email']; ?>&nbsp;</td>
                 <td class="actions">
                     <?php echo $this->Html->link('Edit', array('action' => 'edit')); ?>
-                    <?php echo $this->Form->postlink('Delete', array('action' => 'delete'), null, array('confirm' => 'Are you sure?')); ?>
+                    <?php echo $this->Form->postlink('Delete', array('action' => 'delete'), array('confirm' => 'Are you sure?')); ?>
 
                 </td>
             </tr>
@@ -27,5 +27,6 @@
             <li><?php echo $this->Html->link('New User', array('action' => 'add')); ?></li>
         </ul>
     </div>
-<?php endif; ?>
+<?php else: ?>
 <h3>Welcome to Project Money Lover</h3>
+<?php endif; ?>
