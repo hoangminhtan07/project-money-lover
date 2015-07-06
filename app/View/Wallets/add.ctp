@@ -1,4 +1,4 @@
-<div class="users form">
+<div class="wallets form">
     <?php echo $this->Form->create('Wallet'); ?>
     <fieldset>
         <legend>New Wallet</legend>

@@ -29,21 +29,19 @@ class Wallet extends AppModel
     {
         $this->create();
         $this->saveField('user_id', $idu);
-        if ($this->save($data)) {
-            return ($this->save($data));
-        } else {
-            return ($this->save($data));
-        }
+        return ($this->save($data));
     }
 
-    public function view($id = 0)
+    public function view($idu = 0) //function view all wallet belongs user has id=$idu
     {
-        $data = $this->query("SELECT * from wallets AS Wallet WHERE user_id=$id");
+        $data = $this->query("SELECT * from wallets AS Wallet WHERE user_id=$idu");
         return $data;
     }
 
-    public function checkUserWallet($idu=0,$idw=0){
-        
+    public function edit($data = null, $idw = 0)
+    {
+        $this->id = $idw;
+        return ($this->save($data));
     }
-    
+
 }

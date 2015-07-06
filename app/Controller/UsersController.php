@@ -36,7 +36,7 @@ class UsersController extends AppController
         $this->Auth->allow('add');
     }
 
-    function change_password()
+    public function change_password()
     {
         if ($this->request->is(array('post', 'put'))) {
             $id   = $this->Auth->user('id');
@@ -52,17 +52,46 @@ class UsersController extends AppController
         }
     }
 
+    public function verify() //function check user email.
+    {
+        
+    }
+
+    function generateRandomString($length = 10) //function generateRandomString
+    {
+        $characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString     = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
     public function add()
     {
         if ($this->request->is('post')) {
-            $data = $this->request->data['User'];
-            if ($this->User->add($data)) {
-                $this->Session->setFlash('The user has been saved');
+            $data                  = $this->request->data['User'];
+            $uemail                = $this->request->data['User']['email'];
+            $randomString          = $this->generateRandomString(40);
+            if ($this->User->add($data,$randomString)) {
+                $this->send_email($uemail);
+                $this->Session->setFlash('The user has been saved. Please check your email to verify.');
                 $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash('The user cound not be saved. Please try again.');
             }
         }
+    }
+
+    public function send_email($uemail = null)
+    {
+        $Email = new CakeEmail('gmail');
+        $Email->from(array('moneylover1909@gmail.com' => 'money server'));
+        $Email->to($uemail);
+        $Email->subject('Verify email from Money.server.dev');
+        $Email->template('default');
+        $Email->send();
     }
 
     public function edit()
@@ -94,6 +123,17 @@ class UsersController extends AppController
             $this->Session->setFlash('User was not deleted');
         }
         $this->redirect(array('action' => 'index'));
+    }
+
+    public function set_current($idw = 0)
+    {
+        $id = $this->Auth->user('id');
+        if ($this->User->set_current($id, $idw)) {
+            $this->Session->setFlash('Current wallet has been changed.');
+            $this->redirect(array('controller' => 'wallets', 'action' => 'view'));
+        } else {
+            $this->Session->setFlash('Error. Please try again.');
+        }
     }
 
 }

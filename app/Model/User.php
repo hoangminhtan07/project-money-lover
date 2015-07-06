@@ -86,24 +86,23 @@ class User extends AppModel
         return true;
     }
 
-    public function add($data = null)
+    public function add($data = null, $randomString = null)
     {
         $this->create();
-        if ($this->save($data)) {
-            return ($this->save($data));
-        } else {
-            return ($this->save($data));
-        }
+        $this->saveField('token', $randomString);
+        return ($this->save($data));
     }
 
     public function edit($data = null, $id = 0)
     {
         $this->id = $id;
-        if ($this->save($data)) {
-            return ($this->save($data));
-        } else {
-            return ($this->save($data));
-        }
+        return ($this->save($data));
+    }
+
+    public function set_current($id = 0, $idw = 0)
+    {
+        $this->id = $id;
+        return ($this->saveField('current_wallet_id', $idw));
     }
 
 }
