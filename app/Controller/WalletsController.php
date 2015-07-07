@@ -52,8 +52,8 @@ class WalletsController extends AppController
     public function edit($idw = 0)
     {
         $idu        = $this->Auth->user('id');
-        $numResults = $this->Wallet->find('count', array('conditions' => array('Wallet.user_id' => $idu, 'Wallet.id' => $idw)));
-        if ($numResults > 0) {  // check wallet belongs user
+        $idw = $this->request->farams['pass']['0'];
+        if (checkUserWallet) {  // check wallet belongs user
             if ($this->request->is(array('post', 'put'))) {
                 $data = $this->request->data['Wallet'];
                 if ($this->Wallet->edit($data, $idw)) {

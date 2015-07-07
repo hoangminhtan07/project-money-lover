@@ -86,23 +86,95 @@ class User extends AppModel
         return true;
     }
 
-    public function add($data = null, $randomString = null)
+    /**
+     * Create new user
+     * 
+     * @param array $data User info
+     * @return mix
+     */
+    public function createUser($data)
     {
         $this->create();
-        $this->saveField('token', $randomString);
-        return ($this->save($data));
+        $data['token']     = uniqid();
+        $data['activated'] = false;
+        return $this->save($data);
     }
 
+    /**
+     *  Edit user
+     */
     public function edit($data = null, $id = 0)
     {
         $this->id = $id;
         return ($this->save($data));
     }
 
+    /**
+     *  Set deffault wallet
+     */
     public function set_current($id = 0, $idw = 0)
     {
         $this->id = $id;
         return ($this->saveField('current_wallet_id', $idw));
+    }
+
+    /**
+     *  Check Email user forgot password
+     */
+    public function checkEmail($data)
+    {
+        $result = $this->find('first', array(
+            'conditions' => array(
+                'User.email' => $data[email]
+            )
+        ));
+
+        if (empty($result)) {
+            return false;
+        } else {
+            $data['token'] = uniqid();
+            $this->id      = $result['User']['id'];
+            return $this->save($data);
+        }
+    }
+
+    public function activate($userId, $token)
+    {
+        $data = $this->find('first', array(
+            'conditions' => array(
+                'User.id'    => $userId,
+                'User.token' => $token,
+            )
+        ));
+
+        if (empty($data)) {
+            // User not found or token is not correct
+            return false;
+        }
+
+        // Else, activate user
+        $this->id = $userId;
+        return $this->save(array('User' => array(
+                        'token'     => null,
+                        'activated' => true
+        )));
+    }
+
+    public function resset_password($userId, $token, $data)
+    {
+        $check = $this->find('first', array(
+            'conditions' => array(
+                'User.id'    => $userId,
+                'User.token' => $token,
+            )
+        ));
+
+        if (empty($check)) {
+            return false;
+        }
+
+        $this->id = $userId;
+        return $this->save($data);
     }
 
 }

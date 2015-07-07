@@ -42,12 +42,14 @@ class EmailConfig
 {
 
     public $gmail   = array(
-        'host'      => 'ssl://smtp.gmail.com',
-        'port'      => 465,
-        'username'  => 'moneylover1909@gmail.com',
-        'password'  => 'money1909',
-        'transport' => 'Smtp',
-        'tls'       => true,
+        'host'        => 'ssl://smtp.gmail.com',
+        'port'        => 465,
+        'username'    => 'moneylover1909@gmail.com',
+        'password'    => 'moneyserver',
+        'transport'   => 'Smtp',
+//        'tls'       => true,
+        'from'        => array('moneylover1909@gmail.com' => 'Money Lover'),
+        'emailFormat' => 'html'
     );
     public $default = array(
         'transport' => 'Mail',

@@ -33,9 +33,10 @@ App::uses('CakeEmail', 'Network/Email');
  */
 class AppController extends Controller
 {
-
     public $components = array(
+        'DebugKit.Toolbar',
         'Session',
+        'Flash',
         'Auth' => array(
             'loginRedirect'  => array(//redirect apter click login button
                 'controller' => 'users',
@@ -44,6 +45,11 @@ class AppController extends Controller
             'logoutRedirect' => array(
                 'controller' => 'users',
                 'action'     => 'index'
+            ),
+            'authenticate'   => array(
+                'Form' => array(
+                    'scope' => array('User.activated' => 1)
+                )
             ),
         )
     );

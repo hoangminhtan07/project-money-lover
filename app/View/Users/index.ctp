@@ -24,7 +24,7 @@
         <h3>Actions</h3>
         <ul>
             <li><?php echo $this->Html->link('Wallet', array('controller' => 'wallets', 'action' => 'index', 'full_base' => true)); ?></li>
-            <li><?php echo $this->Html->link('New User', array('action' => 'add')); ?></li>
+            <li><?php echo $this->Html->link('New User', array('controller' => 'users', 'action' => 'register', 'full_base' => true)); ?></li>
         </ul>
     </div>
 <?php else: ?>

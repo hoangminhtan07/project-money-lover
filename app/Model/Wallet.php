@@ -43,5 +43,9 @@ class Wallet extends AppModel
         $this->id = $idw;
         return ($this->save($data));
     }
+    
+    public function checkUserWallet($idu,$idw){
+        
+    }
 
 }

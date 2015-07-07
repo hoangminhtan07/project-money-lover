@@ -1,11 +1,9 @@
 <?php
 
-//App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
-
 class UsersController extends AppController
 {
 
-    public $name    = 'Users';
+    public $uses    = array('User');
     public $helpers = array('Html', 'Form');
 
     public function index()
@@ -14,14 +12,19 @@ class UsersController extends AppController
         $this->set('user', $this->User->findById($id));
     }
 
+    /**
+     * function user login
+     */
     public function login()
     {
-        if ($this->request->is('post')) {
-            if ($this->Auth->login()) {
-                $this->redirect($this->Auth->redirect());
-            } else {
-                $this->Session->setFlash('Your username/password combination was incorrect');
-            }
+        //check request METHOD
+        if (!$this->request->is('post')) {
+            return;
+        }
+        if ($this->Auth->login()) {
+            $this->redirect($this->Auth->redirect());
+        } else {
+            $this->Session->setFlash('Your username/password combination was incorrect');
         }
     }
 
@@ -33,90 +36,163 @@ class UsersController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
-        $this->Auth->allow('add');
+        $this->Auth->allow('add', 'register', 'activate', 'forgot_password', 'resset_password');
     }
 
     public function change_password()
     {
-        if ($this->request->is(array('post', 'put'))) {
-            $id   = $this->Auth->user('id');
-            $data = $this->request->data['User'];
-            if ($this->User->edit($data, $id)) {
-                $this->Session->setFlash('The password has been changed.');
-                $this->redirect(array('action' => 'index'));
-            } else {
-                $this->Session->setFlash('The password cound not be change. Please try again.');
-            }
+        if (!$this->request->is(array('post', 'put'))) {
+            return;
+        }
+        $id   = $this->Auth->user('id');
+        $data = $this->request->data['User'];
+        $edit = $this->User->edit($data, $id);
+        if ($edit) {
+            $this->Session->setFlash('The password has been changed.');
+            $this->redirect(array('action' => 'index'));
         } else {
-            $this->request->data = $this->User->read();
+            $this->Session->setFlash('The password cound not be change. Please try again.');
         }
     }
 
-    public function verify() //function check user email.
+    /**
+     * function activate user email.
+     */
+    public function activate()
     {
-        
-    }
-
-    function generateRandomString($length = 10) //function generateRandomString
-    {
-        $characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString     = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        if (empty($this->request->params['pass']['0']) || empty($this->request->params['pass']['1'])) {
+            throw new BadRequestException('Bad request');
         }
-        return $randomString;
-    }
-
-    public function add()
-    {
-        if ($this->request->is('post')) {
-            $data                  = $this->request->data['User'];
-            $uemail                = $this->request->data['User']['email'];
-            $randomString          = $this->generateRandomString(40);
-            if ($this->User->add($data,$randomString)) {
-                $this->send_email($uemail);
-                $this->Session->setFlash('The user has been saved. Please check your email to verify.');
-                $this->redirect(array('action' => 'index'));
-            } else {
-                $this->Session->setFlash('The user cound not be saved. Please try again.');
-            }
+        $userId     = $this->request->params['pass'][0];
+        $token      = $this->request->params['pass'][1];
+        $activeUser = $this->User->activate($userId, $token);
+        if ($activeUser) {
+            $this->Session->setFlash('The user has been activated. Now you can login.');
+            $this->redirect(array('action' => 'login'));
+        } else {
+            $this->Session->setFlash('Activation failed. Click activation link in your email again.');
         }
     }
-
-    public function send_email($uemail = null)
+    /**
+     *  TODO resset password page
+     */
+    public function resset_password()
     {
-        $Email = new CakeEmail('gmail');
-        $Email->from(array('moneylover1909@gmail.com' => 'money server'));
-        $Email->to($uemail);
-        $Email->subject('Verify email from Money.server.dev');
-        $Email->template('default');
-        $Email->send();
+        if (empty($this->request->params['pass']['0']) || empty($this->request->params['pass']['1'])) {
+            throw new BadRequestException('Bad request');
+        }
+        $userId = $this->request->params['pass'][0];
+        $token  = $this->request->params['pass'][1];
+        if (!$this->request->is(array('post', 'put'))) {
+            return;
+        }
+        $data           = $this->request->$data['User'];
+        $ressetPassword = $this->User->resset_password($userId, $token, $data);
+        if ($ressetPassword) {
+            $this->Session->setFlash('Your password has been changed. Now you can login');
+            $this->redirect(array('action' => 'login'));
+        } else {
+            $this->Session->setFlash('Resset failed. Click resset link in your email again.');
+        }
     }
 
+    /**
+     * User registration action
+     */
+    public function register()
+    {
+        // Check request METHOD
+        if (!$this->request->is(array('post', 'put'))) {
+            return;
+        }
+
+        // Get user info
+        $data = $this->request->data['User'];
+
+        // Create user
+        $createdUser = $this->User->createUser($data);
+
+        // Send activation email
+        if ($createdUser) {
+            $this->_send_activation_email($createdUser['User']);
+            $this->Session->setFlash('User has been created. Please follow instruction in sent email.');
+        } else {
+            $this->Session->setFlash('Unable to create user. Please try again.');
+        }
+    }
+
+    private function _send_password_resset_email($user)
+    {
+        $email = new CakeEmail('gmail');
+        $email->to($user['email'])
+                ->subject('Resset your password form Server Money Lover')
+                ->template('forgot_password')
+                ->viewVars(array('user' => $user))
+                ->send();
+    }
+
+    public function forgot_password()
+    {
+        if (!$this->request->is(array('post', 'put'))) {
+            return;
+        }
+        $data = $this->request->data['User'];
+
+        //check email in database
+        $checkEmail = $this->User->checkEmail($data);
+
+        //Send password resset email 
+        if ($checkEmail) {
+            $this->_send_password_resset_email($checkEmail['User']);
+            $this->Session->setFlash('Check you email to return password.');
+            $this->redirect(array('action' => 'login'));
+        } else {
+            $this->Session->setFlash('Email does not exist.');
+        }
+    }
+
+    /**
+     *  Send activate via email
+     */
+    private function _send_activation_email($user)
+    {
+        $email = new CakeEmail('gmail');
+        $email->to($user['email'])
+                ->subject('Please activate your account')
+                ->template('activate')
+                ->viewVars(array('user' => $user))
+                ->send();
+    }
+
+    /**
+     *  Update profile User
+     */
     public function edit()
     {
-        if ($this->request->is(array('post', 'put'))) {
-            $id   = $this->Auth->user('id');
-            $data = $this->request->data['User'];
-            if ($this->User->edit($data, $id)) {
-                $this->Session->setFlash('The user has been saved');
-                $this->redirect(array('action' => 'index'));
-            } else {
-                $this->Session->setFlash('The user cound not be saved. Please try again.');
-            }
+        if (!$this->request->is(array('post', 'put'))) {
+            return;
+        }
+        $id   = $this->Auth->user('id');
+        $data = $this->request->data['User'];
+        if ($this->User->edit($data, $id)) {
+            $this->Session->setFlash('The user has been saved');
+            $this->redirect(array('action' => 'index'));
         } else {
-            $this->request->data = $this->User->read();
+            $this->Session->setFlash('The user cound not be saved. Please try again.');
         }
     }
 
+    /**
+     *  Delete User Account
+     */
     public function delete()
     {
         if ($this->request->is('get')) {
             throw new MethodNotAllowedException();
         }
-        $id = $this->Auth->User('id');
-        if ($this->User->delete($id)) {
+        $id     = $this->Auth->User('id');
+        $delete = $this->User->delete($id);
+        if ($delete) {
             $this->Session->setFlash('User deleted');
             $this->redirect($this->Auth->logout());
         } else {
@@ -125,6 +201,9 @@ class UsersController extends AppController
         $this->redirect(array('action' => 'index'));
     }
 
+    /**
+     *  function set deffault wallet
+     */
     public function set_current($idw = 0)
     {
         $id = $this->Auth->user('id');
