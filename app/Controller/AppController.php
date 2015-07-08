@@ -2,6 +2,8 @@
 
 /**
  * Application level Controller
+ * var_dump($checkEmail['User']);exit(); //check loi
+ * $this->query("SELECT * from wallets AS Wallet WHERE user_id=$idu");
  *
  * This file is application-wide controller file. You can put all
  * application-wide controller-related methods here.
@@ -33,6 +35,7 @@ App::uses('CakeEmail', 'Network/Email');
  */
 class AppController extends Controller
 {
+
     public $components = array(
         'DebugKit.Toolbar',
         'Session',

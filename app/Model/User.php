@@ -45,10 +45,6 @@ class User extends AppModel
                 'rule'    => 'notBlank',
                 'message' => 'Please enter your password'
             ),
-        /* 'valid' => array(
-          'rule' => 'checkCurrentPassword',
-          'message' => 'Current password wrong'
-          ) */
         ),
         'retype_password'  => array(
             'notEmpty'  => array(
@@ -61,14 +57,6 @@ class User extends AppModel
             )
         )
     );
-
-    /* public function checkCurrentPassword($data) {
-      if (1) {
-      return true;
-      } else {
-      return false;
-      }
-      } */
 
     public function passwordsMatch($data)
     {
@@ -125,19 +113,35 @@ class User extends AppModel
     {
         $result = $this->find('first', array(
             'conditions' => array(
-                'User.email' => $data[email]
+                'User.email' => $data['email']
             )
         ));
 
         if (empty($result)) {
             return false;
         } else {
+            // create token and save
             $data['token'] = uniqid();
             $this->id      = $result['User']['id'];
-            return $this->save($data);
+            $this->save($data);
+
+            //return user data
+            $result1 = $this->find('first', array(
+                'conditions' => array(
+                    'User.email' => $data['email']
+                )
+            ));
+            return $result1;
         }
     }
 
+    /**
+     * 
+     * 
+     * @param int $userId
+     * @param string $token
+     * @return mix
+     */
     public function activate($userId, $token)
     {
         $data = $this->find('first', array(
@@ -160,8 +164,15 @@ class User extends AppModel
         )));
     }
 
+    /**
+     * 
+     * @param int $userId
+     * @param string $token
+     * @return mix
+     */
     public function resset_password($userId, $token, $data)
     {
+        //check id and token of user
         $check = $this->find('first', array(
             'conditions' => array(
                 'User.id'    => $userId,
@@ -173,7 +184,9 @@ class User extends AppModel
             return false;
         }
 
-        $this->id = $userId;
+        //save new user password
+        $this->id      = $userId;
+        $data['token'] = null;
         return $this->save($data);
     }
 

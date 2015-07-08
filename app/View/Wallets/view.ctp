@@ -32,6 +32,7 @@
     <h3>Actions</h3>
     <ul>
         <li><?php echo $this->Html->link('New Wallet', array('controller' => 'wallets', 'action' => 'add', 'full_base' => true)); ?></li>
+        <li><?php echo $this->Html->link('Transfer money', array('controller' => 'wallets', 'action' => 'transfer', 'full_base' => true)); ?></li>
         <li><?php echo $this->Html->link('Back', array('controller' => 'wallets', 'action' => 'index', 'full_base' => true)); ?></li>
     </ul>
 </div>

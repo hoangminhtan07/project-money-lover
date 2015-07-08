@@ -12,5 +12,19 @@ class Category extends AppModel
             'dependent'  => 'true',
         )
     );
+    
+    
+    /**
+     *  Add category
+     * 
+     * @param array $data
+     * @param int $idu
+     * @return mix
+     */
+    public function add($data,$idu){
+        $this->create();
+        $data['user_id'] = $idu;
+        return $this->save($data);
+    }
 
 }
