@@ -1,4 +1,5 @@
 <?php
+App::uses('AppModel', 'Model');
 
 class Wallet extends AppModel
 {
@@ -18,10 +19,6 @@ class Wallet extends AppModel
                 'rule'    => 'notBlank',
                 'message' => 'Please enter wallet name'
             ),
-            'unique'   => array(
-                'rule'    => 'isUnique',
-                'massage' => 'That name already been taken.'
-            ),
         ),
         'balance' => array(
             'integer' => array(
@@ -32,11 +29,11 @@ class Wallet extends AppModel
         'amounts' => array(
             'notEmpty' => array(
                 'rule'    => 'notBlank',
-                'massage' => 'Please enter amounts'
+                'message' => 'Please enter amounts'
             ),
             'integer'  => array(
                 'rule'    => 'numeric',
-                'massage' => 'Integer only.'
+                'message' => 'Integer only.'
             )
         ),
     );
@@ -45,29 +42,29 @@ class Wallet extends AppModel
      * Add wallet
      * 
      * @param array $data
-     * @param int $idu
+     * @param int $userId
      * @return array
      */
-    public function add($data = null, $idu = 0)
+    public function add($data = null, $userId = 0)
     {
         $this->create();
-        $this->saveField('user_id', $idu);
+        $this->saveField('user_id', $userId);
         return ($this->save($data));
     }
 
     /**
      *  Check wallet belong to user
      * 
-     * @param tnt $idu
-     * @param int $idw
+     * @param tnt $userId
+     * @param int $walletId
      */
-    public function checkUserWallet($idu, $idw)
+    public function checkUserWallet($userId, $walletId)
     {
-//find all wallet belong to user
+    //find wallet belong to user
         $data = $this->find('first', array(
             'conditions' => array(
-                'Wallet.id'      => $idw,
-                'Wallet.user_id' => $idu,
+                'Wallet.id'      => $walletId,
+                'Wallet.user_id' => $userId,
             )
         ));
 
@@ -75,16 +72,16 @@ class Wallet extends AppModel
     }
 
     /**
-     * View all wallet belongs user has id=$idu
+     * View all wallet belongs user
      * 
-     * @param int $idu
+     * @param int $userId
      * @return array
      */
-    public function view($idu = 0)
+    public function view($userId = 0)
     {
         $data = $this->find('all', array(
             'conditions' => array(
-                'user_id' => $idu,
+                'user_id' => $userId,
             )
         ));
         return $data;
@@ -94,25 +91,25 @@ class Wallet extends AppModel
      *  Edit wallet
      * 
      * @param array $data
-     * @param int $idw
+     * @param int $walletId
      * @return array
      */
-    public function edit($data = null, $idw = 0)
+    public function edit($data = null, $walletId = 0)
     {
-        $this->id = $idw;
+        $this->id = $walletId;
         return ($this->save($data));
     }
 
     /**
-     *  Find list wallets
+     *  Find list wallets of users
      * 
      */
-    public function findWallet($idu = 0)
+    public function findWallet($userId = 0)
     {
         $data = $this->find('list', array(
             'fields'     => 'Wallet.name',
             'conditions' => array(
-                'Wallet.user_id' => $idu,
+                'Wallet.user_id' => $userId,
             )
         ));
         return $data;
@@ -149,6 +146,17 @@ class Wallet extends AppModel
         $this->saveField('balance', $value2);
 
         return true;
+    }
+    
+    /**
+     * find user by userId
+     * 
+     * @param int $id
+     * @return array
+     */
+    public function findWalletById($id){
+        $data = $this->findById($id);
+        return $data;
     }
 
 }

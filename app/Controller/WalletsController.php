@@ -6,7 +6,19 @@ class WalletsController extends AppController
     // TODO With Category
     public function index()
     {
-        
+        //get userId
+        $userId = $this->Auth->user('id');
+
+        //get default wallet
+        $this->loadModel('User');
+        $data     = $this->User->findUserById($userId);
+        $walletId = $data['User']['current_wallet_id'];
+        if (empty($walletId)) {
+            $this->Session->setFlash('You have not deffault wallet yet. Please set deffault wallet.');
+            $this->redirect(array('action' => 'view'));
+        }
+        $wallet = $this->Wallet->findWalletById($walletId);
+        $this->set('wallet', $wallet);
     }
 
     /**
@@ -32,11 +44,11 @@ class WalletsController extends AppController
             return;
         }
         //get data
-        $data = $this->request->data['Wallet'];
-        $idu  = $this->Auth->user('id');
+        $data   = $this->request->data['Wallet'];
+        $userId = $this->Auth->user('id');
 
         //add wallet
-        $add = $this->Wallet->add($data, $idu);
+        $add = $this->Wallet->add($data, $userId);
         if ($add) {
             $this->Session->setFlash('Wallet has been saved.');
             $this->redirect(array('action' => 'view'));
@@ -48,25 +60,25 @@ class WalletsController extends AppController
     /**
      *  Delete wallet
      * 
-     * @param int $idw
+     * @param int $wallet
      */
-    public function delete($idw = 0)
+    public function delete($walletId = 0)
     {
         //check params
         if (empty($this->request->params['pass']['0'])) {
             throw new ErrorException();
         }
-        $idw = $this->request->params['pass'][0];
+        $walletId = $this->request->params['pass'][0];
 
         //get userId
-        $idu = $this->Auth->user('id');
+        $userId = $this->Auth->user('id');
 
         // check wallet belongs user
-        $checkUserWallet = $this->Wallet->checkUserWallet($idu, $idw);
+        $checkUserWallet = $this->Wallet->checkUserWallet($userId, $walletId);
 
-        //edit wallet
+        //delete wallet
         if ($checkUserWallet) {
-            if ($this->Wallet->delete($idw)) {
+            if ($this->Wallet->delete($walletId)) {
                 $this->Session->setFlash('Wallet deleted');
                 $this->redirect(array('action' => 'view'));
             } else {
@@ -81,21 +93,21 @@ class WalletsController extends AppController
     /**
      *  Edit wallet
      * 
-     * @param int $idw
+     * @param int $walletId
      */
-    public function edit($idw = 0)
+    public function edit($walletId = 0)
     {
         //check params
         if (empty($this->request->params['pass']['0'])) {
             throw new ErrorException();
         }
-        $idw = $this->request->params['pass'][0];
+        $walletId = $this->request->params['pass'][0];
 
         //get userId
-        $idu = $this->Auth->user('id');
+        $userId = $this->Auth->user('id');
 
         // check wallet belongs user
-        $checkUserWallet = $this->Wallet->checkUserWallet($idu, $idw);
+        $checkUserWallet = $this->Wallet->checkUserWallet($userId, $walletId);
 
         //edit wallet
         if ($checkUserWallet) {
@@ -104,7 +116,7 @@ class WalletsController extends AppController
                 return;
             }
             $data = $this->request->data['Wallet'];
-            $edit = $this->Wallet->edit($data, $idw);
+            $edit = $this->Wallet->edit($data, $walletId);
             if ($edit) {
                 $this->Session->setFlash('Wallet has been saved.');
                 $this->redirect(array('action' => 'view'));
@@ -122,8 +134,8 @@ class WalletsController extends AppController
     public function transfer()
     {
         //get list wallets
-        $idu  = $this->Auth->user('id');
-        $list = $this->Wallet->findWallet($idu);
+        $userId = $this->Auth->user('id');
+        $list   = $this->Wallet->findWallet($userId);
 
         //check list wallets
         if (empty($list)) {

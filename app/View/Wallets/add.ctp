@@ -4,7 +4,7 @@
         <legend>New Wallet</legend>
         <?php
         echo $this->Form->input('name');
-        echo $this->Form->input('balance')
+        echo $this->Form->input('balance');
         ?>
     </fieldset>
     <?php echo $this->Form->end('Submit'); ?>

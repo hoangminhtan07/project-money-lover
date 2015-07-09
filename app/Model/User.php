@@ -1,5 +1,5 @@
 <?php
-
+App::uses('AppModel', 'Model');
 class User extends AppModel
 {
 
@@ -100,10 +100,10 @@ class User extends AppModel
     /**
      *  Set deffault wallet
      */
-    public function set_current($id = 0, $idw = 0)
+    public function set_current($id = 0, $walletId = 0)
     {
         $this->id = $id;
-        return ($this->saveField('current_wallet_id', $idw));
+        return ($this->saveField('current_wallet_id', $walletId));
     }
 
     /**
@@ -188,6 +188,11 @@ class User extends AppModel
         $this->id      = $userId;
         $data['token'] = null;
         return $this->save($data);
+    }
+    
+    public function findUserById($id){
+        $data = $this->findById($id);
+        return $data;
     }
 
 }

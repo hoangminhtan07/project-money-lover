@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/projects/project-money-lover/app/Model/User.php</file>
-            <file>file:/D:/projects/project-money-lover/app/Controller/CategoriesController.php</file>
-            <file>file:/D:/projects/project-money-lover/app/Controller/AppController.php</file>
-            <file>file:/D:/projects/project-money-lover/app/Controller/UsersController.php</file>
-            <file>file:/D:/projects/project-money-lover/app/View/Wallets/transfer.ctp</file>
-            <file>file:/D:/projects/project-money-lover/app/Model/Category.php</file>
+            <file>file:/D:/projects/project-money-lover/app/View/Wallets/index.ctp</file>
+            <file>file:/D:/projects/project-money-lover/app/Controller/TransactionsController.php</file>
+            <file>file:/D:/projects/project-money-lover/app/View/Transactions/add.ctp</file>
             <file>file:/D:/projects/project-money-lover/app/Model/Wallet.php</file>
             <file>file:/D:/projects/project-money-lover/app/Controller/WalletsController.php</file>
         </group>

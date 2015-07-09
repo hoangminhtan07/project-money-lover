@@ -2,7 +2,7 @@
 
 /**
  * Application level Controller
- * var_dump($checkEmail['User']);exit(); //check loi
+ * var_dump($checkEmail['User']);exit(); debug($x); //check loi
  * $this->query("SELECT * from wallets AS Wallet WHERE user_id=$idu");
  *
  * This file is application-wide controller file. You can put all

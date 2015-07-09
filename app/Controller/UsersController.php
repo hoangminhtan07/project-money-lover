@@ -245,13 +245,13 @@ class UsersController extends AppController
     /**
      *  function set deffault wallet
      */
-    public function set_current($idw = 0)
+    public function set_current($walletId = 0)
     {
         //get userId
-        $id = $this->Auth->user('id');
+        $userId = $this->Auth->user('id');
 
         //set deffault wallet
-        $set = $this->User->set_current($id, $idw);
+        $set = $this->User->set_current($userId, $walletId);
         if ($set) {
             $this->Session->setFlash('Current wallet has been changed.');
             $this->redirect(array('controller' => 'wallets', 'action' => 'view'));
