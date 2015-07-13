@@ -1,7 +1,7 @@
-<div class="Transaction form">
+<div class="Edit Transaction form">
     <?php echo $this->Form->create(); ?>
     <fieldset>
-        <legend>Add Transaction</legend>
+        <legend>Edit Transaction</legend>
         <?php
         echo $this->Form->input('categorySpentId', array(
             'options' => $listCategorySpent,

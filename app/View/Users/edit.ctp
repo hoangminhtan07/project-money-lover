@@ -3,8 +3,14 @@
     <fieldset>
         <legend>Edit User</legend>
         <?php
-        echo $this->Form->input('username');
-        echo $this->Form->input('email');
+        echo $this->Form->input('username', array(
+            'default'  => AuthComponent::user('username'),
+            'required' => false,
+        ));
+        echo $this->Form->input('email', array(
+            'default'  => AuthComponent::user('email'),
+            'required' => false,
+        ));
         ?>
     </fieldset>
     <?php echo $this->Form->end('Submit'); ?>

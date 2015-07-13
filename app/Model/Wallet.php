@@ -1,4 +1,5 @@
 <?php
+
 App::uses('AppModel', 'Model');
 
 class Wallet extends AppModel
@@ -60,7 +61,7 @@ class Wallet extends AppModel
      */
     public function checkUserWallet($userId, $walletId)
     {
-    //find wallet belong to user
+        //find wallet belong to user
         $data = $this->find('first', array(
             'conditions' => array(
                 'Wallet.id'      => $walletId,
@@ -147,16 +148,31 @@ class Wallet extends AppModel
 
         return true;
     }
-    
+
     /**
      * find user by userId
      * 
      * @param int $id
      * @return array
      */
-    public function findWalletById($id){
+    public function findWalletById($id)
+    {
         $data = $this->findById($id);
         return $data;
+    }
+
+    /**
+     * Deposit money to wallet has id = walletId
+     * 
+     * @param int $walletId
+     * @param int $amount
+     */
+    public function transactionMoney($walletId = 0, $amount = 0)
+    {
+        $this->id = $walletId;
+        $data     = $this->findById($walletId);
+        $data['Wallet']['balance'] += $amount;
+        $this->save($data);
     }
 
 }

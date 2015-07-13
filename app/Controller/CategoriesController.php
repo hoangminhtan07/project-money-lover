@@ -94,7 +94,7 @@ class CategoriesController extends AppController
         if (empty($this->request->params['pass']['0'])) {
             throw new ErrorException();
         }
-        $categoryIdId = $this->request->params['pass'][0];
+        $categoryId = $this->request->params['pass'][0];
 
         //get userId
         $userId = $this->Auth->user('id');
@@ -104,6 +104,15 @@ class CategoriesController extends AppController
 
         //delete category
         if ($checkUserCategory) {
+            $data = $this->Category->find('all',array(
+                'conditions' => array(
+                    'Category.id' => $categoryId,
+                )
+            ));
+            foreach ($data['Transaction'] as $transactions){
+                $this->loadModel('Wallet');
+                $this->Wallet->transactionMoney($transactions['wallet_id'], $transactions['amount']);
+            }
             if ($this->Category->delete($categoryId)) {
                 $this->Session->setFlash('Category has been deleted');
                 $this->redirect(array('action' => 'index'));

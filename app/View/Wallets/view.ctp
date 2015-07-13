@@ -22,7 +22,7 @@
                 <td class="actions">
                     <?php echo $this->Html->link('Edit', array('controller' => 'wallets', 'action' => 'edit', $wallet['Wallet']['id'])); ?>
                     <?php echo $this->Form->postlink('Delete', array('controller' => 'wallets', 'action' => 'delete', $wallet['Wallet']['id']), array('confirm' => 'Are you sure?')); ?>
-                    <?php echo $this->Html->link('Set Current', array('controller' => 'users', 'action' => 'set_current', $wallet['Wallet']['id'])); ?>
+                    <?php echo $this->Html->link('Set Current', array('controller' => 'users', 'action' => 'setCurrentWallet', $wallet['Wallet']['id'])); ?>
                 </td>
             </tr>
         <?php endforeach; ?>

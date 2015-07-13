@@ -1,5 +1,7 @@
 <?php
+
 App::uses('AppModel', 'Model');
+
 class User extends AppModel
 {
 
@@ -89,7 +91,11 @@ class User extends AppModel
     }
 
     /**
-     *  Edit user
+     * save edit urser
+     * 
+     * @param array $data
+     * @param int $id
+     * @return type
      */
     public function edit($data = null, $id = 0)
     {
@@ -98,9 +104,13 @@ class User extends AppModel
     }
 
     /**
-     *  Set deffault wallet
+     * save current wallet to user
+     * 
+     * @param int $id
+     * @param int $walletId
+     * @return array
      */
-    public function set_current($id = 0, $walletId = 0)
+    public function setCurrentWallet($id = 0, $walletId = 0)
     {
         $this->id = $id;
         return ($this->saveField('current_wallet_id', $walletId));
@@ -108,6 +118,8 @@ class User extends AppModel
 
     /**
      *  Check Email user forgot password
+     * 
+     * @param string $data
      */
     public function checkEmail($data)
     {
@@ -189,8 +201,9 @@ class User extends AppModel
         $data['token'] = null;
         return $this->save($data);
     }
-    
-    public function findUserById($id){
+
+    public function findUserById($id)
+    {
         $data = $this->findById($id);
         return $data;
     }

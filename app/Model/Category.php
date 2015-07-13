@@ -77,6 +77,7 @@ class Category extends AppModel
     }
 
     /**
+     * edit Category
      * 
      * @param array $data
      * @param int $categoryId
@@ -98,8 +99,8 @@ class Category extends AppModel
     {
         $data = $this->find('list', array(
             'conditions' => array(
-                'Category.user_id' => $userId,
-                'Category.purpose' => '0',
+                $this->alias . '.user_id' => $userId,
+                'Category.purpose'        => '0',
             ),
             'fields'     => 'Category.name',
         ));

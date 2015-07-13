@@ -3,23 +3,35 @@
     <h2> <?php echo $wallet['Wallet']['name'] . ':' . ' ' . 'Money :' . $wallet['Wallet']['balance'] . '(VND)'; ?></h2>
     <table cellpading="0" cellspacing="0">
         <tr>
-            <th>Category</th>
+            <th><?php echo $this->Html->link('Category', array('action' => 'index', 'Order_by_Category')); ?></th>
             <th>Purpose</th>
             <th>Amount</th>
             <th>Note</th>
-            <th>Created</th>
+            <th><?php echo $this->Html->link('Created', array('action' => 'index')); ?></th>
             <th>Modified</th>
+            <th>Actions</th>
         </tr>
-        <!--<?php foreach ($transactions as $transaction): ?>
+        <?php foreach ($transactions as $transaction): ?>
             <tr>
-                <td> <?php echo $transaction['Transaction']['']; ?></td>
+                <td> <?php echo $transaction['Category']['name']; ?></td>
+                <?php if ($transaction['Category']['purpose'] == 0): ?>
+                    <td><?php echo 'Spent'; ?></td>
+                <?php else: ?>
+                    <td><?php echo 'Earned'; ?></td>
+                <?php endif; ?>
+                <td><?php echo $transaction['Transaction']['amount']; ?></td>
+                <td><?php echo $transaction['Transaction']['note']; ?></td>
+                <td><?php echo $transaction['Transaction']['created']; ?></td>
+                <td><?php echo $transaction['Transaction']['modified']; ?></td>
+                <td class="actions">
+                    <?php echo $this->Html->link('Edit', array('controller' => 'transactions', 'action' => 'edit', $transaction['Transaction']['id'])); ?>
+                    <?php echo $this->Form->postlink('Delete', array('controller' => 'transactions', 'action' => 'delete', $transaction['Transaction']['id']), array('confirm' => 'Are you sure?')); ?>
+                </td>
             </tr>
-        <?php endforeach; ?>-->
+        <?php endforeach; ?>
     </table>
     <?php echo $this->Html->link('Add Transaction', array('controller' => 'transactions', 'action' => 'add')); ?>
 </div>
-
-
 
 <div class="actions">
     <h3>Actions</h3>

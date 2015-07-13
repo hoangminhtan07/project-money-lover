@@ -66,18 +66,13 @@ class UsersController extends AppController
     /**
      * function activate user email.
      */
-    public function activate()
+    public function activate($userId, $token)
     {
         //check request
-        if (empty($this->request->params['pass']['0']) || empty($this->request->params['pass']['1'])) {
+        if (empty($userId) || empty($token)) {
             throw new BadRequestException('Bad request');
         }
 
-        //get data
-        $userId = $this->request->params['pass'][0];
-        $token  = $this->request->params['pass'][1];
-
-        //check data
         $activeUser = $this->User->activate($userId, $token);
         if ($activeUser) {
             $this->Session->setFlash('The user has been activated. Now you can login.');
@@ -90,16 +85,14 @@ class UsersController extends AppController
     /**
      *   resset password 
      */
-    public function resset_password()
+    public function resset_password($userId, $token)
     {
-        //Check params
-        if (empty($this->request->params['pass']['0']) || empty($this->request->params['pass']['1'])) {
+        //Check empty params
+        if (empty($userId) || empty($token)) {
             throw new BadRequestException('Bad request');
         }
 
-        //get info
-        $userId = $this->request->params['pass'][0];
-        $token  = $this->request->params['pass'][1];
+        //check request
         if (!$this->request->is(array('post', 'put'))) {
             return;
         }
@@ -201,20 +194,21 @@ class UsersController extends AppController
     public function edit()
     {
         //check request
-        if (!$this->request->is(array('post', 'put'))) {
-            return;
-        }
+        if ($this->request->is(array('post', 'put'))) {
 
-        //get data
-        $id   = $this->Auth->user('id');
-        $data = $this->request->data['User'];
+            //get data
+            $id   = $this->Auth->user('id');
+            $data = $this->request->data['User'];
 
-        //edit user
-        if ($this->User->edit($data, $id)) {
-            $this->Session->setFlash('The user has been saved');
-            $this->redirect(array('action' => 'index'));
+            //edit user
+            if ($this->User->edit($data, $id)) {
+                $this->Session->setFlash('The user has been saved');
+                $this->redirect(array('action' => 'index'));
+            } else {
+                $this->Session->setFlash('The user cound not be saved. Please try again.');
+            }
         } else {
-            $this->Session->setFlash('The user cound not be saved. Please try again.');
+            $this->Session->read($this->Auth->user());
         }
     }
 
@@ -243,15 +237,15 @@ class UsersController extends AppController
     }
 
     /**
-     *  function set deffault wallet
+     *  function set current wallet
      */
-    public function set_current($walletId = 0)
+    public function setCurrentWallet($walletId = 0)
     {
         //get userId
         $userId = $this->Auth->user('id');
 
-        //set deffault wallet
-        $set = $this->User->set_current($userId, $walletId);
+        //set current wallet
+        $set = $this->User->setCurrentWallet($userId, $walletId);
         if ($set) {
             $this->Session->setFlash('Current wallet has been changed.');
             $this->redirect(array('controller' => 'wallets', 'action' => 'view'));
