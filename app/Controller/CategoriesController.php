@@ -47,7 +47,6 @@ class CategoriesController extends AppController
      * edit category by id
      * 
      * @param int $categoryId
-     * @throws ErrorException
      */
     public function edit($categoryId)
     {
@@ -104,15 +103,26 @@ class CategoriesController extends AppController
 
         //delete category
         if ($checkUserCategory) {
-            $data = $this->Category->find('all',array(
+            $data  = $this->Category->find('all', array(
                 'conditions' => array(
                     'Category.id' => $categoryId,
                 )
             ));
-            foreach ($data['Transaction'] as $transactions){
+            
+            //update balance and delete transactions by categoryId
+            $data1 = $data['0']['Transaction'];
+            foreach ($data1 as $transactions) {
                 $this->loadModel('Wallet');
-                $this->Wallet->transactionMoney($transactions['wallet_id'], $transactions['amount']);
+                if ($data['0']['Category']['purpose'] == true) {
+                    $this->Wallet->transactionMoney($transactions['wallet_id'], -$transactions['amount']);
+                } else {
+                    $this->Wallet->transactionMoney($transactions['wallet_id'], $transactions['amount']);
+                }
             }
+            $this->loadModel('Transaction');
+            $this->Transaction->deleteTransactionsByCetegoryId($categoryId);
+            
+            //delete category
             if ($this->Category->delete($categoryId)) {
                 $this->Session->setFlash('Category has been deleted');
                 $this->redirect(array('action' => 'index'));
@@ -126,3 +136,5 @@ class CategoriesController extends AppController
     }
 
 }
+
+?>

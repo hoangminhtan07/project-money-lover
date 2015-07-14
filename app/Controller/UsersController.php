@@ -161,8 +161,8 @@ class UsersController extends AppController
     /**
      *  Send email to reset password
      * 
-     * @param array $user
-     * 
+     * @param string $email
+     * @param string $token
      */
     private function _send_password_reset_email($email, $token)
     {
@@ -211,6 +211,7 @@ class UsersController extends AppController
 
     /**
      *  Send activate via email
+     * @param array $user
      */
     private function _send_activation_email($user)
     {
@@ -279,6 +280,7 @@ class UsersController extends AppController
 
     /**
      *  function set current wallet
+     * @param int $walletId
      */
     public function setCurrentWallet($walletId = 0)
     {

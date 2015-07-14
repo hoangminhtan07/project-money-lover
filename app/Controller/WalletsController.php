@@ -25,16 +25,15 @@ class WalletsController extends AppController
         $this->set('wallet', $wallet);
 
         //set all transaction view
-        if($order ==null){
-        $this->loadModel('Transaction');
-        $transactions = $this->Transaction->getListTransactions($walletId);
-        $this->set('transactions', $transactions);
+        if ($order == null) {
+            $this->loadModel('Transaction');
+            $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
+            $this->set('transactions', $transactions);
         } elseif ($order == 'Order_by_Category') {
             $this->loadModel('Transaction');
-        $transactions = $this->Transaction->getListTransactionsOrderByCategoriesName($walletId);
-        $this->set('transactions', $transactions);
-    }
-        
+            $transactions = $this->Transaction->getListTransactionsOrderByCategoriesName($walletId);
+            $this->set('transactions', $transactions);
+        }
     }
 
     /**
@@ -188,3 +187,5 @@ class WalletsController extends AppController
     }
 
 }
+
+?>

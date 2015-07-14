@@ -10,7 +10,7 @@
         echo $this->Form->input('email', array(
             'default'  => AuthComponent::user('email'),
             'required' => false,
-            'type' => 'text',
+            'type'     => 'text',
         ));
         ?>
     </fieldset>
@@ -19,7 +19,7 @@
 <div class="actions">
     <h3>Actions</h3>
     <ul>
-        <li><?php echo $this->Html->link('Change Password', array('action' => 'change_password')); ?></li>
+        <li><?php echo $this->Html->link('Change Password', array('action' => 'changePassword')); ?></li>
         <li><?php echo $this->Html->link('Back', array('action' => 'index')); ?></li>
     </ul>
 </div>

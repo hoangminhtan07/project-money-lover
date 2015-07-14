@@ -54,7 +54,7 @@ class Transaction extends AppModel
      * @param int $walletId
      * @return array
      */
-    public function getListTransactions($walletId = 0)
+    public function getListTransactionsByWalletId($walletId = 0)
     {
         $data = $this->find('all', array(
             'conditions' => array(
@@ -63,7 +63,7 @@ class Transaction extends AppModel
         ));
         return $data;
     }
-    
+
     /**
      * get list transaction order by categories name
      * 
@@ -76,10 +76,11 @@ class Transaction extends AppModel
             'conditions' => array(
                 'wallet_id' => $walletId,
             ),
-            'order' => 'Category.name'
+            'order'      => 'Category.name'
         ));
         return $data;
     }
+    
 
     /**
      * 
@@ -117,7 +118,19 @@ class Transaction extends AppModel
                         'note'        => $data['note'],
         )));
     }
-    
-    
+
+    /**
+     * delete all transaction by categoryId
+     * 
+     * @param int $categoryId
+     */
+    public function deleteTransactionsByCetegoryId($categoryId)
+    {
+        $this->deleteAll(array(
+            'Transaction.category_id' => $categoryId,
+        ));
+    }
 
 }
+
+?>

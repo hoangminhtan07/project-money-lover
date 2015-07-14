@@ -3,8 +3,12 @@
     <fieldset>
         <legend>Edit Wallet</legend>
         <?php
-        echo $this->Form->input('name');
-        echo $this->Form->input('balance');
+        echo $this->Form->input('name', array(
+            'required' => false,
+        ));
+        echo $this->Form->input('balance', array(
+            'required' => false,
+        ));
         ?>
     </fieldset>
     <?php echo $this->Form->end('Submit'); ?>

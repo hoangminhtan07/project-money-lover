@@ -20,10 +20,6 @@ class Category extends AppModel
                 'rule'    => 'notBlank',
                 'message' => 'Please enter wallet name'
             ),
-            'unique'   => array(
-                'rule'    => 'isUnique',
-                'massage' => 'That name already been taken.'
-            ),
         ),
     );
 
@@ -126,3 +122,5 @@ class Category extends AppModel
     }
 
 }
+
+?>

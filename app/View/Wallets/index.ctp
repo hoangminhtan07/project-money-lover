@@ -38,7 +38,9 @@
     <ul>
         <li><?php echo $this->Html->link('View All Wallets', array('controller' => 'wallets', 'action' => 'view')); ?></li>
         <li><?php echo $this->Html->link('Categories', array('controller' => 'categories', 'action' => 'index', 'full_base' => true)); ?></li>
-        <li><?php echo $this->Html->link('Statistics', array('controller' => '', 'action' => '', 'full_base' => true)); ?></li>
+        <?php if (!empty($transactions)): ?>
+            <li><?php echo $this->Html->link('Statistics', array('controller' => 'transactions', 'action' => 'statistic', 'full_base' => true)); ?></li>
+        <?php endif; ?>
         <li><?php echo $this->Html->link('Back', array('controller' => 'users', 'action' => 'index', 'full_base' => true)); ?></li>
 
     </ul>

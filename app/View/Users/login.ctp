@@ -9,4 +9,4 @@ echo $this->Form->input('password', array(
 ));
 echo $this->Form->end('Login');
 ?>
-<?php echo $this->Html->link('Forgot password',array('action' => 'forgot_password')); ?>
+<?php echo $this->Html->link('Forgot password',array('action' => 'forgotPassword')); ?>

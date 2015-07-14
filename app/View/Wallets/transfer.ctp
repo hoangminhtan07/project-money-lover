@@ -7,7 +7,7 @@
             'options' => array(
                 'Wallet Name' => $list),
             'label'   => 'Form',
-            'class'   => 'scale'
+            'class'   => 'scale',
         ));
         echo $this->Form->input('toWallet', array(
             'options' => array(

@@ -69,6 +69,12 @@ class User extends AppModel
         )
     );
 
+    /**
+     *  validate match password 
+     * 
+     * @param array $data
+     * @return boolean
+     */
     public function passwordsMatch($data)
     {
         if ($this->data['User']['password'] == $this->data['User']['retype_password']) {
@@ -77,10 +83,16 @@ class User extends AppModel
         return false;
     }
 
+    /**
+     * hash password before save
+     * 
+     * @param array $options
+     * @return boolean
+     */
     public function beforeSave($options = array())
     {
         if (isset($this->data['User']['password'])) {
-            $this->data['User']['password'] = AuthComponent::password($this->data['User']['password']); //hash password before save
+            $this->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
         }
         return true;
     }
@@ -148,7 +160,7 @@ class User extends AppModel
     }
 
     /**
-     * 
+     *  activate user
      * 
      * @param int $userId
      * @param string $token
@@ -177,6 +189,7 @@ class User extends AppModel
     }
 
     /**
+     *  save new password
      * 
      * @param string $email
      * @param string $token
@@ -203,6 +216,12 @@ class User extends AppModel
         )));
     }
 
+    /**
+     * get user data by userId
+     * 
+     * @param int $id
+     * @return array
+     */
     public function findUserById($id)
     {
         $data = $this->findById($id);

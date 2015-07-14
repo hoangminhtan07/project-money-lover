@@ -3,6 +3,9 @@
 class TransactionsController extends AppController
 {
 
+    private $income  = 0;
+    private $expense = 0;
+
     /**
      *   Add transaction
      */
@@ -178,7 +181,7 @@ class TransactionsController extends AppController
             $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         }
 
-        //get amount before delete
+        //get amount to save before delete
         $data = $this->Transaction->findById($transactionId);
         if ($data['Category']['purpose'] == false) {
             $amount = $data['Transaction']['amount'];
@@ -199,4 +202,31 @@ class TransactionsController extends AppController
         }
     }
 
+    //TODO
+    public function statistic()
+    {
+        //get userId
+        $userId = $this->Auth->user('id');
+
+        //get default wallet
+        $this->loadModel('User');
+        $data         = $this->User->findUserById($userId);
+        var_dump($data['Wallet']['balance']);
+        $walletId     = $data['User']['current_wallet_id'];
+        $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
+        
+        foreach ($transactions as $transaction) {
+            if ($transaction['Category']['purpose'] == false) {
+                $this->expense += $transaction['Transaction']['amount'];
+            } else {
+                $this->income += $transaction['Transaction']['amount'];
+            }
+        }
+        $this->set('expense', $this->expense);
+        $this->set('income', $this->income);
+        $this->set('currentMoney', $data['Wallet']['balance']);
+    }
+
 }
+
+?>

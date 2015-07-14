@@ -102,8 +102,10 @@ class Wallet extends AppModel
     }
 
     /**
-     *  Find list wallets of users
+     *  Get list wallets of users
      * 
+     * @param int $userId
+     * @return array 
      */
     public function findWallet($userId = 0)
     {
@@ -176,3 +178,5 @@ class Wallet extends AppModel
     }
 
 }
+
+?>
