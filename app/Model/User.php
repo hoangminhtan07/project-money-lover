@@ -20,7 +20,6 @@ class User extends AppModel
         )
     );
     public $validate     = array(
-        
         'username'         => array(
             'notEmpty' => array(
                 'rule'    => 'notBlank',
@@ -30,15 +29,14 @@ class User extends AppModel
                 'rule'    => array('between', 5, 15),
                 'message' => 'The username must be between 5 and 15 characters.'
             ),
-            'unique' => array(
-                'on' => 'create',
-               'rule'    => 'isUnique',
+            'unique'   => array(
+                'on'      => 'create',
+                'rule'    => 'isUnique',
                 'message' => 'That username already been taken.'
             ),
-            
         ),
         'email'            => array(
-            'notEmpty' => array(
+            'notEmpty'   => array(
                 'rule'    => 'notBlank',
                 'message' => 'Please enter your email'
             ),
@@ -46,7 +44,6 @@ class User extends AppModel
                 'rule'    => array('email'),
                 'message' => 'Please enter a valid email dress'
             ),
-            
         ),
         'password'         => array(
             'notEmpty' => array(
@@ -136,8 +133,8 @@ class User extends AppModel
      */
     public function generateTokenForEmail($email)
     {
-        $token = uniqid();
-        $db    = $this->getDataSource();
+        $token       = uniqid();
+        $db          = $this->getDataSource();
         $quotedToken = $db->value($token, 'string');
 
         $this->updateAll(array(
@@ -183,23 +180,27 @@ class User extends AppModel
      * 
      * @param string $email
      * @param string $token
+     * @param array $data
      * @return mix
      */
-    public function resset_password($email, $token, $data)
+    public function resetPassword($email, $token, $data)
     {
-       
-        $db    = $this->getDataSource();
-        $quotedToken = $db->value($data['password'], 'string');
-        $this->updateAll(array(
-            $this->alias . '.token' => "''",
-            $this->alias . '.password' => $quotedToken,
-        ),array(
-            $this->alias . '.email' => $email,
-            $this->alias . '.token' => $token,
+        $find = $this->find('first', array(
+            'conditions' => array(
+                'User.email' => $email,
+                'User.token' => $token,
+            ),
         ));
-        
-        $count = $this->getAffectedRows();
-        return $count > 0 ? true: false;
+
+        if (empty($find)) {
+            return;
+        }
+
+        $this->id = $find['User']['id'];
+        return $this->save(array('User' => array(
+                        'token'    => null,
+                        'password' => $data['password'],
+        )));
     }
 
     public function findUserById($id)

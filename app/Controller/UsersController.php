@@ -21,7 +21,7 @@ class UsersController extends AppController
         if (!$this->request->is('post')) {
             return;
         }
-       
+
         // Validate inputs
         $this->User->set($this->request->data);
         $this->User->validator()->remove('username', 'unique');
@@ -29,7 +29,7 @@ class UsersController extends AppController
         if (!$valid) {
             return;
         }
-       
+
         if ($this->Auth->login()) {
             $this->redirect($this->Auth->redirect());
         }
@@ -44,18 +44,20 @@ class UsersController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
-        $this->Auth->allow('register', 'activate', 'forgot_password', 'resset_password');
+        $this->Auth->allow('register', 'activate', 'forgotPassword', 'resetPassword');
     }
 
     /**
      *  Change password after user login
      */
-    public function change_password()
+    public function changePassword()
     {
         //check request
         if (!$this->request->is(array('post', 'put'))) {
             return;
         }
+
+
 
         //get data
         $id   = $this->Auth->user('id');
@@ -72,7 +74,11 @@ class UsersController extends AppController
     }
 
     /**
-     * function activate user email.
+     *  Activate user email
+     * 
+     * @param int $userId
+     * @param string $token
+     * 
      */
     public function activate($userId, $token)
     {
@@ -91,9 +97,12 @@ class UsersController extends AppController
     }
 
     /**
-     *   resset password 
+     *   reset password 
+     * 
+     * @param string $email
+     * @param string $token
      */
-    public function resset_password($email, $token)
+    public function resetPassword($email, $token)
     {
         //Check empty params
         if (empty($email) || empty($token)) {
@@ -104,7 +113,8 @@ class UsersController extends AppController
         if (!$this->request->is(array('post', 'put'))) {
             return;
         }
-        
+
+        //load validation
         $this->User->set($this->request->data);
         $valid = $this->User->validates();
         if (!$valid) {
@@ -112,14 +122,14 @@ class UsersController extends AppController
         }
         //get data request
         $data = $this->request->data['User'];
-        
+
         //check and save data
-        $ressetPassword = $this->User->resset_password($email, $token, $data);
-        if ($ressetPassword) {
+        $resetPassword = $this->User->resetPassword($email, $token, $data);
+        if ($resetPassword) {
             $this->Session->setFlash('Your password has been changed. Now you can login');
             $this->redirect(array('action' => 'login'));
         } else {
-            $this->Session->setFlash('Resset failed. Click resset link in your email again.');
+            $this->Session->setFlash('Reset failed. Click reset link in your email again.');
         }
     }
 
@@ -149,17 +159,17 @@ class UsersController extends AppController
     }
 
     /**
-     *  Send email to resset password
+     *  Send email to reset password
      * 
      * @param array $user
      * 
      */
-    private function _send_password_resset_email($email, $token)
+    private function _send_password_reset_email($email, $token)
     {
         $emailObj = new CakeEmail('gmail');
         $emailObj->to($email)
-                ->subject('Resset your password form Server Money Lover')
-                ->template('forgot_password')
+                ->subject('Reset your password form Server Money Lover')
+                ->template('forgotPassword')
                 ->viewVars(array(
                     'token' => $token,
                     'email' => $email,
@@ -168,11 +178,11 @@ class UsersController extends AppController
     }
 
     /**
-     *  Get email user forgot password
+     *  Forgot password activate
      */
-    public function forgot_password()
+    public function forgotPassword()
     {
-        //check reqest
+        //check request
         if (!$this->request->is(array('post', 'put'))) {
             return;
         }
@@ -187,17 +197,16 @@ class UsersController extends AppController
         //get data
         $email = $this->request->data['User']['email'];
 
-        //check email in database
+        //generate token for email
         $token = $this->User->generateTokenForEmail($email);
 
-        //Send password resset email 
+        //Send password reset email 
         if ($token) {
-            $this->_send_password_resset_email($email, $token);
+            $this->_send_password_reset_email($email, $token);
             $this->Session->setFlash('Check you email and follow instruction in sent email.');
             $this->redirect(array('action' => 'login'));
-        } else {
-            $this->Session->setFlash('Email does not exist.');
         }
+        $this->Session->setFlash('Email does not exist.');
     }
 
     /**
@@ -219,21 +228,28 @@ class UsersController extends AppController
     public function edit()
     {
         //check request
-        if ($this->request->is(array('post', 'put'))) {
+        if (!$this->request->is(array('post', 'put'))) {
+            return;
+        }
 
-            //get data
-            $id   = $this->Auth->user('id');
-            $data = $this->request->data['User'];
+        $this->User->validator()->getField('username')->setRule('unique', array(
+            'rule'    => 'isUnique',
+            'message' => 'the username already exists'
+        ));
+        //get data
+        $id   = $this->Auth->user('id');
+        $data = $this->request->data['User'];
 
-            //edit user
-            if ($this->User->edit($data, $id)) {
-                $this->Session->setFlash('The user has been saved');
-                $this->redirect(array('action' => 'index'));
-            } else {
-                $this->Session->setFlash('The user cound not be saved. Please try again.');
-            }
+
+        //edit user
+        if ($this->User->edit($data, $id)) {
+            //updating the session user
+            $this->Session->write('Auth.User', array_merge(AuthComponent::User(), $this->request->data['User']));
+
+            $this->Session->setFlash('The user has been saved');
+            $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->read($this->Auth->user());
+            $this->Session->setFlash('The user cound not be saved. Please try again.');
         }
     }
 
