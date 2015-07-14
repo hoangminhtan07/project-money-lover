@@ -20,21 +20,33 @@ class User extends AppModel
         )
     );
     public $validate     = array(
+        
         'username'         => array(
-            'length' => array(
+            'notEmpty' => array(
+                'rule'    => 'notBlank',
+                'message' => 'Please enter your username'
+            ),
+            'length'   => array(
                 'rule'    => array('between', 5, 15),
                 'message' => 'The username must be between 5 and 15 characters.'
             ),
             'unique' => array(
-                'rule'    => 'isUnique',
+                'on' => 'create',
+               'rule'    => 'isUnique',
                 'message' => 'That username already been taken.'
             ),
+            
         ),
         'email'            => array(
+            'notEmpty' => array(
+                'rule'    => 'notBlank',
+                'message' => 'Please enter your email'
+            ),
             'validEmail' => array(
                 'rule'    => array('email'),
                 'message' => 'Please enter a valid email dress'
-            )
+            ),
+            
         ),
         'password'         => array(
             'notEmpty' => array(
@@ -117,34 +129,25 @@ class User extends AppModel
     }
 
     /**
-     *  Check Email user forgot password
+     *  Generate token for user by email
      * 
-     * @param string $data
+     * @param string $email Email
+     * @return string|false Token on success, else false
      */
-    public function checkEmail($data)
+    public function generateTokenForEmail($email)
     {
-        $result = $this->find('first', array(
-            'conditions' => array(
-                'User.email' => $data['email']
-            )
+        $token = uniqid();
+        $db    = $this->getDataSource();
+        $quotedToken = $db->value($token, 'string');
+
+        $this->updateAll(array(
+            $this->alias . '.token' => $quotedToken,
+                ), array(
+            $this->alias . '.email' => $email,
         ));
 
-        if (empty($result)) {
-            return false;
-        } else {
-            // create token and save
-            $data['token'] = uniqid();
-            $this->id      = $result['User']['id'];
-            $this->save($data);
-
-            //return user data
-            $result1 = $this->find('first', array(
-                'conditions' => array(
-                    'User.email' => $data['email']
-                )
-            ));
-            return $result1;
-        }
+        $count = $this->getAffectedRows();
+        return $count > 0 ? $token : false;
     }
 
     /**
@@ -178,28 +181,25 @@ class User extends AppModel
 
     /**
      * 
-     * @param int $userId
+     * @param string $email
      * @param string $token
      * @return mix
      */
-    public function resset_password($userId, $token, $data)
+    public function resset_password($email, $token, $data)
     {
-        //check id and token of user
-        $check = $this->find('first', array(
-            'conditions' => array(
-                'User.id'    => $userId,
-                'User.token' => $token,
-            )
+       
+        $db    = $this->getDataSource();
+        $quotedToken = $db->value($data['password'], 'string');
+        $this->updateAll(array(
+            $this->alias . '.token' => "''",
+            $this->alias . '.password' => $quotedToken,
+        ),array(
+            $this->alias . '.email' => $email,
+            $this->alias . '.token' => $token,
         ));
-
-        if (empty($check)) {
-            return false;
-        }
-
-        //save new user password
-        $this->id      = $userId;
-        $data['token'] = null;
-        return $this->save($data);
+        
+        $count = $this->getAffectedRows();
+        return $count > 0 ? true: false;
     }
 
     public function findUserById($id)
@@ -209,3 +209,5 @@ class User extends AppModel
     }
 
 }
+
+?>

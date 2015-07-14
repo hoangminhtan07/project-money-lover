@@ -21,11 +21,19 @@ class UsersController extends AppController
         if (!$this->request->is('post')) {
             return;
         }
+       
+        // Validate inputs
+        $this->User->set($this->request->data);
+        $this->User->validator()->remove('username', 'unique');
+        $valid = $this->User->validates();
+        if (!$valid) {
+            return;
+        }
+       
         if ($this->Auth->login()) {
             $this->redirect($this->Auth->redirect());
-        } else {
-            $this->Session->setFlash('Your username/password combination was incorrect');
         }
+        $this->Session->setFlash('Your username/password combination was incorrect');
     }
 
     public function logout()
@@ -85,10 +93,10 @@ class UsersController extends AppController
     /**
      *   resset password 
      */
-    public function resset_password($userId, $token)
+    public function resset_password($email, $token)
     {
         //Check empty params
-        if (empty($userId) || empty($token)) {
+        if (empty($email) || empty($token)) {
             throw new BadRequestException('Bad request');
         }
 
@@ -96,10 +104,17 @@ class UsersController extends AppController
         if (!$this->request->is(array('post', 'put'))) {
             return;
         }
+        
+        $this->User->set($this->request->data);
+        $valid = $this->User->validates();
+        if (!$valid) {
+            return;
+        }
+        //get data request
         $data = $this->request->data['User'];
-
+        
         //check and save data
-        $ressetPassword = $this->User->resset_password($userId, $token, $data);
+        $ressetPassword = $this->User->resset_password($email, $token, $data);
         if ($ressetPassword) {
             $this->Session->setFlash('Your password has been changed. Now you can login');
             $this->redirect(array('action' => 'login'));
@@ -139,13 +154,16 @@ class UsersController extends AppController
      * @param array $user
      * 
      */
-    private function _send_password_resset_email($user)
+    private function _send_password_resset_email($email, $token)
     {
-        $email = new CakeEmail('gmail');
-        $email->to($user['email'])
+        $emailObj = new CakeEmail('gmail');
+        $emailObj->to($email)
                 ->subject('Resset your password form Server Money Lover')
                 ->template('forgot_password')
-                ->viewVars(array('user' => $user))
+                ->viewVars(array(
+                    'token' => $token,
+                    'email' => $email,
+                ))
                 ->send();
     }
 
@@ -159,15 +177,22 @@ class UsersController extends AppController
             return;
         }
 
+        // Validate inputs
+        $this->User->set($this->request->data);
+        $valid = $this->User->validates();
+        if (!$valid) {
+            return;
+        }
+
         //get data
-        $data = $this->request->data['User'];
+        $email = $this->request->data['User']['email'];
 
         //check email in database
-        $checkEmail = $this->User->checkEmail($data);
+        $token = $this->User->generateTokenForEmail($email);
 
         //Send password resset email 
-        if ($checkEmail) {
-            $this->_send_password_resset_email($checkEmail['User']);
+        if ($token) {
+            $this->_send_password_resset_email($email, $token);
             $this->Session->setFlash('Check you email and follow instruction in sent email.');
             $this->redirect(array('action' => 'login'));
         } else {
@@ -255,3 +280,5 @@ class UsersController extends AppController
     }
 
 }
+
+?>

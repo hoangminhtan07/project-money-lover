@@ -10,6 +10,7 @@
         echo $this->Form->input('email', array(
             'default'  => AuthComponent::user('email'),
             'required' => false,
+            'type' => 'text',
         ));
         ?>
     </fieldset>

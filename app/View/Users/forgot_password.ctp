@@ -3,7 +3,10 @@
 <fieldset>
     <legend>Email</legend>
     <?php
-    echo $this->Form->input('email')
+    echo $this->Form->input('email', array(
+        'required' => false,
+        'type' => 'text',
+    ));
     ?>
 </fieldset>
 <?php echo $this->Form->end('Submit'); ?>
