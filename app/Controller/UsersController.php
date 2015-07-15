@@ -8,8 +8,7 @@ class UsersController extends AppController
 
     public function index()
     {
-        $id = $this->Auth->user('id');
-        $this->set('user', $this->User->findById($id));
+        
     }
 
     /**
@@ -31,7 +30,7 @@ class UsersController extends AppController
         }
 
         if ($this->Auth->login()) {
-            $this->redirect($this->Auth->redirect());
+            $this->redirect($this->Auth->redirectUrl());
         }
         $this->Session->setFlash('Your username/password combination was incorrect');
     }
@@ -43,8 +42,7 @@ class UsersController extends AppController
 
     public function beforeFilter()
     {
-        parent::beforeFilter();
-        $this->Auth->allow('register', 'activate', 'forgotPassword', 'resetPassword');
+        $this->Auth->allow('index', 'login', 'register', 'activate', 'forgotPassword', 'resetPassword');
     }
 
     /**
@@ -57,8 +55,6 @@ class UsersController extends AppController
             return;
         }
 
-
-
         //get data
         $id   = $this->Auth->user('id');
         $data = $this->request->data['User'];
@@ -69,7 +65,7 @@ class UsersController extends AppController
             $this->Session->setFlash('The password has been changed.');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('The password cound not be change. Please try again.');
+            $this->Session->setFlash('The password could not be changed. Please try again.');
         }
     }
 
@@ -90,10 +86,10 @@ class UsersController extends AppController
         $activeUser = $this->User->activate($userId, $token);
         if ($activeUser) {
             $this->Session->setFlash('The user has been activated. Now you can login.');
-            $this->redirect(array('action' => 'login'));
         } else {
             $this->Session->setFlash('Activation failed. Click activation link in your email again.');
         }
+        $this->redirect(array('action' => 'login'));
     }
 
     /**
@@ -127,10 +123,10 @@ class UsersController extends AppController
         $resetPassword = $this->User->resetPassword($email, $token, $data);
         if ($resetPassword) {
             $this->Session->setFlash('Your password has been changed. Now you can login');
-            $this->redirect(array('action' => 'login'));
         } else {
             $this->Session->setFlash('Reset failed. Click reset link in your email again.');
         }
+        $this->redirect(array('action' => 'login'));
     }
 
     /**
@@ -233,10 +229,6 @@ class UsersController extends AppController
             return;
         }
 
-        $this->User->validator()->getField('username')->setRule('unique', array(
-            'rule'    => 'isUnique',
-            'message' => 'the username already exists'
-        ));
         //get data
         $id   = $this->Auth->user('id');
         $data = $this->request->data['User'];
@@ -248,7 +240,7 @@ class UsersController extends AppController
             $this->Session->write('Auth.User', array_merge(AuthComponent::User(), $this->request->data['User']));
 
             $this->Session->setFlash('The user has been saved');
-            $this->redirect(array('action' => 'index'));
+            $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         } else {
             $this->Session->setFlash('The user cound not be saved. Please try again.');
         }
@@ -268,7 +260,7 @@ class UsersController extends AppController
         $id = $this->Auth->User('id');
 
         //delete user
-        $delete = $this->User->delete($id);
+        $delete = $this->User->deleteUserById($id);
         if ($delete) {
             $this->Session->setFlash('User deleted');
             $this->redirect($this->Auth->logout());

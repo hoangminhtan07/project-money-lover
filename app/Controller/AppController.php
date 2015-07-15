@@ -2,8 +2,6 @@
 
 /**
  * Application level Controller
- * var_dump($checkEmail['User']);exit(); debug($x); //check loi
- * $this->query("SELECT * from wallets AS Wallet WHERE user_id=$idu");
  *
  * This file is application-wide controller file. You can put all
  * application-wide controller-related methods here.
@@ -41,28 +39,21 @@ class AppController extends Controller
         'Session',
         'Flash',
         'Auth' => array(
-            'loginRedirect'  => array(//redirect apter click login button
-                'controller' => 'users',
-                'action'     => 'index'
+            'loginRedirect'  => array(
+                'controller' => 'wallets',
+                'action'     => 'index',
             ),
             'logoutRedirect' => array(
                 'controller' => 'users',
-                'action'     => 'index'
+                'action'     => 'index',
             ),
             'authenticate'   => array(
                 'Form' => array(
-                    'scope' => array('User.activated' => 1)
+                    'scope' => array('User.activated' => 1),
                 )
             ),
         )
     );
-
-    public function beforeFilter()
-    {
-        $this->Auth->allow('index');
-        $this->set('logged_in', $this->Auth->loggedIn());
-        $this->set('current_user', $this->Auth->user()); //use: $current_user['id']...
-    }
 
 }
 

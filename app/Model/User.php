@@ -30,7 +30,6 @@ class User extends AppModel
                 'message' => 'The username must be between 5 and 15 characters.'
             ),
             'unique'   => array(
-                'on'      => 'create',
                 'rule'    => 'isUnique',
                 'message' => 'That username already been taken.'
             ),
@@ -121,7 +120,7 @@ class User extends AppModel
     public function edit($data = null, $id = 0)
     {
         $this->id = $id;
-        return ($this->save($data));
+        return $this->save($data);
     }
 
     /**
@@ -222,10 +221,20 @@ class User extends AppModel
      * @param int $id
      * @return array
      */
-    public function findUserById($id)
+    public function getUserById($id)
     {
-        $data = $this->findById($id);
-        return $data;
+        return $this->findById($id);
+    }
+    
+    /**
+     *  delete user by id
+     * 
+     * @param int $id
+     * @return boolean
+     */
+    public function deleteUserById($id)
+    {
+        return $this->deleteById($id);
     }
 
 }
