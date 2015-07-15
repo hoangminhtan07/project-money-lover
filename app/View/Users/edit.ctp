@@ -19,7 +19,8 @@
 <div class="actions">
     <h3>Actions</h3>
     <ul>
+        <li><?php echo $this->Form->postlink('Delete User', array('action' => 'delete'), array('confirm' => 'Are you sure?')); ?></li>
         <li><?php echo $this->Html->link('Change Password', array('action' => 'changePassword')); ?></li>
-        <li><?php echo $this->Html->link('Back', array('action' => 'index')); ?></li>
+        <li><?php echo $this->Html->link('Back', array('controller' => 'wallets', 'action' => 'index')); ?></li>
     </ul>
 </div>

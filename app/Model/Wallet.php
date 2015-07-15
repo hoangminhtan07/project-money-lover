@@ -107,7 +107,7 @@ class Wallet extends AppModel
      * @param int $userId
      * @return array 
      */
-    public function findWallet($userId = 0)
+    public function getWalletByUserId($userId = 0)
     {
         $data = $this->find('list', array(
             'fields'     => 'Wallet.name',
@@ -152,12 +152,12 @@ class Wallet extends AppModel
     }
 
     /**
-     * find user by userId
+     * get wallet by wallet Id
      * 
      * @param int $id
      * @return array
      */
-    public function findWalletById($id)
+    public function getWalletById($id)
     {
         $data = $this->findById($id);
         return $data;

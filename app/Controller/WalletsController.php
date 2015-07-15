@@ -15,13 +15,13 @@ class WalletsController extends AppController
 
         //get default wallet
         $this->loadModel('User');
-        $data     = $this->User->findUserById($userId);
+        $data     = $this->User->getUserById($userId);
         $walletId = $data['User']['current_wallet_id'];
         if (empty($walletId)) {
             $this->Session->setFlash('You have not deffault wallet yet. Please set deffault wallet.');
             $this->redirect(array('action' => 'view'));
         }
-        $wallet = $this->Wallet->findWalletById($walletId);
+        $wallet = $this->Wallet->getWalletById($walletId);
         $this->set('wallet', $wallet);
 
         //set all transaction view
@@ -150,7 +150,7 @@ class WalletsController extends AppController
     {
         //get list wallets
         $userId = $this->Auth->user('id');
-        $list   = $this->Wallet->findWallet($userId);
+        $list   = $this->Wallet->getWalletByUserId($userId);
 
         //check list wallets
         if (empty($list)) {

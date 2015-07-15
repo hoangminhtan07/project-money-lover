@@ -1,7 +1,7 @@
 <div class="users form">
     <?php echo $this->Form->create('User'); ?>
     <fieldset>
-        <legend>Register</legend>
+        <legend>Change password</legend>
         <?php
         echo $this->Form->input('current_password', array(
             'type' => 'password',

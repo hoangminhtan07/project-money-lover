@@ -22,9 +22,9 @@ class TransactionsController extends AppController
         $this->set('listCategorySpent', $getListNameCategorySpent);
         $this->set('listCategoryEarned', $getListNameCategoryEarned);
 
-        //get default walletId
+        //get current walletId
         $this->loadModel('User');
-        $data     = $this->User->findUserById($userId);
+        $data     = $this->User->getUserById($userId);
         $walletId = $data['User']['current_wallet_id'];
 
         //check request
@@ -32,7 +32,7 @@ class TransactionsController extends AppController
             return;
         }
 
-        //get data
+        //get request data 
         //get categoryId
         $data             = $this->request->data['Transaction'];
         $categorySpentId  = $this->request->data['Transaction']['categorySpentId'];
@@ -90,7 +90,7 @@ class TransactionsController extends AppController
 
         //get current walletId
         $this->loadModel('User');
-        $data     = $this->User->findUserById($userId);
+        $data     = $this->User->getUserById($userId);
         $walletId = $data['User']['current_wallet_id'];
 
         //check transaction belong to wallet
@@ -125,9 +125,9 @@ class TransactionsController extends AppController
         }
 
         //save edited transaction
-        $oldData     = $this->Transaction->findById($transactionId);
+        $oldData     = $this->Transaction->getById($transactionId);
         $this->loadModel('Category');
-        $newData     = $this->Category->findById($categoryId);
+        $newData     = $this->Category->getById($categoryId);
         $transaction = $this->Transaction->edit($data, $categoryId, $transactionId);
         if ($transaction) {
             $this->Session->setFlash('Transaction has been saved.');
@@ -171,7 +171,7 @@ class TransactionsController extends AppController
 
         //get current walletId
         $this->loadModel('User');
-        $data     = $this->User->findUserById($userId);
+        $data     = $this->User->getUserById($userId);
         $walletId = $data['User']['current_wallet_id'];
 
         //check transaction belong to wallet
@@ -182,7 +182,7 @@ class TransactionsController extends AppController
         }
 
         //get amount to save before delete
-        $data = $this->Transaction->findById($transactionId);
+        $data = $this->Transaction->getTransactionById($transactionId);
         if ($data['Category']['purpose'] == false) {
             $amount = $data['Transaction']['amount'];
         } else {
@@ -202,19 +202,27 @@ class TransactionsController extends AppController
         }
     }
 
-    //TODO
+    //TODO Monthly report
     public function statistic()
     {
         //get userId
         $userId = $this->Auth->user('id');
 
-        //get default wallet
+        //get current wallet
         $this->loadModel('User');
-        $data         = $this->User->findUserById($userId);
-        var_dump($data['Wallet']['balance']);
-        $walletId     = $data['User']['current_wallet_id'];
+        $data     = $this->User->getUserById($userId);
+        $walletId = $data['User']['current_wallet_id'];
+   
+        foreach ($data['Wallet'] as $wallet) {
+            if ($wallet['id'] == $walletId) {
+                $currentMoney = $wallet['balance'];
+            }
+        }
+
+        //get list transactions by wallet Id
         $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
-        
+
+        //calculate expense and income money
         foreach ($transactions as $transaction) {
             if ($transaction['Category']['purpose'] == false) {
                 $this->expense += $transaction['Transaction']['amount'];
@@ -224,7 +232,10 @@ class TransactionsController extends AppController
         }
         $this->set('expense', $this->expense);
         $this->set('income', $this->income);
-        $this->set('currentMoney', $data['Wallet']['balance']);
+        $this->set('currentMoney', $currentMoney);
+        
+        
+        
     }
 
 }

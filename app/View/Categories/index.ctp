@@ -21,7 +21,6 @@
                 <td class="actions">
                     <?php echo $this->Html->link('Edit', array('action' => 'edit', $category['Category']['id'])); ?>
                     <?php echo $this->Form->postlink('Delete', array('action' => 'delete', $category['Category']['id']), array('confirm' => 'Are you sure?')); ?>
-
                 </td>
             </tr>
         <?php endforeach; ?>

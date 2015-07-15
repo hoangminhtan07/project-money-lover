@@ -121,6 +121,17 @@ class Category extends AppModel
         return $data;
     }
 
+    /**
+     * Get category by id
+     * 
+     * @param int $id
+     * @return array
+     */
+    public function getCategoryById($id)
+    {
+        return $this->findById($id);
+    }
+
 }
 
 ?>

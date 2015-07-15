@@ -80,7 +80,6 @@ class Transaction extends AppModel
         ));
         return $data;
     }
-    
 
     /**
      * 
@@ -129,6 +128,17 @@ class Transaction extends AppModel
         $this->deleteAll(array(
             'Transaction.category_id' => $categoryId,
         ));
+    }
+
+    /**
+     *  get transaction by id
+     * 
+     * @param int $id
+     * @return array
+     */
+    public function getTransactionById($id)
+    {
+        return $this->findById($id);
     }
 
 }

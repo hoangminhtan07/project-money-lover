@@ -36,6 +36,7 @@
 <div class="actions">
     <h3>Actions</h3>
     <ul>
+        <li><?php echo $this->Html->link('Edit User', array('controller' => 'users', 'action' => 'edit')); ?></li>
         <li><?php echo $this->Html->link('View All Wallets', array('controller' => 'wallets', 'action' => 'view')); ?></li>
         <li><?php echo $this->Html->link('Categories', array('controller' => 'categories', 'action' => 'index', 'full_base' => true)); ?></li>
         <?php if (!empty($transactions)): ?>
