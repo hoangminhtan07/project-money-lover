@@ -26,8 +26,30 @@ class Transaction extends AppModel
                 'rule'    => 'naturalNumber',
                 'message' => 'natural number only.',
             ),
-        )
+        ),
     );
+
+    public function bindBelongTo($model, $fKey)
+    {
+        $this->bindModel(array(
+            'belongTo' => array(
+                $model => array(
+                    'className'  => $model,
+                    'foreignKey' => $fKey,
+                ),
+            ),
+        ));
+    }
+
+    public function bindCategory()
+    {
+        $this->bindBelongTo('Category', 'category_id');
+    }
+    
+    public function bindWallet()
+    {
+        $this->bindBelongTo('Wallet', 'wallet_id');
+    }
 
     /**
      *  Add Transaction
@@ -54,7 +76,7 @@ class Transaction extends AppModel
      * @param int $walletId
      * @return array
      */
-    public function getListTransactionsByWalletId($walletId = 0)
+    public function getListTransactionsByWalletId($walletId)
     {
         $data = $this->find('all', array(
             'conditions' => array(
@@ -70,7 +92,7 @@ class Transaction extends AppModel
      * @param int $walletId
      * @return array
      */
-    public function getListTransactionsOrderByCategoriesName($walletId = 0)
+    public function getListTransactionsOrderByCategoriesName($walletId)
     {
         $data = $this->find('all', array(
             'conditions' => array(
@@ -125,8 +147,8 @@ class Transaction extends AppModel
      */
     public function deleteTransactionsByCetegoryId($categoryId)
     {
-        $this->deleteAll(array(
-            'Transaction.category_id' => $categoryId,
+        return $this->deleteAll(array(
+                    'Transaction.category_id' => $categoryId,
         ));
     }
 
@@ -141,6 +163,15 @@ class Transaction extends AppModel
         return $this->findById($id);
     }
 
-}
+    /**
+     * delete transaction by id
+     * 
+     * @param int $id
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->delete($id);
+    }
 
-?>
+}

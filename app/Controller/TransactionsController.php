@@ -64,11 +64,10 @@ class TransactionsController extends AppController
         $transaction = $this->Transaction->add($data, $walletId, $categoryId);
         if ($transaction) {
             $this->Session->setFlash('Transaction has been saved.');
-            $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         } else {
             $this->Session->setFlash('Error. Please try again.');
-            $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         }
+        $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
     }
 
     /**
@@ -76,7 +75,7 @@ class TransactionsController extends AppController
      * 
      * @param int $transactionId
      */
-    public function edit($transactionId = 0)
+    public function edit($transactionId)
     {
         //get userId
         $userId = $this->Auth->user('id');
@@ -192,14 +191,42 @@ class TransactionsController extends AppController
         //save balance to the current wallet
         $this->loadModel('Wallet');
         $this->Wallet->transactionMoney($walletId, $amount);
-        $delete = $this->Transaction->delete($transactionId);
-        if ($delete) {
+        $del = $this->Transaction->deleteById($transactionId);
+        if ($del) {
             $this->Session->setFlash('Transaction has been deleted.');
-            $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         } else {
             $this->Session->setFlash('Error. Please try again.');
-            $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         }
+        $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
+    }
+
+    
+    /**
+     * view transaction by date range
+     * 
+     * @param int $walletId
+     */
+    public function viewDay($walletId)
+    {
+        $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
+        $transactions = $this->getListTransactionsOrderByDateRange($transactions);
+        $this->set('transactions', $transactions);
+    }
+    
+    private function getListTransactionsOrderByDateRange($trans)
+    {
+        $reqs = array();
+        foreach ($trans as $date) {
+            $createTime = date('Y-m-d', strtotime($date['Transaction']['created']));
+            if (!array_key_exists($createTime, $reqs)) {
+                foreach ($trans as $value) {
+                    if ($createTime == date('Y-m-d', strtotime($value['Transaction']['created']))) {
+                        $reqs[$createTime][] = $value;
+                    }
+                }
+            }
+        }
+        return $reqs;
     }
 
     //TODO Monthly report
@@ -212,7 +239,7 @@ class TransactionsController extends AppController
         $this->loadModel('User');
         $data     = $this->User->getUserById($userId);
         $walletId = $data['User']['current_wallet_id'];
-   
+
         foreach ($data['Wallet'] as $wallet) {
             if ($wallet['id'] == $walletId) {
                 $currentMoney = $wallet['balance'];
@@ -233,9 +260,6 @@ class TransactionsController extends AppController
         $this->set('expense', $this->expense);
         $this->set('income', $this->income);
         $this->set('currentMoney', $currentMoney);
-        
-        
-        
     }
 
 }

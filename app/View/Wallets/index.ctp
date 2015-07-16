@@ -1,6 +1,7 @@
 
 <div class="users index">
     <h2> <?php echo $wallet['Wallet']['name'] . ':' . ' ' . 'Money :' . $wallet['Wallet']['balance'] . '(VND)'; ?></h2>
+    <?php echo $this->Html->link('Sort By Date Range', array('controller' => 'transactions', 'action' => 'viewDay', $wallet['Wallet']['id'])); ?>
     <table cellpading="0" cellspacing="0">
         <tr>
             <th><?php echo $this->Html->link('Category', array('action' => 'index', 'Order_by_Category')); ?></th>

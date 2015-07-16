@@ -37,10 +37,10 @@ class CategoriesController extends AppController
         $add = $this->Category->add($data, $userId);
         if ($add) {
             $this->Session->setFlash('Category has been save.');
-            $this->redirect(array('action' => 'index'));
         } else {
             $this->Session->setFlash('Error. Please try again.');
         }
+        $this->redirect(array('action' => 'index'));
     }
 
     /**
@@ -51,10 +51,9 @@ class CategoriesController extends AppController
     public function edit($categoryId)
     {
         //check params
-        if (empty($this->request->params['pass']['0'])) {
+        if (empty($categoryId)) {
             throw new ErrorException();
         }
-        $categoryId = $this->request->params['pass'][0];
 
         //get userId
         $userId = $this->Auth->user('id');
@@ -74,12 +73,11 @@ class CategoriesController extends AppController
             $edit = $this->Category->edit($data, $categoryId);
             if ($edit) {
                 $this->Session->setFlash('Category has been saved.');
-                $this->redirect(array('action' => 'index'));
             }
         } else {
             $this->Session->setFlash('You do not have permission to access.');
-            $this->redirect(array('action' => 'index'));
         }
+        $this->redirect(array('action' => 'index'));
     }
 
     /**
@@ -87,13 +85,12 @@ class CategoriesController extends AppController
      * 
      * @param int $categoryId
      */
-    public function delete($categoryId = 0)
+    public function delete($categoryId)
     {
         //check params
-        if (empty($this->request->params['pass']['0'])) {
+        if (empty($categoryId)) {
             throw new ErrorException();
         }
-        $categoryId = $this->request->params['pass'][0];
 
         //get userId
         $userId = $this->Auth->user('id');
@@ -103,12 +100,7 @@ class CategoriesController extends AppController
 
         //delete category
         if ($checkUserCategory) {
-            $data  = $this->Category->find('all', array(
-                'conditions' => array(
-                    'Category.id' => $categoryId,
-                )
-            ));
-            
+            $data = $this->Category->getCategoryById($categoryId);
             //update balance and delete transactions by categoryId
             $data1 = $data['0']['Transaction'];
             foreach ($data1 as $transactions) {
@@ -121,20 +113,18 @@ class CategoriesController extends AppController
             }
             $this->loadModel('Transaction');
             $this->Transaction->deleteTransactionsByCetegoryId($categoryId);
-            
+
             //delete category
-            if ($this->Category->delete($categoryId)) {
+            $del = $this->Category->deleteCategoryById($categoryId);
+            if ($del) {
                 $this->Session->setFlash('Category has been deleted');
-                $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash('Category was not deleted. Please try again.');
             }
         } else {
             $this->Session->setFlash('You do not have permission to access.');
-            $this->redirect(array('action' => 'index'));
         }
+        $this->redirect(array('action' => 'index'));
     }
 
 }
-
-?>

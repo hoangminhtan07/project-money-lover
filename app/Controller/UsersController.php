@@ -103,6 +103,7 @@ class UsersController extends AppController
         //Check empty params
         if (empty($email) || empty($token)) {
             throw new BadRequestException('Bad request');
+            $this->redirect(array('action' => 'index'));
         }
 
         //check request
@@ -274,7 +275,7 @@ class UsersController extends AppController
      *  function set current wallet
      * @param int $walletId
      */
-    public function setCurrentWallet($walletId = 0)
+    public function setCurrentWallet($walletId)
     {
         //get userId
         $userId = $this->Auth->user('id');
@@ -291,4 +292,3 @@ class UsersController extends AppController
 
 }
 
-?>

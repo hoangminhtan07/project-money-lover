@@ -117,7 +117,7 @@ class User extends AppModel
      * @param int $id
      * @return type
      */
-    public function edit($data = null, $id = 0)
+    public function edit($data, $id)
     {
         $this->id = $id;
         return $this->save($data);
@@ -130,7 +130,7 @@ class User extends AppModel
      * @param int $walletId
      * @return array
      */
-    public function setCurrentWallet($id = 0, $walletId = 0)
+    public function setCurrentWallet($id, $walletId)
     {
         $this->id = $id;
         return ($this->saveField('current_wallet_id', $walletId));
@@ -225,7 +225,7 @@ class User extends AppModel
     {
         return $this->findById($id);
     }
-    
+
     /**
      *  delete user by id
      * 
@@ -239,4 +239,4 @@ class User extends AppModel
 
 }
 
-?>
+

@@ -9,7 +9,7 @@ class Category extends AppModel
     public $belongsTo = 'User';
     public $hasMany   = array(
         'Transaction' => array(
-            'name'       => 'Transaction',
+            'className'       => 'Transaction',
             'foreignKey' => 'category_id',
             'dependent'  => 'true',
         )
@@ -22,6 +22,37 @@ class Category extends AppModel
             ),
         ),
     );
+    
+    public function bindHasMany($model, $fKey){
+        $this->bindModel(array(
+            'hasMany' => array(
+                $model => array(
+                    'className' => $model,
+                    'foreignKey' => $fKey,
+                    'dependent'  => 'true'
+                ),
+            ),
+        ));
+    }
+    
+    public function bindTransaction(){
+        $this->bindHasMany('Transaction');
+    }
+    
+    public function bindBelongTo($model, $fKey){
+        $this->bindModel(array(
+            'belongTo' => array(
+                $model => array(
+                    'className' => $model,
+                    'foreignKey' => $fKey,
+                ),
+            ),
+        ));
+    }
+    
+    public function bindUser(){
+        $this->bindBelongTo('User','user_id');
+    }
 
     /**
      *  Add category
@@ -132,6 +163,10 @@ class Category extends AppModel
         return $this->findById($id);
     }
 
+    public function deleteCategoryById($id)
+    {
+        return $this->deleteById($id);
+    }
+
 }
 
-?>

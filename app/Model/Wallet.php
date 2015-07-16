@@ -39,6 +39,41 @@ class Wallet extends AppModel
         ),
     );
 
+    public function bindHasMany($model, $fKey)
+    {
+        $this->bindModel(array(
+            'hasMany' => array(
+                $model => array(
+                    'className'  => $model,
+                    'foreignKey' => $fKey,
+                    'dependent'  => 'true'
+                ),
+            ),
+        ));
+    }
+
+    public function bindTransaction()
+    {
+        $this->bindHasMany('Transaction');
+    }
+
+    public function bindBelongTo($model, $fKey)
+    {
+        $this->bindModel(array(
+            'belongTo' => array(
+                $model => array(
+                    'className'  => $model,
+                    'foreignKey' => $fKey,
+                ),
+            ),
+        ));
+    }
+
+    public function bindUser()
+    {
+        $this->bindBelongTo('User', 'user_id');
+    }
+
     /**
      * Add wallet
      * 
@@ -179,4 +214,3 @@ class Wallet extends AppModel
 
 }
 
-?>
