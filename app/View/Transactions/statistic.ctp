@@ -15,12 +15,12 @@
         <tr>
             <th>Income Money</th>
             <td><?php echo $income . '(VND)'; ?></td>
-            <td><?php echo $income / ($income + $expense) *100 .'%' ; ?></td>
+            <td><?php echo $income / ($income + $expense) * 100 . '%'; ?></td>
         </tr>
         <tr>
             <th>Expense Money</th>
             <td><?php echo $expense . '(VND)'; ?></td>
-            <td><?php echo $expense / ($income + $expense) *100 .'%' ; ?></td>
+            <td><?php echo $expense / ($income + $expense) * 100 . '%'; ?></td>
         </tr>
         <tr>
             <th>Current Money</th>
@@ -32,7 +32,15 @@
 </div>
 <div class="statistic form">
     <h2>Detail</h2>
-    
+    <div style="float: right">
+        <?php
+        echo $this->Form->create();
+        echo $this->Form->dateTime('formdate');
+        echo $this->Form->dateTime('todate');
+        echo $this->Form->end('Submit');
+        ?>
+
+    </div>
     <table>
         <tr>
             <th>Balance</th>
@@ -42,12 +50,12 @@
         <tr>
             <th>Income Money</th>
             <td><?php echo '(VND)'; ?></td>
-            <td><?php echo '%' ; ?></td>
+            <td><?php echo '%'; ?></td>
         </tr>
         <tr>
             <th>Expense Money</th>
-            <td><?php echo  '(VND)'; ?></td>
-            <td><?php echo  '%' ; ?></td>
+            <td><?php echo '(VND)'; ?></td>
+            <td><?php echo '%'; ?></td>
         </tr>
         <tr>
             <th>Current Money</th>

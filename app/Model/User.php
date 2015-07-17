@@ -7,19 +7,7 @@ class User extends AppModel
 
     public $name         = 'User';
     public $displayField = 'name';
-    public $hasMany      = array(
-        'Wallet'   => array(
-            'className'  => 'Wallet',
-            'foreignKey' => 'user_id',
-            'dependent'  => 'true'
-        ),
-        'Category' => array(
-            'className'  => 'Category',
-            'foreignKey' => 'user_id',
-            'dependent'  => 'true',
-        )
-    );
-    public $validate     = array(
+    public $validate = array(
         'username'         => array(
             'notEmpty' => array(
                 'rule'    => 'notBlank',
@@ -67,6 +55,29 @@ class User extends AppModel
             )
         )
     );
+
+    public function bindHasMany($model, $fKey)
+    {
+        $this->bindModel(array(
+            'hasMany' => array(
+                $model => array(
+                    'className'  => $model,
+                    'foreignKey' => $fKey,
+                    'dependent'  => 'true'
+                ),
+            ),
+        ));
+    }
+
+    public function bindWallet()
+    {
+        $this->bindHasMany('Wallet', 'user_id');
+    }
+
+    public function bindCategory()
+    {
+        $this->bindHasMany('Category', 'user_id');
+    }
 
     /**
      *  validate match password 
@@ -234,9 +245,20 @@ class User extends AppModel
      */
     public function deleteUserById($id)
     {
-        return $this->deleteById($id);
+        return $this->delete($id);
+    }
+
+    /**
+     *  Get current wallet by userId
+     * 
+     * @param int $id
+     * @return param
+     */
+    public function getCurrentWalletIdByUserId($id)
+    {
+        $data     = $this->getUserById($id);
+        $walletId = $data['User']['current_wallet_id'];
+        return $walletId;
     }
 
 }
-
-

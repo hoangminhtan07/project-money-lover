@@ -153,6 +153,7 @@ class UsersController extends AppController
         } else {
             $this->Session->setFlash('Unable to create user. Please try again.');
         }
+        $this->redirect(array('action' => 'index'));
     }
 
     /**
@@ -261,14 +262,36 @@ class UsersController extends AppController
         $id = $this->Auth->User('id');
 
         //delete user
-        $delete = $this->User->deleteUserById($id);
-        if ($delete) {
-            $this->Session->setFlash('User deleted');
-            $this->redirect($this->Auth->logout());
-        } else {
-            $this->Session->setFlash('User was not deleted');
+        //delete all wallet,transaction
+        //get list wallets of user
+        $this->loadModel('Wallet');
+        $data = $this->Wallet->getWalletsByUserId($id);
+        foreach ($data as $wallet) {
+            $walletId = $wallet['Wallet']['id'];
+
+            //delete all transactions by walletId
+            $this->loadModel('Transaction');
+            $del = $this->Transaction->deleteTransactionsByWalletId($walletId);
+            if ($del) {
+                $this->loadModel('Wallet');
+                $del = $this->Wallet->deleteWalletById($walletId);
+            }
         }
-        $this->redirect(array('action' => 'index'));
+
+        //delete all categories by userId
+        $this->loadModel('Category');
+        $del = $this->Category->deleteCategoriesByUserId($id);
+        if ($del) {
+            //delete user
+            $delete = $this->User->deleteUserById($id);
+            if ($delete) {
+                $this->Session->setFlash('User deleted');
+                $this->redirect($this->Auth->logout());
+            } else {
+                $this->Session->setFlash('User was not deleted');
+            }
+            $this->redirect(array('action' => 'index'));
+        }
     }
 
     /**
@@ -291,4 +314,3 @@ class UsersController extends AppController
     }
 
 }
-

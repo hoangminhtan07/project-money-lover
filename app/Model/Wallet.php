@@ -5,16 +5,8 @@ App::uses('AppModel', 'Model');
 class Wallet extends AppModel
 {
 
-    public $name      = 'Wallet';
-    public $belongsTo = 'User';
-    public $hasMany   = array(
-        'Transaction' => array(
-            'name'       => 'Transaction',
-            'foreignKey' => 'wallet_id',
-            'dependent'  => 'true',
-        )
-    );
-    public $validate  = array(
+    public $name     = 'Wallet';
+    public $validate = array(
         'name'    => array(
             'notEmpty' => array(
                 'rule'    => 'notBlank',
@@ -113,7 +105,7 @@ class Wallet extends AppModel
      * @param int $userId
      * @return array
      */
-    public function view($userId = 0)
+    public function getWalletsByUserId($userId = 0)
     {
         $data = $this->find('all', array(
             'conditions' => array(
@@ -142,7 +134,7 @@ class Wallet extends AppModel
      * @param int $userId
      * @return array 
      */
-    public function getWalletByUserId($userId = 0)
+    public function getListWalletsNameByUserId($userId = 0)
     {
         $data = $this->find('list', array(
             'fields'     => 'Wallet.name',
@@ -212,5 +204,40 @@ class Wallet extends AppModel
         $this->save($data);
     }
 
-}
+    /**
+     * Delete wallet by walletId
+     * 
+     * @param int $id
+     * @return boolean
+     */
+    public function deleteWalletById($id)
+    {
+        return $this->delete($id);
+    }
 
+    /**
+     *  Get balance of an wallet
+     * 
+     * @param int $id
+     * @return param
+     */
+    public function getBalanceByWalletId($id)
+    {
+        $data = $this->findById($id);
+        return $data['Wallet']['balance'];
+    }
+
+    /**
+     *  delete wallets by userId
+     * 
+     * @param int $userId
+     * return boolean
+     */
+    public function deleteWalletsByUserId($userId)
+    {
+        return $this->deleteAll(array(
+                    'Wallet.user_id' => $userId,
+        ));
+    }
+
+}

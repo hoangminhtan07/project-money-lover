@@ -24,8 +24,7 @@ class TransactionsController extends AppController
 
         //get current walletId
         $this->loadModel('User');
-        $data     = $this->User->getUserById($userId);
-        $walletId = $data['User']['current_wallet_id'];
+        $walletId = $this->User->getCurrentWalletIdByUserId($userId);
 
         //check request
         if (!$this->request->is('post')) {
@@ -124,9 +123,10 @@ class TransactionsController extends AppController
         }
 
         //save edited transaction
-        $oldData     = $this->Transaction->getById($transactionId);
+        $this->Transaction->bindCategory();
+        $oldData     = $this->Transaction->getTransactionById($transactionId);
         $this->loadModel('Category');
-        $newData     = $this->Category->getById($categoryId);
+        $newData     = $this->Category->getCategoryById($categoryId);
         $transaction = $this->Transaction->edit($data, $categoryId, $transactionId);
         if ($transaction) {
             $this->Session->setFlash('Transaction has been saved.');
@@ -191,7 +191,7 @@ class TransactionsController extends AppController
         //save balance to the current wallet
         $this->loadModel('Wallet');
         $this->Wallet->transactionMoney($walletId, $amount);
-        $del = $this->Transaction->deleteById($transactionId);
+        $del = $this->Transaction->deleteTransactionById($transactionId);
         if ($del) {
             $this->Session->setFlash('Transaction has been deleted.');
         } else {
@@ -200,7 +200,6 @@ class TransactionsController extends AppController
         $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
     }
 
-    
     /**
      * view transaction by date range
      * 
@@ -208,11 +207,15 @@ class TransactionsController extends AppController
      */
     public function viewDay($walletId)
     {
+        //get list transactions bind Category by walletId
+        $this->Transaction->bindCategory();
         $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
         $transactions = $this->getListTransactionsOrderByDateRange($transactions);
+
         $this->set('transactions', $transactions);
     }
-    
+
+    //generate new array transaction pointing by date
     private function getListTransactionsOrderByDateRange($trans)
     {
         $reqs = array();
@@ -235,18 +238,16 @@ class TransactionsController extends AppController
         //get userId
         $userId = $this->Auth->user('id');
 
-        //get current wallet
+        //get current walletId
         $this->loadModel('User');
-        $data     = $this->User->getUserById($userId);
-        $walletId = $data['User']['current_wallet_id'];
+        $walletId = $this->User->getCurrentWalletIdByUserId($userId);
 
-        foreach ($data['Wallet'] as $wallet) {
-            if ($wallet['id'] == $walletId) {
-                $currentMoney = $wallet['balance'];
-            }
-        }
+        //get balance of an wallet by walletId
+        $this->loadModel('Wallet');
+        $currentMoney = $this->Wallet->getBalanceByWalletId($walletId);
 
-        //get list transactions by wallet Id
+        //get list transactions bidWallet bind Category by wallet Id
+        $this->Transaction->bindCategory();
         $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
 
         //calculate expense and income money
@@ -260,8 +261,17 @@ class TransactionsController extends AppController
         $this->set('expense', $this->expense);
         $this->set('income', $this->income);
         $this->set('currentMoney', $currentMoney);
+
+        //get list cate
+        $cate = $this->cateArrangement($transactions);
+    }
+
+    private function cateArrangement($tran)
+    {
+        $newCate = array();
+        foreach($tran as $key => $value){
+            
+        }
     }
 
 }
-
-?>

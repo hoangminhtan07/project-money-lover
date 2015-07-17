@@ -5,18 +5,8 @@ App::uses('AppModel', 'Model');
 class Transaction extends AppModel
 {
 
-    public $name      = 'Transaction';
-    public $belongsTo = array(
-        'Wallet'   => array(
-            'className'  => 'Wallet',
-            'foreignKey' => 'wallet_id'
-        ),
-        'Category' => array(
-            'className'  => 'Category',
-            'foreignKey' => 'category_id'
-        )
-    );
-    public $validate  = array(
+    public $name     = 'Transaction';
+    public $validate = array(
         'amount' => array(
             'notEmpty'      => array(
                 'rule'    => 'notBlank',
@@ -29,10 +19,10 @@ class Transaction extends AppModel
         ),
     );
 
-    public function bindBelongTo($model, $fKey)
+    public function bindBelongsTo($model, $fKey)
     {
         $this->bindModel(array(
-            'belongTo' => array(
+            'belongsTo' => array(
                 $model => array(
                     'className'  => $model,
                     'foreignKey' => $fKey,
@@ -43,12 +33,12 @@ class Transaction extends AppModel
 
     public function bindCategory()
     {
-        $this->bindBelongTo('Category', 'category_id');
+        $this->bindBelongsTo('Category', 'category_id');
     }
-    
+
     public function bindWallet()
     {
-        $this->bindBelongTo('Wallet', 'wallet_id');
+        $this->bindBelongsTo('Wallet', 'wallet_id');
     }
 
     /**
@@ -148,7 +138,7 @@ class Transaction extends AppModel
     public function deleteTransactionsByCetegoryId($categoryId)
     {
         return $this->deleteAll(array(
-                    'Transaction.category_id' => $categoryId,
+                    'Transaction.category_id' => $categoryId
         ));
     }
 
@@ -169,9 +159,22 @@ class Transaction extends AppModel
      * @param int $id
      * @return boolean
      */
-    public function deleteById($id)
+    public function deleteTransactionById($id)
     {
         return $this->delete($id);
+    }
+
+    /**
+     * Delete transactions by walletId
+     * 
+     * @param int $walletId
+     * @return boolean
+     */
+    public function deleteTransactionsByWalletId($walletId)
+    {
+        return $this->deleteAll(array(
+                    'Transaction.wallet_id' => $walletId,
+        ));
     }
 
 }

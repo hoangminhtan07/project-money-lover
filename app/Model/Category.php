@@ -5,53 +5,41 @@ App::uses('AppModel', 'Model');
 class Category extends AppModel
 {
 
-    public $name      = 'Category';
-    public $belongsTo = 'User';
-    public $hasMany   = array(
-        'Transaction' => array(
-            'className'       => 'Transaction',
-            'foreignKey' => 'category_id',
-            'dependent'  => 'true',
-        )
-    );
-    public $validate  = array(
-        'name' => array(
-            'notEmpty' => array(
-                'rule'    => 'notBlank',
-                'message' => 'Please enter wallet name'
-            ),
-        ),
-    );
-    
-    public function bindHasMany($model, $fKey){
+    public $name = 'Category';
+
+    public function bindHasMany($model, $fKey)
+    {
         $this->bindModel(array(
             'hasMany' => array(
                 $model => array(
-                    'className' => $model,
+                    'className'  => $model,
                     'foreignKey' => $fKey,
                     'dependent'  => 'true'
                 ),
             ),
         ));
     }
-    
-    public function bindTransaction(){
-        $this->bindHasMany('Transaction');
+
+    public function bindTransaction()
+    {
+        $this->bindHasMany('Transaction', 'category_id');
     }
-    
-    public function bindBelongTo($model, $fKey){
+
+    public function bindBelongsTo($model, $fKey)
+    {
         $this->bindModel(array(
-            'belongTo' => array(
+            'belongsTo' => array(
                 $model => array(
-                    'className' => $model,
+                    'className'  => $model,
                     'foreignKey' => $fKey,
                 ),
             ),
         ));
     }
-    
-    public function bindUser(){
-        $this->bindBelongTo('User','user_id');
+
+    public function bindUser()
+    {
+        $this->bindBelongsTo('User', 'user_id');
     }
 
     /**
@@ -69,12 +57,12 @@ class Category extends AppModel
     }
 
     /**
-     * Get categories of an user
+     * Get list categories of an user
      * 
      * @param int $userId User Id
      * @return array Array of categories
      */
-    public function getCategoriesByUser($userId)
+    public function getListCategoriesByUser($userId)
     {
         $data = $this->find('all', array(
             'conditions' => array(
@@ -163,10 +151,28 @@ class Category extends AppModel
         return $this->findById($id);
     }
 
+    /**
+     * Delete category by categoryId
+     * 
+     * @param int $id
+     * @return boolean
+     */
     public function deleteCategoryById($id)
     {
-        return $this->deleteById($id);
+        return $this->delete($id);
+    }
+
+    /**
+     *  delete all categories by userId
+     * 
+     * @param int $userId
+     * @return boolean
+     */
+    public function deleteCategoriesByUserId($userId)
+    {
+        return $this->deleteAll(array(
+            'Category.user_id' => $userId
+        ));
     }
 
 }
-
