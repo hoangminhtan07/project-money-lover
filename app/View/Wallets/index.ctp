@@ -1,14 +1,15 @@
 
 <div class="users index">
     <h2> <?php echo $wallet['Wallet']['name'] . ':' . ' ' . 'Money :' . $wallet['Wallet']['balance'] . '(VND)'; ?></h2>
-    <?php echo $this->Html->link('Sort By Date Range', array('controller' => 'transactions', 'action' => 'viewDay', $wallet['Wallet']['id'])); ?>
+    <?php echo $this->Html->link('Sort By Date Range', array('action' => 'viewDay', $wallet['Wallet']['id'])); ?>
+    <?php echo $this->Html->link('Sort By Category', array('action' => 'viewCategory', $wallet['Wallet']['id'])); ?>
     <table cellpading="0" cellspacing="0">
         <tr>
-            <th><?php echo $this->Html->link('Category', array('action' => 'index', 'Order_by_Category')); ?></th>
+            <th>Category</th>
             <th>Purpose</th>
             <th>Amount</th>
             <th>Note</th>
-            <th><?php echo $this->Html->link('Created', array('action' => 'index')); ?></th>
+            <th>Created</th>
             <th>Modified</th>
             <th>Actions</th>
         </tr>

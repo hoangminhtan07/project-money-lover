@@ -3,6 +3,8 @@
 class WalletsController extends AppController
 {
 
+    public $uses = array('Wallet', 'User', 'Transaction');
+
     /**
      * view all transaction in current wallet
      * 
@@ -14,7 +16,6 @@ class WalletsController extends AppController
         $userId = $this->Auth->user('id');
 
         //get current wallet
-        $this->loadModel('User');
         $walletId = $this->User->getCurrentWalletIdByUserId($userId);
 
         if (empty($walletId)) {
@@ -29,18 +30,9 @@ class WalletsController extends AppController
         $this->set('wallet', $wallet);
 
         //get list transactions bind category by walletId
-        $this->loadModel('Transaction');
         $this->Transaction->bindCategory();
         $this->Transaction->bindWallet();
         $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
-
-        //get list transaction bind category order by category name
-        if ($order == 'Order_by_Category') {
-            $this->loadModel('Transaction');
-            $this->Transaction->bindCategory();
-            $this->Transaction->bindWallet();
-            $transactions = $this->Transaction->getListTransactionsOrderByCategoriesName($walletId);
-        }
 
         //set view
         $this->set('transactions', $transactions);
@@ -104,23 +96,22 @@ class WalletsController extends AppController
 
         //delete wallet
         if ($checkUserWallet) {
+
+            //check request
+            if (!$this->request->is('post', 'put')) {
+                return;
+            }
+
             //delete all transactions by walletId
-            $this->loadModel('Transaction');
-            $del = $this->Transaction->deleteTransactionsByWalletId($walletId);
+            $del = $this->Wallet->deleteWalletById($walletId);
             if ($del) {
 
-                //delete wallet apter delete all transactions
-                $del = $this->Wallet->deleteWalletById($walletId);
-                if ($del) {
+                //set null current user wallet id
+                $this->User->setCurrentWallet($userId, null);
 
-                    //set null current user wallet id
-                    $this->loadModel('User');
-                    $this->User->setCurrentWallet($userId, null);
-
-                    $this->Session->setFlash('Wallet deleted.');
-                } else {
-                    $this->Session->setFlash('Wallet was not deleted. Please try again.');
-                }
+                $this->Session->setFlash('Wallet deleted.');
+            } else {
+                $this->Session->setFlash('Wallet was not deleted. Please try again.');
             }
         } else {
             $this->Session->setFlash('You do not have permission to access.');
@@ -199,21 +190,126 @@ class WalletsController extends AppController
 
         //check fromWalletId vs toWalletId
         $fromWalletId = $data['Wallet']['fromWallet'];
-        $toWalletId   = $data['Wallet']['toWallet'];
-        if ($fromWalletId == $toWalletId) {
-            $this->Session->setFlash('Wallets must be different.');
-        } else {
-            $amounts = $data['Wallet']['amounts'];
 
-            //update wallet balance
-            $newBalance = $this->Wallet->transfer($fromWalletId, $toWalletId, $amounts);
-            if ($newBalance) {
-                $this->Session->setFlash('Balance has been update');
-            } else {
-                $this->Session->setFlash('Error. Please try again.');
+        //check fromWallet belongto current user 
+        $checkUserWallet = $this->Wallet->checkUserWallet($userId, $fromWalletId);
+        if ($checkUserWallet) {
+            $toWalletId = $data['Wallet']['toWallet'];
+
+            //check toWallet belongto current user
+            $checkUserWallet = $this->Wallet->checkUserWallet($userId, $toWalletId);
+            if ($checkUserWallet) {
+                if ($fromWalletId == $toWalletId) {
+                    $this->Session->setFlash('Wallets must be different.');
+                } else {
+                    $amounts = $data['Wallet']['amounts'];
+
+                    //update wallet balance
+                    $newBalance = $this->Wallet->transfer($fromWalletId, $toWalletId, $amounts);
+                    if ($newBalance) {
+                        $this->Session->setFlash('Balance has been update');
+                    } else {
+                        $this->Session->setFlash('Error. Please try again.');
+                    }
+                    $this->redirect(array('action' => 'view'));
+                }
             }
-            $this->redirect(array('action' => 'view'));
         }
+        $this->Session->setFlash('Access Denied');
+        $this->redirect(array('action' => 'index'));
+    }
+
+    /**
+     * view transaction by date range
+     * 
+     * @param int $walletId
+     */
+    public function viewDay($walletId)
+    {
+        //get userId
+        $userId = $this->Auth->user('id');
+
+        //check Wallet belongsTo user
+        $checkUserWallet = $this->Wallet->checkUserWallet($userId, $walletId);
+        if (!$checkUserWallet) {
+            $this->Session->setFlash('Can not access.');
+            $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
+        }
+
+        //get list transactions bind Category by walletId
+        $this->Transaction->bindCategory();
+        $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
+        $transactions = $this->getListTransactionsOrderByDateRange($transactions);
+
+        $this->set('transactions', $transactions);
+    }
+
+    /**
+     * generate new array transaction pointing by date
+     * 
+     * @param array $trans
+     * @return array
+     */
+    private function getListTransactionsOrderByDateRange($trans)
+    {
+        $reqs = array();
+        foreach ($trans as $date) {
+            $createTime = date('Y-m-d', strtotime($date['Transaction']['created']));
+            if (!array_key_exists($createTime, $reqs)) {
+                foreach ($trans as $value) {
+                    if ($createTime == date('Y-m-d', strtotime($value['Transaction']['created']))) {
+                        $reqs[$createTime][] = $value;
+                    }
+                }
+            }
+        }
+        return $reqs;
+    }
+
+    /**
+     *  view transaction sort by categoryName
+     * 
+     * @param int $walletId
+     */
+    public function viewCategory($walletId)
+    {
+        //get userId
+        $userId = $this->Auth->user('id');
+
+        //check Wallet belongsTo user
+        $checkUserWallet = $this->Wallet->checkUserWallet($userId, $walletId);
+        if (!$checkUserWallet) {
+            $this->Session->setFlash('Can not access.');
+            $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
+        }
+
+        //get list transactions bind Category by walletId
+        $this->Transaction->bindCategory();
+        $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
+        $transactions = $this->getListTransactionsOrderByCategory($transactions);
+        $this->set('transactions', $transactions);
+    }
+
+    /**
+     * generate new array transaction pointing by categoryName
+     * 
+     * @param array $trans
+     * @return array
+     */
+    private function getListTransactionsOrderByCategory($trans)
+    {
+        $reqs = array();
+        foreach ($trans as $name) {
+            $categoryName = $name['Category']['name'];
+            if (!array_key_exists($categoryName, $reqs)) {
+                foreach ($trans as $value) {
+                    if ($categoryName == $name['Category']['name']) {
+                        $reqs[$categoryName][] = $value;
+                    }
+                }
+            }
+        }
+        return $reqs;
     }
 
 }

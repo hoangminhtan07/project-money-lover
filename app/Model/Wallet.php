@@ -155,27 +155,20 @@ class Wallet extends AppModel
     public function transfer($fromWalletId, $toWalletId, $amounts)
     {
 
+        $dataSource = $this->getDataSource();
+        $dataSource->begin();
+
         //update balance fromWallet
-        $data1    = $this->find('first', array(
-            'conditions' => array(
-                'Wallet.id' => $fromWalletId,
-            )
+        $this->updateAll(array('Wallet.balance' => "Wallet.balance - {$amounts}"), array(
+            'Wallet.id' => $fromWalletId,
         ));
-        $value1   = $data1['Wallet']['balance'] - $amounts;
-        $this->id = $fromWalletId;
-        $this->saveField('balance', $value1);
 
         //update balance toWallet
-        $data2    = $this->find('first', array(
-            'conditions' => array(
-                'Wallet.id' => $toWalletId,
-            )
+        $this->updateAll(array('Wallet.balance' => "Wallet.balance + {$amounts}"), array(
+            'Wallet.id' => $toWalletId,
         ));
-        $value2   = $data2['Wallet']['balance'] + $amounts;
-        $this->id = $toWalletId;
-        $this->saveField('balance', $value2);
 
-        return true;
+        return $dataSource->commit();
     }
 
     /**
@@ -210,9 +203,17 @@ class Wallet extends AppModel
      * @param int $id
      * @return boolean
      */
-    public function deleteWalletById($id)
+    public function deleteWalletById($walletId)
     {
-        return $this->delete($id);
+        $dataSource  = $this->getDataSource();
+        $dataSource->begin();
+        //delete all transactions before delete wallet
+        $Transaction = ClassRegistry::init('Transaction');
+        $Transaction->deleteTransactionsByWalletId($walletId);
+
+        //delete wallet
+        $this->delete($walletId);
+        return $dataSource->commit();
     }
 
     /**

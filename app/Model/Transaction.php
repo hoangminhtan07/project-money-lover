@@ -77,23 +77,6 @@ class Transaction extends AppModel
     }
 
     /**
-     * get list transaction order by categories name
-     * 
-     * @param int $walletId
-     * @return array
-     */
-    public function getListTransactionsOrderByCategoriesName($walletId)
-    {
-        $data = $this->find('all', array(
-            'conditions' => array(
-                'wallet_id' => $walletId,
-            ),
-            'order'      => 'Category.name'
-        ));
-        return $data;
-    }
-
-    /**
      * 
      * check Transaction belong to wallet by walletId and transactionId
      * 

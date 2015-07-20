@@ -41,6 +41,7 @@
         </p>
         <div style="float: right" > <?php echo $this->Form->end('Submit'); ?> </div>
     </div>
+    <?php if(isset($sumIncome)): ?>
     <table>
         <tr>
             <th>Income Money <?php echo $sumIncome .'(VND)'; ?> </th>
@@ -65,4 +66,5 @@
             <?php endif; ?>
         </tr>
     </table>
+    <?php endif; ?>
 </div>

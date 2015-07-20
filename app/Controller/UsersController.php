@@ -103,12 +103,11 @@ class UsersController extends AppController
         //Check empty params
         if (empty($email) || empty($token)) {
             throw new BadRequestException('Bad request');
-            $this->redirect(array('action' => 'index'));
         }
 
         //check request
         if (!$this->request->is(array('post', 'put'))) {
-            return;
+            return false;
         }
 
         //load validation

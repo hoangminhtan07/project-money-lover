@@ -3,6 +3,8 @@
 class CategoriesController extends AppController
 {
 
+    public $uses = array('Categogy', 'User', 'Wallet', 'Transaction');
+
     /**
      *  Index: display all category
      */
@@ -11,14 +13,14 @@ class CategoriesController extends AppController
 
         //get categories of user
         //get userId
-        $userId       = $this->Auth->user('id');
-        
+        $userId = $this->Auth->user('id');
+
         //get list categories by userId
         $categoryList = $this->Category->getListCategoriesByUser($userId);
         if (empty($categoryList)) {
             $this->Session->setFlash('you have not caterory yet. Please creat new Category.');
         }
-        
+
         //set view
         $this->set('categories', $categoryList);
     }
@@ -35,9 +37,9 @@ class CategoriesController extends AppController
 
         //get userId
         $userId = $this->Auth->user('id');
-        
+
         //get data request
-        $data   = $this->request->data['Category'];
+        $data = $this->request->data['Category'];
 
         //save data
         $add = $this->Category->add($data, $userId);
@@ -69,7 +71,7 @@ class CategoriesController extends AppController
 
         //edit category
         if ($checkUserCategory) {
-            
+
             //check request
             if (!$this->request->is(array('post', 'put'))) {
                 return;
@@ -77,7 +79,7 @@ class CategoriesController extends AppController
 
             //get data request
             $data = $this->request->data['Category'];
-            
+
             //save data after edit
             $edit = $this->Category->edit($data, $categoryId);
             if ($edit) {
@@ -112,13 +114,12 @@ class CategoriesController extends AppController
 
             //get all amount to update balance
             //get current walletId
-            $this->loadModel('User');
             $walletId = $this->User->getCurrentWalletIdByUserId($userId);
 
             //get data bind Category-Transaction by categoryId
             $this->Category->bindTransaction();
-            $data   = $this->Category->getCategoryById($categoryId);
-            
+            $data = $this->Category->getCategoryById($categoryId);
+
             //get amount
             $amount = 0;
             foreach ($data['Transaction'] as $transactions) {
@@ -135,11 +136,9 @@ class CategoriesController extends AppController
 
             //delete all transaction by walletId and CategoryId
 
-            $this->loadModel('Transaction');
             $del = $this->Transaction->deleteTransactionsByCetegoryId($categoryId);
             if ($del) {
                 //update amount to current walletId
-                $this->loadModel('Wallet');
                 $this->Wallet->transactionMoney($walletId, $amount);
 
                 //delete category apter delete all transactions

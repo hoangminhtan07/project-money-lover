@@ -257,6 +257,9 @@ class User extends AppModel
     public function getCurrentWalletIdByUserId($id)
     {
         $data     = $this->getUserById($id);
+        if(empty($data)){
+            return;
+        }
         $walletId = $data['User']['current_wallet_id'];
         return $walletId;
     }
