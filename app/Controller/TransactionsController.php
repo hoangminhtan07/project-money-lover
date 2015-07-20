@@ -232,7 +232,10 @@ class TransactionsController extends AppController
         return $reqs;
     }
 
-    //TODO Monthly report
+    /**
+     *  Statistic current wallet
+     * 
+     */
     public function statistic()
     {
         //get userId
@@ -249,7 +252,7 @@ class TransactionsController extends AppController
         //get list transactions bidWallet bind Category by wallet Id
         $this->Transaction->bindCategory();
         $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
-
+        
         //calculate expense and income money
         foreach ($transactions as $transaction) {
             if ($transaction['Category']['purpose'] == false) {
@@ -258,20 +261,63 @@ class TransactionsController extends AppController
                 $this->income += $transaction['Transaction']['amount'];
             }
         }
+        
+        //set view
         $this->set('expense', $this->expense);
         $this->set('income', $this->income);
         $this->set('currentMoney', $currentMoney);
 
-        //get list cate
-        $cate = $this->cateArrangement($transactions);
+        //check request
+        if (!$this->request->is(array('put', 'post'))) {
+            return;
+        }
+
+        //get data request
+        $formMonth = $this->request->data['Transaction']['form'];
+        $toMonth   = $this->request->data['Transaction']['to'];
+
+        //get list cates to display month report
+        $cates       = $this->cateArrangement($transactions, $formMonth['month'], $toMonth['month']);
+
+        //calculate sumIncome and sumExpense formMonth toMonth
+        $sumIncome  = 0;
+        $sumExpense = 0;
+        foreach ($cates as $detail) {
+            if ($detail['purpose'] == true) {
+                $sumIncome += $detail['amount'];
+            } else {
+                $sumExpense += $detail['amount'];
+            }
+        }
+        
+        //set view
+        $this->set('cates', $cates);
+        $this->set('sumIncome', $sumIncome);
+        $this->set('sumExpense', $sumExpense);
     }
 
-    private function cateArrangement($tran)
+    //generate new cates array to display month report
+    private function cateArrangement($trans, $formMonth, $toMonth)
     {
-        $newCate = array();
-        foreach($tran as $key => $value){
-            
+        $newCates = array();
+        foreach ($trans as $key => $value) {
+            $month = date('m', strtotime($value['Transaction']['created']));
+            if ($formMonth <= $month && $month <= $toMonth) {
+                $cateId = $value['Category']['id'];
+                if (!array_key_exists($cateId, $newCates)) {
+                    $amount = 0;
+                    foreach ($trans as $key => $value) {
+                        if ($cateId == $value['Category']['id']) {
+                            $newCates[$cateId]['name']    = $value['Category']['name'];
+                            $newCates[$cateId]['purpose'] = $value['Category']['purpose'];
+                            $amount += $value['Transaction']['amount'];
+                            $newCates[$cateId]['amount']  = $amount;
+                        }
+                    }
+                }
+            }
         }
+        return $newCates;
     }
 
 }
