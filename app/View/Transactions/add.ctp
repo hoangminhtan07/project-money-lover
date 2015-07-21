@@ -15,7 +15,9 @@
             'label'   => 'Earned Purpose',
             'class'   => 'scale'
         ));
-        echo $this->Form->input('amount');
+        echo $this->Form->input('amount', array(
+            'required' => false,
+        ));
         echo $this->Form->input('note');
         ?>
     </fieldset>

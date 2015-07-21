@@ -59,7 +59,7 @@ class Category extends AppModel
     /**
      * Get list categories of an user
      * 
-     * @param int $userId User Id
+     * @param int $userId
      * @return array Array of categories
      */
     public function getListCategoriesByUser($userId)
@@ -110,30 +110,12 @@ class Category extends AppModel
      * @param int $userId
      * @return array list name category by userId
      */
-    public function getListNameCategorySpent($userId)
+    public function getListNameCategoryByPurpose($userId, $purpose)
     {
         $data = $this->find('list', array(
             'conditions' => array(
                 $this->alias . '.user_id' => $userId,
-                'Category.purpose'        => '0',
-            ),
-            'fields'     => 'Category.name',
-        ));
-        return $data;
-    }
-
-    /**
-     *  get list name category earned by userId
-     * 
-     * @param int $userId
-     * @return arrat
-     */
-    public function getListNameCategoryEarned($userId)
-    {
-        $data = $this->find('list', array(
-            'conditions' => array(
-                'Category.user_id' => $userId,
-                'Category.purpose' => '1',
+                'Category.purpose'        => $purpose,
             ),
             'fields'     => 'Category.name',
         ));
@@ -157,9 +139,19 @@ class Category extends AppModel
      * @param int $id
      * @return boolean
      */
-    public function deleteCategoryById($id)
+    public function deleteCategoryById($categoryId)
     {
-        return $this->delete($id);
+        $dataSource = $this->getDataSource();
+        $dataSource->begin();
+
+        //delete all transaction by CategoryId
+        $transaction = ClassRegistry::init('Transaction');
+        $transaction->deleteTransactionsByCategoryId($categoryId);
+
+        //delete category apter delete all transactions
+        $this->delete($categoryId);
+
+        return $dataSource->commit();
     }
 
     /**
@@ -171,7 +163,7 @@ class Category extends AppModel
     public function deleteCategoriesByUserId($userId)
     {
         return $this->deleteAll(array(
-            'Category.user_id' => $userId
+                    'Category.user_id' => $userId
         ));
     }
 

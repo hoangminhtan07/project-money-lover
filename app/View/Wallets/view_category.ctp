@@ -6,9 +6,9 @@
         <table cellpading="0" cellspacing="0">
             <tr>
                 <th>Purpose</th>
+                <th >Date</th>
                 <th>Amount</th>
-                <th>Note</th>
-                <th>Created</th>
+                <th style="width: 300px">Note</th>
             </tr>
             <?php foreach ($transaction as $tran): ?>
                 <tr>
@@ -17,9 +17,9 @@
                     <?php else: ?>
                         <td><?php echo 'Earned'; ?></td>
                     <?php endif; ?>
+                    <td><?php echo $tran['Transaction']['created']; ?></td>
                     <td><?php echo $tran['Transaction']['amount']; ?></td>
                     <td><?php echo $tran['Transaction']['note']; ?></td>
-                    <td><?php echo $tran['Transaction']['created']; ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>

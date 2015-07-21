@@ -207,9 +207,10 @@ class Wallet extends AppModel
     {
         $dataSource  = $this->getDataSource();
         $dataSource->begin();
+        
         //delete all transactions before delete wallet
-        $Transaction = ClassRegistry::init('Transaction');
-        $Transaction->deleteTransactionsByWalletId($walletId);
+        $transaction = ClassRegistry::init('Transaction');
+        $transaction->deleteTransactionsByWalletId($walletId);
 
         //delete wallet
         $this->delete($walletId);

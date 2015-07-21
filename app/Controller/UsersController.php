@@ -3,7 +3,7 @@
 class UsersController extends AppController
 {
 
-    public $uses    = array('User');
+    public $uses    = array('User', 'Wallet', 'Category', 'Transaction');
     public $helpers = array('Html', 'Form');
 
     public function index()
@@ -107,7 +107,7 @@ class UsersController extends AppController
 
         //check request
         if (!$this->request->is(array('post', 'put'))) {
-            return false;
+            return;
         }
 
         //load validation
@@ -260,37 +260,14 @@ class UsersController extends AppController
         //get userId
         $id = $this->Auth->User('id');
 
-        //delete user
-        //delete all wallet,transaction
-        //get list wallets of user
-        $this->loadModel('Wallet');
-        $data = $this->Wallet->getWalletsByUserId($id);
-        foreach ($data as $wallet) {
-            $walletId = $wallet['Wallet']['id'];
-
-            //delete all transactions by walletId
-            $this->loadModel('Transaction');
-            $del = $this->Transaction->deleteTransactionsByWalletId($walletId);
-            if ($del) {
-                $this->loadModel('Wallet');
-                $del = $this->Wallet->deleteWalletById($walletId);
-            }
+        $delete = $this->User->deleteUserById($id);
+        if ($delete) {
+            $this->Session->setFlash('User deleted');
+            $this->redirect($this->Auth->logout());
+        } else {
+            $this->Session->setFlash('User was not deleted');
         }
-
-        //delete all categories by userId
-        $this->loadModel('Category');
-        $del = $this->Category->deleteCategoriesByUserId($id);
-        if ($del) {
-            //delete user
-            $delete = $this->User->deleteUserById($id);
-            if ($delete) {
-                $this->Session->setFlash('User deleted');
-                $this->redirect($this->Auth->logout());
-            } else {
-                $this->Session->setFlash('User was not deleted');
-            }
-            $this->redirect(array('action' => 'index'));
-        }
+        $this->redirect(array('action' => 'index'));
     }
 
     /**

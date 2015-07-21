@@ -8,7 +8,7 @@
                 <th>Category</th>
                 <th>Purpose</th>
                 <th>Amount</th>
-                <th style="width: 200px">Note</th>
+                <th style="width: 300px">Note</th>
             </tr>
             <?php foreach ($transaction as $tran): ?>
                 <tr>

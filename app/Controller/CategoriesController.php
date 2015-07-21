@@ -3,7 +3,7 @@
 class CategoriesController extends AppController
 {
 
-    public $uses = array('Categogy', 'User', 'Wallet', 'Transaction');
+    public $uses = array('Category', 'User', 'Wallet', 'Transaction');
 
     /**
      *  Index: display all category
@@ -58,6 +58,11 @@ class CategoriesController extends AppController
      */
     public function edit($categoryId)
     {
+        //check request
+        if (!$this->request->is(array('post', 'put'))) {
+            return;
+        }
+        
         //check params
         if (empty($categoryId)) {
             throw new ErrorException();
@@ -70,23 +75,18 @@ class CategoriesController extends AppController
         $checkUserCategory = $this->Category->checkUserCategory($userId, $categoryId);
 
         //edit category
-        if ($checkUserCategory) {
-
-            //check request
-            if (!$this->request->is(array('post', 'put'))) {
-                return;
-            }
-
-            //get data request
-            $data = $this->request->data['Category'];
-
-            //save data after edit
-            $edit = $this->Category->edit($data, $categoryId);
-            if ($edit) {
-                $this->Session->setFlash('Category has been saved.');
-            }
-        } else {
+        if (!$checkUserCategory) {
             $this->Session->setFlash('You do not have permission to access.');
+            $this->redirect(array('action' => 'index'));
+        }
+        
+        //get data request
+        $data = $this->request->data['Category'];
+
+        //save data after edit
+        $edit = $this->Category->edit($data, $categoryId);
+        if ($edit) {
+            $this->Session->setFlash('Category has been saved.');
         }
         $this->redirect(array('action' => 'index'));
     }
@@ -98,6 +98,11 @@ class CategoriesController extends AppController
      */
     public function delete($categoryId)
     {
+        //check request
+        if (!$this->request->is('post', 'put')) {
+            throw new BadRequestException('Bad request');
+        }
+
         //check params
         if (empty($categoryId)) {
             throw new ErrorException();
@@ -110,47 +115,39 @@ class CategoriesController extends AppController
         $checkUserCategory = $this->Category->checkUserCategory($userId, $categoryId);
 
         //delete category
-        if ($checkUserCategory) {
-
-            //get all amount to update balance
-            //get current walletId
-            $walletId = $this->User->getCurrentWalletIdByUserId($userId);
-
-            //get data bind Category-Transaction by categoryId
-            $this->Category->bindTransaction();
-            $data = $this->Category->getCategoryById($categoryId);
-
-            //get amount
-            $amount = 0;
-            foreach ($data['Transaction'] as $transactions) {
-                if ($walletId != $transactions['wallet_id']) {
-                    $this->Session->setFlash('this category can not be deleted because it was in many wallet.');
-                    $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
-                }
-                if ($data['Category']['purpose'] == true) {
-                    $amount += -$transactions['amount'];
-                } else {
-                    $amount += $transactions['amount'];
-                }
-            }
-
-            //delete all transaction by walletId and CategoryId
-
-            $del = $this->Transaction->deleteTransactionsByCetegoryId($categoryId);
-            if ($del) {
-                //update amount to current walletId
-                $this->Wallet->transactionMoney($walletId, $amount);
-
-                //delete category apter delete all transactions
-                $del = $this->Category->deleteCategoryById($categoryId);
-                if ($del) {
-                    $this->Session->setFlash('Category has been deleted');
-                } else {
-                    $this->Session->setFlash('Category was not deleted. Please try again.');
-                }
-            }
-        } else {
+        if (!$checkUserCategory) {
             $this->Session->setFlash('You do not have permission to access.');
+            $this->redirect(array('action' => 'index'));
+        }
+        //get all amount to update balance
+        //get current walletId
+        $walletId = $this->User->getCurrentWalletIdByUserId($userId);
+
+        //get data bind Category-Transaction by categoryId
+        $this->Category->bindTransaction();
+        $data = $this->Category->getCategoryById($categoryId);
+
+        //get amount
+        $amount = 0;
+        foreach ($data['Transaction'] as $transactions) {
+            if ($walletId != $transactions['wallet_id']) {
+                $this->Session->setFlash('this category can not be deleted because it was in many wallet.');
+                $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
+            }
+            if ($data['Category']['purpose'] == true) {
+                $amount += -$transactions['amount'];
+            } else {
+                $amount += $transactions['amount'];
+            }
+        }
+
+        $del = $this->Category->deleteCategoryById($categoryId);
+        if ($del) {
+            //update amount to current walletId
+            $this->Wallet->transactionMoney($walletId, $amount);
+            $this->Session->setFlash('Category has been deleted');
+        } else {
+            $this->Session->setFlash('Category was not deleted. Please try again.');
         }
         $this->redirect(array('action' => 'index'));
     }

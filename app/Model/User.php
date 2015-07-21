@@ -7,7 +7,7 @@ class User extends AppModel
 
     public $name         = 'User';
     public $displayField = 'name';
-    public $validate = array(
+    public $validate     = array(
         'username'         => array(
             'notEmpty' => array(
                 'rule'    => 'notBlank',
@@ -245,7 +245,31 @@ class User extends AppModel
      */
     public function deleteUserById($id)
     {
-        return $this->delete($id);
+        $dataSource = $this->getDataSource();
+        $dataSource->begin();
+
+        //delete user
+        //delete all wallet,transaction
+        //get list wallets of user
+        $wallet = ClassRegistry::init('Wallet');
+        $data   = $wallet->getWalletsByUserId($id);
+        foreach ($data as $walletDel) {
+            $walletId = $walletDel['Wallet']['id'];
+
+            //delete all transactions by walletId
+            $transaction = ClassRegistry::init('Transaction');
+            $del         = $transaction->deleteTransactionsByWalletId($walletId);
+            if ($del) {
+                $wallet = ClassRegistry::init('Wallet');
+                $del    = $wallet->deleteWalletById($walletId);
+            }
+        }
+
+        //delete all categories by userId
+        $category = ClassRegistry::init('Category');
+        $category->deleteCategoriesByUserId($id);
+        $this->delete($id);
+        return $dataSource->commit();
     }
 
     /**
@@ -256,8 +280,8 @@ class User extends AppModel
      */
     public function getCurrentWalletIdByUserId($id)
     {
-        $data     = $this->getUserById($id);
-        if(empty($data)){
+        $data = $this->getUserById($id);
+        if (empty($data)) {
             return;
         }
         $walletId = $data['User']['current_wallet_id'];

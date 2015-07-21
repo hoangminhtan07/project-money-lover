@@ -118,7 +118,7 @@ class Transaction extends AppModel
      * 
      * @param int $categoryId
      */
-    public function deleteTransactionsByCetegoryId($categoryId)
+    public function deleteTransactionsByCategoryId($categoryId)
     {
         return $this->deleteAll(array(
                     'Transaction.category_id' => $categoryId

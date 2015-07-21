@@ -17,8 +17,8 @@ class TransactionsController extends AppController
         $userId = $this->Auth->user('id');
 
         //get list name category of user
-        $getListNameCategorySpent  = $this->Category->getListNameCategorySpent($userId);
-        $getListNameCategoryEarned = $this->Category->getListNameCategoryEarned($userId);
+        $getListNameCategorySpent  = $this->Category->getListNameCategoryByPurpose($userId, '0');
+        $getListNameCategoryEarned = $this->Category->getListNameCategoryByPurpose($userId, '1');
         $this->set('listCategorySpent', $getListNameCategorySpent);
         $this->set('listCategoryEarned', $getListNameCategoryEarned);
 
@@ -30,12 +30,19 @@ class TransactionsController extends AppController
             return;
         }
 
+        // Validate inputs
+        $this->Transaction->set($this->request->data);
+        $valid = $this->Transaction->validates();
+        if (!$valid) {
+            return;
+        }
+
         //get request data 
         //get categoryId
         $data             = $this->request->data['Transaction'];
-        $categorySpentId  = $this->request->data['Transaction']['categorySpentId'];
-        $categoryEarnedId = $this->request->data['Transaction']['categoryEarnedId'];
-        $amount           = $this->request->data['Transaction']['amount'];
+        $categorySpentId  = $data['categorySpentId'];
+        $categoryEarnedId = $data['categoryEarnedId'];
+        $amount           = $data['amount'];
 
         if (empty($categorySpentId) && !empty($categoryEarnedId)) {
             $categoryId = $categoryEarnedId;
@@ -77,14 +84,23 @@ class TransactionsController extends AppController
         $userId = $this->Auth->user('id');
 
         //get list name category of user
-        $getListNameCategorySpent  = $this->Category->getListNameCategorySpent($userId);
-        $getListNameCategoryEarned = $this->Category->getListNameCategoryEarned($userId);
+        $getListNameCategorySpent  = $this->Category->getListNameCategoryByPurpose($userId, '0');
+        $getListNameCategoryEarned = $this->Category->getListNameCategoryByPurpose($userId, '1');
         $this->set('listCategorySpent', $getListNameCategorySpent);
         $this->set('listCategoryEarned', $getListNameCategoryEarned);
 
+        //check request
+        if (!$this->request->is(array('put', 'post'))) {
+            return;
+        }
+
+        //check params
+        if (empty($transactionId)) {
+            throw new ErrorException();
+        }
+
         //get current walletId
-        $data     = $this->User->getUserById($userId);
-        $walletId = $data['User']['current_wallet_id'];
+        $walletId = $this->User->getCurrentWalletIdByUserId($userId);
 
         //check transaction belong to wallet
         $checkWalletTransaction = $this->Transaction->checkWalletTransaction($walletId, $transactionId);
@@ -93,17 +109,19 @@ class TransactionsController extends AppController
             $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         }
 
-        //check request
-        if (!$this->request->is(array('put', 'post'))) {
+        // Validate inputs
+        $this->Transaction->set($this->request->data);
+        $valid = $this->Transaction->validates();
+        if (!$valid) {
             return;
         }
 
         //get data
         //get categoryId
         $data             = $this->request->data['Transaction'];
-        $categorySpentId  = $this->request->data['Transaction']['categorySpentId'];
-        $categoryEarnedId = $this->request->data['Transaction']['categoryEarnedId'];
-        $amount           = $this->request->data['Transaction']['amount'];
+        $categorySpentId  = $data['categorySpentId'];
+        $categoryEarnedId = $data['categoryEarnedId'];
+        $amount           = $data['amount'];
 
         if (empty($categorySpentId) && !empty($categoryEarnedId)) {
             $categoryId = $categoryEarnedId;
@@ -155,6 +173,15 @@ class TransactionsController extends AppController
      */
     public function delete($transactionId)
     {
+        //check request
+        if (!$this->request->is('post', 'put')) {
+            throw new BadRequestException('Bad request');
+        }
+
+        //check params
+        if (empty($transactionId)) {
+            throw new ErrorException();
+        }
         //get userId
         $userId = $this->Auth->user('id');
 
@@ -217,9 +244,11 @@ class TransactionsController extends AppController
         }
 
         //set view
-        $this->set('expense', $this->expense);
-        $this->set('income', $this->income);
-        $this->set('currentMoney', $currentMoney);
+        $this->set(array(
+            'expense'      => $this->expense,
+            'income'       => $this->income,
+            'currentMoney' => $currentMoney,
+        ));
 
         //check request
         if (!$this->request->is(array('put', 'post'))) {
@@ -245,9 +274,11 @@ class TransactionsController extends AppController
         }
 
         //set view
-        $this->set('cates', $cates);
-        $this->set('sumIncome', $sumIncome);
-        $this->set('sumExpense', $sumExpense);
+        $this->set(array(
+            'cates'      => $cates,
+            'sumIncome'  => $sumIncome,
+            'sumExpense' => $sumExpense,
+        ));
     }
 
     //generate new cates array to display month report

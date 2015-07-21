@@ -8,9 +8,8 @@ class WalletsController extends AppController
     /**
      * view all transaction in current wallet
      * 
-     * @param string $order
      */
-    public function index($order = null)
+    public function index()
     {
         //get userId
         $userId = $this->Auth->user('id');
@@ -79,10 +78,15 @@ class WalletsController extends AppController
     /**
      *  Delete wallet
      * 
-     * @param int $wallet
+     * @param int $walletId
      */
     public function delete($walletId)
     {
+        //check request
+        if (!$this->request->is('post', 'put')) {
+            throw new BadRequestException('Bad request');
+        }
+
         //check params
         if (empty($walletId)) {
             throw new ErrorException();
@@ -91,31 +95,29 @@ class WalletsController extends AppController
         //get userId
         $userId = $this->Auth->user('id');
 
+        //get current walletId by userId
+        $currentWalletId = $this->User->getCurrentWalletIdByUserId($userId);
+
         // check wallet belongs user
         $checkUserWallet = $this->Wallet->checkUserWallet($userId, $walletId);
 
         //delete wallet
-        if ($checkUserWallet) {
-
-            //check request
-            if (!$this->request->is('post', 'put')) {
-                return;
-            }
-
-            //delete all transactions by walletId
-            $del = $this->Wallet->deleteWalletById($walletId);
-            if ($del) {
-
-                //set null current user wallet id
-                $this->User->setCurrentWallet($userId, null);
-
-                $this->Session->setFlash('Wallet deleted.');
-            } else {
-                $this->Session->setFlash('Wallet was not deleted. Please try again.');
-            }
-        } else {
+        if (!$checkUserWallet) {
             $this->Session->setFlash('You do not have permission to access.');
+            $this->redirect(array('action' => 'view'));
         }
+        //delete all transactions by walletId
+        $del = $this->Wallet->deleteWalletById($walletId);
+        if ($del) {
+            //set null current user walletId if currentWallet was deleted
+            if ($currentWalletId == $walletId) {
+                $this->User->setCurrentWallet($userId, null);
+            }
+            $this->Session->setFlash('Wallet deleted.');
+        } else {
+            $this->Session->setFlash('Wallet was not deleted. Please try again.');
+        }
+
         $this->redirect(array('action' => 'view'));
     }
 
@@ -138,25 +140,24 @@ class WalletsController extends AppController
         $checkUserWallet = $this->Wallet->checkUserWallet($userId, $walletId);
 
         //edit wallet
-        if ($checkUserWallet) {
-
-            //check request
-            if (!$this->request->is(array('post', 'put'))) {
-                return;
-            }
-
-            //get data request
-            $data = $this->request->data['Wallet'];
-
-            //save edit data
-            $edit = $this->Wallet->edit($data, $walletId);
-            if ($edit) {
-                $this->Session->setFlash('Wallet has been saved.');
-            } else {
-                $this->Session->setFlash('Wallet was not saved. Please try again.');
-            }
-        } else {
+        if (!$checkUserWallet) {
             $this->Session->setFlash('You do not have permission to access.');
+            $this->redirect(array('action' => 'view'));
+        }
+        //check request
+        if (!$this->request->is(array('post', 'put'))) {
+            return;
+        }
+
+        //get data request
+        $data = $this->request->data['Wallet'];
+
+        //save edit data
+        $edit = $this->Wallet->edit($data, $walletId);
+        if ($edit) {
+            $this->Session->setFlash('Wallet has been saved.');
+        } else {
+            $this->Session->setFlash('Wallet was not saved. Please try again.');
         }
         $this->redirect(array('action' => 'view'));
     }
@@ -193,29 +194,30 @@ class WalletsController extends AppController
 
         //check fromWallet belongto current user 
         $checkUserWallet = $this->Wallet->checkUserWallet($userId, $fromWalletId);
+        if (!$checkUserWallet) {
+            $this->Session->setFlash('Access Denied');
+            $this->redirect(array('action' => 'index'));
+        }
+        $toWalletId = $data['Wallet']['toWallet'];
+
+        //check toWallet belongto current user
+        $checkUserWallet = $this->Wallet->checkUserWallet($userId, $toWalletId);
         if ($checkUserWallet) {
-            $toWalletId = $data['Wallet']['toWallet'];
+            if ($fromWalletId == $toWalletId) {
+                $this->Session->setFlash('Wallets must be different.');
+            } else {
+                $amounts = $data['Wallet']['amounts'];
 
-            //check toWallet belongto current user
-            $checkUserWallet = $this->Wallet->checkUserWallet($userId, $toWalletId);
-            if ($checkUserWallet) {
-                if ($fromWalletId == $toWalletId) {
-                    $this->Session->setFlash('Wallets must be different.');
+                //update wallet balance
+                $newBalance = $this->Wallet->transfer($fromWalletId, $toWalletId, $amounts);
+                if ($newBalance) {
+                    $this->Session->setFlash('Balance has been update');
                 } else {
-                    $amounts = $data['Wallet']['amounts'];
-
-                    //update wallet balance
-                    $newBalance = $this->Wallet->transfer($fromWalletId, $toWalletId, $amounts);
-                    if ($newBalance) {
-                        $this->Session->setFlash('Balance has been update');
-                    } else {
-                        $this->Session->setFlash('Error. Please try again.');
-                    }
-                    $this->redirect(array('action' => 'view'));
+                    $this->Session->setFlash('Error. Please try again.');
                 }
+                $this->redirect(array('action' => 'view'));
             }
         }
-        $this->Session->setFlash('Access Denied');
         $this->redirect(array('action' => 'index'));
     }
 
@@ -238,10 +240,9 @@ class WalletsController extends AppController
 
         //get list transactions bind Category by walletId
         $this->Transaction->bindCategory();
-        $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
-        $transactions = $this->getListTransactionsOrderByDateRange($transactions);
-
-        $this->set('transactions', $transactions);
+        $oldListTrans = $this->Transaction->getListTransactionsByWalletId($walletId);
+        $newListTrans = $this->getListTransactionsOrderByDateRange($oldListTrans);
+        $this->set('transactions', $newListTrans);
     }
 
     /**
@@ -285,9 +286,9 @@ class WalletsController extends AppController
 
         //get list transactions bind Category by walletId
         $this->Transaction->bindCategory();
-        $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
-        $transactions = $this->getListTransactionsOrderByCategory($transactions);
-        $this->set('transactions', $transactions);
+        $oldListTrans = $this->Transaction->getListTransactionsByWalletId($walletId);
+        $newListTrans = $this->getListTransactionsOrderByCategory($oldListTrans);
+        $this->set('transactions', $newListTrans);
     }
 
     /**
@@ -303,7 +304,7 @@ class WalletsController extends AppController
             $categoryName = $name['Category']['name'];
             if (!array_key_exists($categoryName, $reqs)) {
                 foreach ($trans as $value) {
-                    if ($categoryName == $name['Category']['name']) {
+                    if ($categoryName === $value['Category']['name']) {
                         $reqs[$categoryName][] = $value;
                     }
                 }

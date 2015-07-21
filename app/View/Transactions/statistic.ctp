@@ -15,12 +15,12 @@
         <tr>
             <th>Income Money</th>
             <td><?php echo $income . '(VND)'; ?></td>
-            <td><?php echo $income / ($income + $expense) * 100 . '%'; ?></td>
+            <td><?php echo round($income / ($income + $expense) * 100, 2) . '%'; ?></td>
         </tr>
         <tr>
             <th>Expense Money</th>
             <td><?php echo $expense . '(VND)'; ?></td>
-            <td><?php echo $expense / ($income + $expense) * 100 . '%'; ?></td>
+            <td><?php echo round($expense / ($income + $expense) * 100, 2) . '%'; ?></td>
         </tr>
         <tr>
             <th>Current Money</th>
@@ -41,30 +41,30 @@
         </p>
         <div style="float: right" > <?php echo $this->Form->end('Submit'); ?> </div>
     </div>
-    <?php if(isset($sumIncome)): ?>
-    <table>
-        <tr>
-            <th>Income Money <?php echo $sumIncome .'(VND)'; ?> </th>
-            <?php if(!empty($cates)): ?> 
-            <td> <?php foreach ($cates as $cate): ?>
-                <?php if($cate['purpose'] == 1): ?>
-                <p><?php echo $cate['name'] . ':' . $cate['amount'] . '(VND)  ' . $cate['amount']/$sumIncome*100 . '%' ?></p>
+    <?php if (isset($sumIncome)): ?>
+        <table>
+            <tr>
+                <th>Income Money <?php echo $sumIncome . '(VND)'; ?> </th>
+                <?php if (!empty($cates)): ?> 
+                    <td> <?php foreach ($cates as $cate): ?>
+                            <?php if ($cate['purpose'] == 1): ?>
+                                <p><?php echo $cate['name'] . ':' . $cate['amount'] . '(VND)  ' . round($cate['amount'] / $sumIncome * 100, 2) . '%' ?></p>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </td>
                 <?php endif; ?>
-                <?php endforeach; ?>
-            </td>
-            <?php endif; ?>
-        </tr>
-        <tr>
-            <th>Expense Money <?php echo $sumExpense .'(VND)'; ?> </th>
-            <?php if(!empty($cates)): ?>
-            <td> <?php foreach ($cates as $cate): ?>
-                <?php if($cate['purpose'] == 0): ?>
-                <p><?php echo $cate['name'] . ':' . $cate['amount'] . '(VND)  ' . $cate['amount']/$sumExpense*100 . '%' ?></p>
+            </tr>
+            <tr>
+                <th>Expense Money <?php echo $sumExpense . '(VND)'; ?> </th>
+                <?php if (!empty($cates)): ?>
+                    <td> <?php foreach ($cates as $cate): ?>
+                            <?php if ($cate['purpose'] == 0): ?>
+                                <p><?php echo $cate['name'] . ':' . $cate['amount'] . '(VND)  ' . round($cate['amount'] / $sumExpense * 100, 2) . '%' ?></p>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </td>
                 <?php endif; ?>
-                <?php endforeach; ?>
-            </td>
-            <?php endif; ?>
-        </tr>
-    </table>
+            </tr>
+        </table>
     <?php endif; ?>
 </div>
