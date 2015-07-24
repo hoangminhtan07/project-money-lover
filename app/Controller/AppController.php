@@ -38,6 +38,7 @@ class AppController extends Controller
         'DebugKit.Toolbar',
         'Session',
         'Flash',
+        'Cookie',
         'Auth' => array(
             'loginRedirect'  => array(
                 'controller' => 'wallets',
@@ -55,5 +56,24 @@ class AppController extends Controller
         )
     );
 
-}
+    public function beforeFilter()
+    {
+        parent::beforeFilter();
+        $this->Cookie->httpOnly = true;
+        $cookie                 = $this->Cookie->read('rememberMe');
+        if (!$this->Auth->loggedIn() && $cookie) {
+            $this->loadModel('User');
+            $user = $this->User->find('first', array(
+                'conditions' => array(
+                    'User.username' => $cookie['username'],
+                    'User.password' => $cookie['password'],
+                ),
+            ));
+            if ($user && !$this->Auth->login($user['User'])) {
+                //another user loggin, destroy session and cookie
+                $this->redirect(array('controller' => 'users', 'action' => 'logout'));
+            }
+        }
+    }
 
+}

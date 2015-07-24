@@ -34,3 +34,61 @@
     </ul>
 </div>
 
+<?php
+$paginator = $this->Paginator;
+
+if ($trans) {
+
+    //creating our table
+    echo "<table>";
+
+    echo "<tr>";
+    echo "<th>" . 'Category' . "</th>";
+    echo "<th>" . 'Purpose' . "</th>";
+    echo "<th>" . 'Amount' . "</th>";
+    echo "<th>" . 'Note' . "</th>";
+    echo "</tr>";
+
+    // loop through the tran's records
+    foreach ($trans as $tran) {
+        echo "<tr>";
+        echo "<td>{$tran['Category']['name']}</td>";
+        if ($tran['Category']['purpose'] == 0) {
+            echo "<td>" . 'Spent' . "</td>";
+        } else {
+            echo "<td>" . 'Eanred' . "</td>";
+        }
+        echo "<td>{$tran['Transaction']['amount']}</td>";
+        echo "<td>{$tran['Transaction']['note']}</td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
+
+    // pagination section
+    echo "<div class='paging'>";
+
+    // the 'first' page button
+    echo $paginator->first("First");
+
+    // 'prev' page button, 
+    if ($paginator->hasPrev()) {
+        echo $paginator->prev("Prev");
+    }
+
+    // the 'number' page buttons
+    echo $paginator->numbers(array('modulus' => 2));
+
+    // for the 'next' button
+    if ($paginator->hasNext()) {
+        echo $paginator->next("Next");
+    }
+
+    // the 'last' page button
+    echo $paginator->last("Last");
+
+    echo "</div>";
+} else {
+    echo "No trans found.";
+}
+?>

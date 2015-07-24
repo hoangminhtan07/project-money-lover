@@ -3,12 +3,17 @@
 class WalletsController extends AppController
 {
 
-    public $uses = array('Wallet', 'User', 'Transaction');
+    public $uses       = array('Wallet', 'User', 'Transaction');
+    public $components = array('Paginator');
 
     /**
      * view all transaction in current wallet
      * 
      */
+    public $paginate = array(
+        'limit' => 3,
+    );
+
     public function index()
     {
         //get userId
@@ -18,7 +23,7 @@ class WalletsController extends AppController
         $walletId = $this->User->getCurrentWalletIdByUserId($userId);
 
         if (empty($walletId)) {
-            $this->Session->setFlash('You have not current wallet yet. Please set current wallet.');
+            $this->Session->setFlash(__('You have not current wallet yet. Please set current wallet.'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('action' => 'view'));
         }
 
@@ -68,9 +73,9 @@ class WalletsController extends AppController
         //add wallet
         $add = $this->Wallet->add($data, $userId);
         if ($add) {
-            $this->Session->setFlash('Wallet has been saved.');
+            $this->Session->setFlash(__('Wallet has been saved.'), 'alert_box', array('class' => 'alert-success'));
         } else {
-            $this->Session->setFlash('Wallet cound not be saved. Please try again.');
+            $this->Session->setFlash(__('Wallet cound not be saved. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('action' => 'view'));
     }
@@ -103,7 +108,7 @@ class WalletsController extends AppController
 
         //delete wallet
         if (!$checkUserWallet) {
-            $this->Session->setFlash('You do not have permission to access.');
+            $this->Session->setFlash(__('You do not have permission to access.'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('action' => 'view'));
         }
         //delete all transactions by walletId
@@ -113,9 +118,9 @@ class WalletsController extends AppController
             if ($currentWalletId == $walletId) {
                 $this->User->setCurrentWallet($userId, null);
             }
-            $this->Session->setFlash('Wallet deleted.');
+            $this->Session->setFlash(__('Wallet deleted.'), 'alert_box', array('class' => 'alert-success'));
         } else {
-            $this->Session->setFlash('Wallet was not deleted. Please try again.');
+            $this->Session->setFlash(__('Wallet was not deleted. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
 
         $this->redirect(array('action' => 'view'));
@@ -141,7 +146,7 @@ class WalletsController extends AppController
 
         //edit wallet
         if (!$checkUserWallet) {
-            $this->Session->setFlash('You do not have permission to access.');
+            $this->Session->setFlash(__('You do not have permission to access.'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('action' => 'view'));
         }
         //check request
@@ -155,9 +160,9 @@ class WalletsController extends AppController
         //save edit data
         $edit = $this->Wallet->edit($data, $walletId);
         if ($edit) {
-            $this->Session->setFlash('Wallet has been saved.');
+            $this->Session->setFlash(__('Wallet has been saved.'), 'alert_box', array('class' => 'alert-success'));
         } else {
-            $this->Session->setFlash('Wallet was not saved. Please try again.');
+            $this->Session->setFlash(__('Wallet was not saved. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('action' => 'view'));
     }
@@ -174,7 +179,7 @@ class WalletsController extends AppController
 
         //check list wallets
         if (empty($list)) {
-            $this->Session->setFlash('You have not wallet yet.');
+            $this->Session->setFlash(__('You have not wallet yet.'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('action' => 'view'));
         }
 
@@ -195,30 +200,32 @@ class WalletsController extends AppController
         //check fromWallet belongto current user 
         $checkUserWallet = $this->Wallet->checkUserWallet($userId, $fromWalletId);
         if (!$checkUserWallet) {
-            $this->Session->setFlash('Access Denied');
+            $this->Session->setFlash(__('Access Denied'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('action' => 'index'));
         }
         $toWalletId = $data['Wallet']['toWallet'];
 
         //check toWallet belongto current user
         $checkUserWallet = $this->Wallet->checkUserWallet($userId, $toWalletId);
-        if ($checkUserWallet) {
-            if ($fromWalletId == $toWalletId) {
-                $this->Session->setFlash('Wallets must be different.');
-            } else {
-                $amounts = $data['Wallet']['amounts'];
-
-                //update wallet balance
-                $newBalance = $this->Wallet->transfer($fromWalletId, $toWalletId, $amounts);
-                if ($newBalance) {
-                    $this->Session->setFlash('Balance has been update');
-                } else {
-                    $this->Session->setFlash('Error. Please try again.');
-                }
-                $this->redirect(array('action' => 'view'));
-            }
+        if (!$checkUserWallet) {
+            $this->Session->setFlash(__('Access Denied'), 'alert_box', array('class' => 'alert-danger'));
+            $this->redirect(array('action' => 'index'));
         }
-        $this->redirect(array('action' => 'index'));
+
+        if ($fromWalletId == $toWalletId) {
+            $this->Session->setFlash(__('Wallets must be different.'), 'alert_box', array('class' => 'alert-danger'));
+            return;
+        }
+        $amounts = $data['Wallet']['amounts'];
+
+        //update wallet balance
+        $newBalance = $this->Wallet->transfer($fromWalletId, $toWalletId, $amounts);
+        if ($newBalance) {
+            $this->Session->setFlash(__('Balance has been update'), 'alert_box', array('class' => 'alert-success'));
+        } else {
+            $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
+        }
+        $this->redirect(array('action' => 'view'));
     }
 
     /**
@@ -228,21 +235,28 @@ class WalletsController extends AppController
      */
     public function viewDay($walletId)
     {
+
         //get userId
         $userId = $this->Auth->user('id');
 
         //check Wallet belongsTo user
         $checkUserWallet = $this->Wallet->checkUserWallet($userId, $walletId);
         if (!$checkUserWallet) {
-            $this->Session->setFlash('Can not access.');
+            $this->Session->setFlash(__('Can not access.'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         }
 
         //get list transactions bind Category by walletId
         $this->Transaction->bindCategory();
-        $oldListTrans = $this->Transaction->getListTransactionsByWalletId($walletId);
-        $newListTrans = $this->getListTransactionsOrderByDateRange($oldListTrans);
+        $oldListTrans              = $this->Transaction->getListTransactionsByWalletId($walletId);
+        $this->Paginator->settings = $this->paginate;
+        $this->Transaction->bindCategory();
+        $old                       = $this->Paginator->paginate('Transaction', array(
+            'Transaction.wallet_id' => $walletId,
+        ));
+        $newListTrans              = $this->getListTransactionsOrderByDateRange($oldListTrans);
         $this->set('transactions', $newListTrans);
+        $this->set('trans', $old);
     }
 
     /**
@@ -280,7 +294,7 @@ class WalletsController extends AppController
         //check Wallet belongsTo user
         $checkUserWallet = $this->Wallet->checkUserWallet($userId, $walletId);
         if (!$checkUserWallet) {
-            $this->Session->setFlash('Can not access.');
+            $this->Session->setFlash(__('Can not access.'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         }
 

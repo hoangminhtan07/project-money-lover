@@ -21,28 +21,31 @@ $cakeVersion     = __d('cake_dev', 'CakePHP %s', Configure::version())
     <head>
         <?php echo $this->Html->charset(); ?>
         <title>
-            <?php echo $cakeDescription ?>:
-            <?php echo $this->fetch('title'); ?>
+
+            <?php echo 'Money-lover'; ?>
         </title>
+        <link rel="shortcut icon" type="image/x-icon" href="<?php echo $this->webroot; ?>img/wallet.png">
         <?php
-        echo $this->Html->meta('icon');
+        //echo $this->Html->meta('icon');
 
-        echo $this->Html->css('cake.generic');
-
+        echo $this->Html->script('bootstrap.min');
+        echo $this->Html->script('jquery-1.11.3.min');
+        echo $this->Html->css('bootstrap.min');
+        //echo $this->Html->css('cake.generic');
         echo $this->fetch('meta');
         echo $this->fetch('css');
         echo $this->fetch('script');
         ?>
     </head>
     <body>
-        <div id="container">
+        <div class="container">
             <div id="header">
-                <h1><?php echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>
+                <h1><?php echo 'Project Money-Lover'; ?></h1>
             </div>
             <div id="content">
                 <div style="text-align: right">
                     <?php if (AuthComponent::user()): ?>
-                    Welcome <?php echo AuthComponent::user('username'); ?> <?php echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout')); ?>
+                        Welcome <?php echo AuthComponent::user('username'); ?> <?php echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout')); ?>
                     <?php else: ?>
                         <?php echo $this->Html->link('Register', array('controller' => 'users', 'action' => 'register')); ?>
                         <?php echo ' ' ?>
@@ -62,10 +65,9 @@ $cakeVersion     = __d('cake_dev', 'CakePHP %s', Configure::version())
                 );
                 ?>
                 <p>
-                <?php echo $cakeVersion; ?>
+                    <?php echo $cakeVersion; ?>
                 </p>
             </div>
         </div>
-<?php echo $this->element('sql_dump'); ?>
     </body>
 </html>

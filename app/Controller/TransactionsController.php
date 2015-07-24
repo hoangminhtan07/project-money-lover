@@ -46,29 +46,34 @@ class TransactionsController extends AppController
 
         if (empty($categorySpentId) && !empty($categoryEarnedId)) {
             $categoryId = $categoryEarnedId;
-
-            //deposit money to wallet has Id = walletId
-            $this->Wallet->transactionMoney($walletId, $amount);
         } elseif (empty($categoryEarnedId) && !empty($categorySpentId)) {
             $categoryId = $categorySpentId;
-
-            //withdraw money from wallet has Id = walletId
-            $amount = -$amount;
-            $this->Wallet->transactionMoney($walletId, $amount);
+            $amount     = -$amount;
         } elseif (empty($categoryEarnedId) && empty($categorySpentId)) {
-            $this->Session->setFlash('Please chose a transaction.');
+            $this->Session->setFlash(__('Please chose a transaction.'), 'alert_box', array('class' => 'alert-danger'));
             return;
         } else {
-            $this->Session->setFlash('Only allowed to choose one of two transactions.');
+            $this->Session->setFlash(__('Only allowed to choose one of two transactions.'), 'alert_box', array('class' => 'alert-danger'));
+            return;
+        }
+
+        //check category belong to user
+
+        $checkCategoryUser = $this->Category->checkUserCategory($userId, $categoryId);
+        if (!$checkCategoryUser) {
+            $this->Session->setFlash(__('Error, try again.'), 'alert_box', array('class' => 'alert-danger'));
             return;
         }
 
         //save data
         $transaction = $this->Transaction->add($data, $walletId, $categoryId);
         if ($transaction) {
-            $this->Session->setFlash('Transaction has been saved.');
+
+            //update balance to default wallet
+            $this->Wallet->transactionMoney($walletId, $amount);
+            $this->Session->setFlash(__('Transaction has been saved.'), 'alert_box', array('class' => 'alert-success'));
         } else {
-            $this->Session->setFlash('Error. Please try again.');
+            $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
     }
@@ -105,7 +110,7 @@ class TransactionsController extends AppController
         //check transaction belong to wallet
         $checkWalletTransaction = $this->Transaction->checkWalletTransaction($walletId, $transactionId);
         if (empty($checkWalletTransaction)) {
-            $this->Session->setFlash('Not allow');
+            $this->Session->setFlash(__('Not allow'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         }
 
@@ -128,10 +133,10 @@ class TransactionsController extends AppController
         } elseif (empty($categoryEarnedId) && !empty($categorySpentId)) {
             $categoryId = $categorySpentId;
         } elseif (empty($categoryEarnedId) && empty($categorySpentId)) {
-            $this->Session->setFlash('Please chose a transaction.');
+            $this->Session->setFlash(__('Please chose a transaction.'), 'alert_box', array('class' => 'alert-danger'));
             return;
         } else {
-            $this->Session->setFlash('Only allowed to choose one of two transactions.');
+            $this->Session->setFlash(__('Only allowed to choose one of two transactions.'), 'alert_box', array('class' => 'alert-danger'));
             return;
         }
 
@@ -141,27 +146,27 @@ class TransactionsController extends AppController
         $newData     = $this->Category->getCategoryById($categoryId);
         $transaction = $this->Transaction->edit($data, $categoryId, $transactionId);
         if ($transaction) {
-            $this->Session->setFlash('Transaction has been saved.');
-        } else {
-            $this->Session->setFlash('Error. Please try again');
-        }
+            $this->Session->setFlash(__('Transaction has been saved.'), 'alert_box', array('class' => 'alert-success'));
 
-        //save balance in current wallet
-        if ($oldData['Category']['purpose'] == false && $newData['Category']['purpose'] == false) {
-            $amount = ($oldData['Transaction']['amount'] - $amount);
-            $this->Wallet->transactionMoney($walletId, $amount);
-        }
-        if ($oldData['Category']['purpose'] == true && $newData['Category']['purpose'] == true) {
-            $amount = ($amount - $oldData['Transaction']['amount']);
-            $this->Wallet->transactionMoney($walletId, $amount);
-        }
-        if ($oldData['Category']['purpose'] == false && $newData['Category']['purpose'] == true) {
-            $amount = ($amount + $oldData['Transaction']['amount']);
-            $this->Wallet->transactionMoney($walletId, $amount);
-        }
-        if ($oldData['Category']['purpose'] == true && $newData['Category']['purpose'] == false) {
-            $amount = -($amount + $oldData['Transaction']['amount']);
-            $this->Wallet->transactionMoney($walletId, $amount);
+            //save balance in current wallet
+            if ($oldData['Category']['purpose'] == false && $newData['Category']['purpose'] == false) {
+                $amount = ($oldData['Transaction']['amount'] - $amount);
+                $this->Wallet->transactionMoney($walletId, $amount);
+            }
+            if ($oldData['Category']['purpose'] == true && $newData['Category']['purpose'] == true) {
+                $amount = ($amount - $oldData['Transaction']['amount']);
+                $this->Wallet->transactionMoney($walletId, $amount);
+            }
+            if ($oldData['Category']['purpose'] == false && $newData['Category']['purpose'] == true) {
+                $amount = ($amount + $oldData['Transaction']['amount']);
+                $this->Wallet->transactionMoney($walletId, $amount);
+            }
+            if ($oldData['Category']['purpose'] == true && $newData['Category']['purpose'] == false) {
+                $amount = -($amount + $oldData['Transaction']['amount']);
+                $this->Wallet->transactionMoney($walletId, $amount);
+            }
+        } else {
+            $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
     }
@@ -192,7 +197,7 @@ class TransactionsController extends AppController
         //check transaction belong to wallet
         $checkWalletTransaction = $this->Transaction->checkWalletTransaction($walletId, $transactionId);
         if (empty($checkWalletTransaction)) {
-            $this->Session->setFlash('Not allow');
+            $this->Session->setFlash(__('Not allow.'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         }
 
@@ -204,13 +209,14 @@ class TransactionsController extends AppController
             $amount = -$data['Transaction']['amount'];
         }
 
-        //save balance to the current wallet
-        $this->Wallet->transactionMoney($walletId, $amount);
         $del = $this->Transaction->deleteTransactionById($transactionId);
         if ($del) {
-            $this->Session->setFlash('Transaction has been deleted.');
+            $this->Session->setFlash(__('Transaction has been deleted.'), 'alert_box', array('class' => 'alert-success'));
+
+            //save balance to the current wallet
+            $this->Wallet->transactionMoney($walletId, $amount);
         } else {
-            $this->Session->setFlash('Error. Please try again.');
+            $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
     }

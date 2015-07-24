@@ -18,7 +18,7 @@ class CategoriesController extends AppController
         //get list categories by userId
         $categoryList = $this->Category->getListCategoriesByUser($userId);
         if (empty($categoryList)) {
-            $this->Session->setFlash('you have not caterory yet. Please creat new Category.');
+            $this->Session->setFlash(__('You have not caterory yet. Please creat new Category.'), 'alert_box', array('class' => 'alert-danger'));
         }
 
         //set view
@@ -44,9 +44,9 @@ class CategoriesController extends AppController
         //save data
         $add = $this->Category->add($data, $userId);
         if ($add) {
-            $this->Session->setFlash('Category has been save.');
+            $this->Session->setFlash(__('Category has been save.'), 'alert_box', array('class' => 'alert-success'));
         } else {
-            $this->Session->setFlash('Error. Please try again.');
+            $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('action' => 'index'));
     }
@@ -62,7 +62,7 @@ class CategoriesController extends AppController
         if (!$this->request->is(array('post', 'put'))) {
             return;
         }
-        
+
         //check params
         if (empty($categoryId)) {
             throw new ErrorException();
@@ -76,17 +76,17 @@ class CategoriesController extends AppController
 
         //edit category
         if (!$checkUserCategory) {
-            $this->Session->setFlash('You do not have permission to access.');
+            $this->Session->setFlash(__('You do not have permission to access.'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('action' => 'index'));
         }
-        
+
         //get data request
         $data = $this->request->data['Category'];
 
         //save data after edit
         $edit = $this->Category->edit($data, $categoryId);
         if ($edit) {
-            $this->Session->setFlash('Category has been saved.');
+            $this->Session->setFlash(__('Category has been saved.'), 'alert_box', array('class' => 'alert-success'));
         }
         $this->redirect(array('action' => 'index'));
     }
@@ -116,7 +116,7 @@ class CategoriesController extends AppController
 
         //delete category
         if (!$checkUserCategory) {
-            $this->Session->setFlash('You do not have permission to access.');
+            $this->Session->setFlash(__('You do not have permission to access.'), 'alert_box', array('class' => 'alert-danger'));
             $this->redirect(array('action' => 'index'));
         }
         //get all amount to update balance
@@ -131,7 +131,7 @@ class CategoriesController extends AppController
         $amount = 0;
         foreach ($data['Transaction'] as $transactions) {
             if ($walletId != $transactions['wallet_id']) {
-                $this->Session->setFlash('this category can not be deleted because it was in many wallet.');
+                $this->Session->setFlash(__('This category can not be deleted because it was in many wallet.'), 'alert_box', array('class' => 'alert-danger'));
                 $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
             }
             if ($data['Category']['purpose'] == true) {
@@ -145,9 +145,9 @@ class CategoriesController extends AppController
         if ($del) {
             //update amount to current walletId
             $this->Wallet->transactionMoney($walletId, $amount);
-            $this->Session->setFlash('Category has been deleted');
+            $this->Session->setFlash(__('Category has been deleted'), 'alert_box', array('class' => 'alert-success'));
         } else {
-            $this->Session->setFlash('Category was not deleted. Please try again.');
+            $this->Session->setFlash(__('Category was not deleted. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('action' => 'index'));
     }

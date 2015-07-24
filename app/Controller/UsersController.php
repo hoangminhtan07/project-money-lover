@@ -30,13 +30,29 @@ class UsersController extends AppController
         }
 
         if ($this->Auth->login()) {
+            $rememberMe = $this->request->data['User']['rememberMe'];
+
+            if ($rememberMe) {
+                $cookieTime = "12 months";
+
+                //remove remember me checkbox
+                unset($rememberMe);
+
+                //hash the user's password
+                $this->request->data['User']['password'] = $this->Auth->password($this->request->data['User']['password']);
+
+                //write the cookie
+                $this->Cookie->write('rememberMe', $this->request->data['User'], true, $cookieTime);
+            }
             $this->redirect($this->Auth->redirectUrl());
         }
-        $this->Session->setFlash('Your username/password combination was incorrect');
+        $this->Session->setFlash(__('Your username/password combination was incorrect.'), 'alert_box', array('class' => 'alert-danger'));
     }
 
     public function logout()
     {
+        $this->Session->setFlash(__('You have been logged out'), 'alert_box', array('class' => 'alert-success'));
+        $this->Cookie->delete('rememberMe');
         $this->redirect($this->Auth->logout());
     }
 
@@ -62,10 +78,10 @@ class UsersController extends AppController
         //change password
         $edit = $this->User->edit($data, $id);
         if ($edit) {
-            $this->Session->setFlash('The password has been changed.');
+            $this->Session->setFlash(__('The password has been changed.'), 'alert_box', array('class' => 'alert-success'));
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('The password could not be changed. Please try again.');
+            $this->Session->setFlash(__('The password could not be changed. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
     }
 
@@ -85,9 +101,9 @@ class UsersController extends AppController
 
         $activeUser = $this->User->activate($userId, $token);
         if ($activeUser) {
-            $this->Session->setFlash('The user has been activated. Now you can login.');
+            $this->Session->setFlash(__('The user has been activated. Now you can login.'), 'alert_box', array('class' => 'alert-success'));
         } else {
-            $this->Session->setFlash('Activation failed. Click activation link in your email again.');
+            $this->Session->setFlash(__('Activation failed. Click activation link in your email again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('action' => 'login'));
     }
@@ -122,9 +138,9 @@ class UsersController extends AppController
         //check and save data
         $resetPassword = $this->User->resetPassword($email, $token, $data);
         if ($resetPassword) {
-            $this->Session->setFlash('Your password has been changed. Now you can login');
+            $this->Session->setFlash(__('Your password has been changed. Now you can login'), 'alert_box', array('class' => 'alert-success'));
         } else {
-            $this->Session->setFlash('Reset failed. Click reset link in your email again.');
+            $this->Session->setFlash(__('Reset failed. Click reset link in your email again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('action' => 'login'));
     }
@@ -148,9 +164,9 @@ class UsersController extends AppController
         // Send activation email
         if ($createdUser) {
             $this->_send_activation_email($createdUser['User']);
-            $this->Session->setFlash('User has been created. Please follow instruction in sent email.');
+            $this->Session->setFlash(__('User has been created. Please follow instruction in sent email.'), 'alert_box', array('class' => 'alert-success'));
         } else {
-            $this->Session->setFlash('Unable to create user. Please try again.');
+            $this->Session->setFlash(__('Unable to create user. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('action' => 'index'));
     }
@@ -200,10 +216,10 @@ class UsersController extends AppController
         //Send password reset email 
         if ($token) {
             $this->_send_password_reset_email($email, $token);
-            $this->Session->setFlash('Check you email and follow instruction in sent email.');
+            $this->Session->setFlash(__('Check you email and follow instruction in sent email.'), 'alert_box', array('class' => 'alert-success'));
             $this->redirect(array('action' => 'login'));
         }
-        $this->Session->setFlash('Email does not exist.');
+        $this->Session->setFlash(__('Email does not exist.'), 'alert_box', array('class' => 'alert-danger'));
     }
 
     /**
@@ -240,10 +256,10 @@ class UsersController extends AppController
             //updating the session user
             $this->Session->write('Auth.User', array_merge(AuthComponent::User(), $this->request->data['User']));
 
-            $this->Session->setFlash('The user has been saved');
+            $this->Session->setFlash(__('The user has been saved'), 'alert_box', array('class' => 'alert-success'));
             $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         } else {
-            $this->Session->setFlash('The user cound not be saved. Please try again.');
+            $this->Session->setFlash(__('The user cound not be saved. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
     }
 
@@ -262,10 +278,10 @@ class UsersController extends AppController
 
         $delete = $this->User->deleteUserById($id);
         if ($delete) {
-            $this->Session->setFlash('User deleted');
+            $this->Session->setFlash(__('User deleted'), 'alert_box', array('class' => 'alert-success'));
             $this->redirect($this->Auth->logout());
         } else {
-            $this->Session->setFlash('User was not deleted');
+            $this->Session->setFlash(__('User was not deleted'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('action' => 'index'));
     }
@@ -282,10 +298,10 @@ class UsersController extends AppController
         //set current wallet
         $set = $this->User->setCurrentWallet($userId, $walletId);
         if ($set) {
-            $this->Session->setFlash('Current wallet has been changed.');
+            $this->Session->setFlash(__('Current wallet has been changed.'), 'alert_box', array('class' => 'alert-success'));
             $this->redirect(array('controller' => 'wallets', 'action' => 'view'));
         } else {
-            $this->Session->setFlash('Error. Please try again.');
+            $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
     }
 
