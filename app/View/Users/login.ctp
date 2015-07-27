@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-3"></div>
-    <div class="col-md-6" style="margin-top: 100px">
+    <div class="col-md-6" style="margin-top: 88px">
         <?php
         echo $this->Form->create('User', array(
             'inputDefaults' => array(

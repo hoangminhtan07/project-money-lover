@@ -1,0 +1,36 @@
+header {
+    background-image: url(/img/Brick-Wall.jpg); 
+    background-repeat: repeat-x;
+    height: 100px;
+    margin-top: 10px;
+}
+
+h1 {
+    padding-top: 25px;
+    padding-left: 45px;
+    color: #fff;
+}
+
+body {
+    background-color: #e3e0cf;
+}
+
+.ashi {
+    text-align: center;
+}
+
+footer {
+    background-color: #b3c2bf;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    overflow:hidden;
+    text-align: center;
+}
+
+.foot {
+    margin-top: 15px;
+    color: #fff;
+}

@@ -21,27 +21,24 @@ $cakeVersion     = __d('cake_dev', 'CakePHP %s', Configure::version())
     <head>
         <?php echo $this->Html->charset(); ?>
         <title>
-
             <?php echo 'Money-lover'; ?>
         </title>
         <link rel="shortcut icon" type="image/x-icon" href="<?php echo $this->webroot; ?>img/wallet.png">
         <?php
-        //echo $this->Html->meta('icon');
-
         echo $this->Html->script('bootstrap.min');
         echo $this->Html->script('jquery-1.11.3.min');
         echo $this->Html->css('bootstrap.min');
-        //echo $this->Html->css('cake.generic');
+        echo $this->Html->css('web.cake');
         echo $this->fetch('meta');
         echo $this->fetch('css');
         echo $this->fetch('script');
         ?>
     </head>
     <body>
+        <header>
+            <h1><?php echo 'Project Money-Lover'; ?></h1>
+        </header>
         <div class="container">
-            <div id="header">
-                <h1><?php echo 'Project Money-Lover'; ?></h1>
-            </div>
             <div id="content">
                 <div style="text-align: right">
                     <?php if (AuthComponent::user()): ?>
@@ -68,6 +65,9 @@ $cakeVersion     = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <?php echo $cakeVersion; ?>
                 </p>
             </div>
+            <footer>
+                <p class="foot"><?php echo 'Hayate07'; ?></p>
+            </footer>
         </div>
     </body>
 </html>
