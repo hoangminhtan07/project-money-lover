@@ -12,7 +12,7 @@
         </ul>
     </div>
     <div class="col-md-8">
-        <h2 style="color: red"> <?php echo $wallet['Wallet']['name'] . ':' . ' ' . 'Money :' . $wallet['Wallet']['balance'] . '(VND)'; ?></h2>
+        <h2> <?php echo $wallet['Wallet']['name'] . ':' . ' ' . 'Money :' . $wallet['Wallet']['balance'] . '(VND)'; ?></h2>
         <?php echo $this->Html->link('Sort By Date Range', array('action' => 'viewDay', $wallet['Wallet']['id'])); ?>
         <?php echo $this->Html->link('Sort By Category', array('action' => 'viewCategory', $wallet['Wallet']['id'])); ?>
         <table class="table table-hover">

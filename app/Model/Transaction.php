@@ -88,7 +88,7 @@ class Transaction extends AppModel
     {
         $data = $this->find('first', array(
             'conditions' => array(
-                'wallet_id'      => $walletId,
+                'Transaction.wallet_id'      => $walletId,
                 'Transaction.id' => $transactionId,
             )
         ));

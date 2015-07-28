@@ -7,7 +7,7 @@
     </div>
     <div class="col-md-8">
         <h3>Overview</h3>
-        <table>
+        <table class="table table-hover">
             <tr>
                 <th>Balance</th>
                 <td><?php echo $currentMoney + $expense - $income . ' (VND)'; ?></td>
@@ -28,10 +28,9 @@
                 <td><?php echo $currentMoney . '(VND)'; ?></td>
                 <td></td>
             </tr>
-
         </table>
     </div>
-    <div class="statistic form">
+    <div class="col-md-offset-3 col-md-8">
         <h3>Detail</h3>
         <div style="float: right; height: 100px" >
             <?php echo $this->Form->create(); ?>
@@ -45,19 +44,15 @@
         <?php if (isset($sumIncome)): ?>
             <table class="table table-hover">
                 <tr>
-                <thead>
-                <th>Income Money <?php echo $sumIncome . '(VND)'; ?> </th>
-                </thead>
-                <tbody>
+                    <th>Income Money <?php echo $sumIncome . '(VND)'; ?> </th>
                     <?php if (!empty($cates)): ?> 
-                    <td> <?php foreach ($cates as $cate): ?>
-                            <?php if ($cate['purpose'] == 1): ?>
-                                <p><?php echo $cate['name'] . ':' . $cate['amount'] . '(VND)  ' . round($cate['amount'] / $sumIncome * 100, 2) . '%' ?></p>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </td>
-                <?php endif; ?>
-                </tbody>
+                        <td> <?php foreach ($cates as $cate): ?>
+                                <?php if ($cate['purpose'] == 1): ?>
+                                    <p><?php echo $cate['name'] . ':' . $cate['amount'] . '(VND)  ' . round($cate['amount'] / $sumIncome * 100, 2) . '%' ?></p>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </td>
+                    <?php endif; ?>
                 </tr>
                 <tr>
                     <th>Expense Money <?php echo $sumExpense . '(VND)'; ?> </th>

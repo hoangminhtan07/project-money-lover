@@ -34,3 +34,11 @@ footer {
     margin-top: 15px;
     color: #fff;
 }
+
+h3,legend {
+    color: #7d4627;
+}
+
+h2 {
+    color: red;
+}

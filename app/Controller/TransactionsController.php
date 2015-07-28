@@ -94,11 +94,6 @@ class TransactionsController extends AppController
         $this->set('listCategorySpent', $getListNameCategorySpent);
         $this->set('listCategoryEarned', $getListNameCategoryEarned);
 
-        //check request
-        if (!$this->request->is(array('put', 'post'))) {
-            return;
-        }
-
         //check params
         if (empty($transactionId)) {
             throw new ErrorException();
@@ -106,7 +101,7 @@ class TransactionsController extends AppController
 
         //get current walletId
         $walletId = $this->User->getCurrentWalletIdByUserId($userId);
-
+        
         //check transaction belong to wallet
         $checkWalletTransaction = $this->Transaction->checkWalletTransaction($walletId, $transactionId);
         if (empty($checkWalletTransaction)) {
@@ -114,6 +109,11 @@ class TransactionsController extends AppController
             $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         }
 
+        //check request
+        if (!$this->request->is(array('put', 'post'))) {
+            return;
+        }
+        
         // Validate inputs
         $this->Transaction->set($this->request->data);
         $valid = $this->Transaction->validates();

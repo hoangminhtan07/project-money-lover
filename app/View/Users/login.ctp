@@ -16,10 +16,11 @@
             <div class="col-xs-10">
                 <?php
                 echo $this->Form->input('username', array(
-                    'class'    => 'form-control',
-                    'div'      => false,
-                    'label'    => false,
-                    'required' => false,
+                    'class'       => 'form-control',
+                    'div'         => false,
+                    'label'       => false,
+                    'required'    => false,
+                    'placeholder' => 'Username',
                 ));
                 ?>
             </div>
@@ -29,10 +30,11 @@
             <div class="col-xs-10">
                 <?php
                 echo $this->Form->input('password', array(
-                    'class'    => 'form-control',
-                    'div'      => false,
-                    'label'    => false,
-                    'required' => false,
+                    'class'       => 'form-control',
+                    'div'         => false,
+                    'label'       => false,
+                    'required'    => false,
+                    'placeholder' => 'Password',
                 ));
                 ?>
             </div>
@@ -63,5 +65,4 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3"></div>
 </div>

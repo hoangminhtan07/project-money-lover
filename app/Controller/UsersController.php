@@ -155,6 +155,13 @@ class UsersController extends AppController
             return;
         }
 
+        // Validate inputs
+        $this->User->set($this->request->data);
+        $valid = $this->User->validates();
+        if (!$valid) {
+            return;
+        }
+
         // Get user info
         $data = $this->request->data['User'];
 
