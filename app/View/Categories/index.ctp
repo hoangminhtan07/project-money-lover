@@ -30,9 +30,23 @@
                             ?>&nbsp;</td>
                         <td><?php echo $category['Category']['note']; ?>&nbsp;</td>
                         <td class="actions">
-                            <?php echo $this->Html->link('Edit', array('action' => 'edit', $category['Category']['id'])); ?>
-                            <?php echo $this->Form->postlink('Delete', array('action' => 'delete', $category['Category']['id']), array('confirm' => 'Are you sure?')); ?>
-                        </td>
+                            <?php
+                            echo $this->Html->link(
+                                    $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-edit')), array(
+                                'action' => 'edit', $category['Category']['id']), array(
+                                'class'  => 'btn btn-warning',
+                                'escape' => false,
+                            ));
+                            ?>
+                            <?php
+                            echo $this->Html->link(
+                                    $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-trash')), array(
+                                'action' => 'delete', $category['Category']['id']), array(
+                                'class'  => 'btn btn-danger',
+                                'escape' => false,
+                            ));
+                            ?>
+                            </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

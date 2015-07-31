@@ -215,8 +215,10 @@ class UsersController extends AppController
         }
 
         //get data
-        $email = $this->request->data['User']['email'];
-
+        $data = $this->request->data;
+        debug($data); die;
+        //$email = $this->request->data['User']['email'];
+        $email = $this->request->data['email'];
         //generate token for email
         $token = $this->User->generateTokenForEmail($email);
 
@@ -224,7 +226,7 @@ class UsersController extends AppController
         if ($token) {
             $this->_send_password_reset_email($email, $token);
             $this->Session->setFlash(__('Check you email and follow instruction in sent email.'), 'alert_box', array('class' => 'alert-success'));
-            $this->redirect(array('action' => 'login'));
+            $this->redirect(array('action' => 'index'));
         }
         $this->Session->setFlash(__('Email does not exist.'), 'alert_box', array('class' => 'alert-danger'));
     }

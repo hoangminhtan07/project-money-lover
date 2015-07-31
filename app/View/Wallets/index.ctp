@@ -41,8 +41,23 @@
                         <td><?php echo $transaction['Transaction']['created']; ?></td>
                         <td><?php echo $transaction['Transaction']['modified']; ?></td>
                         <td class="actions">
-                            <?php echo $this->Html->link('Edit', array('controller' => 'transactions', 'action' => 'edit', $transaction['Transaction']['id'])); ?>
-                            <?php echo $this->Form->postlink('Delete', array('controller' => 'transactions', 'action' => 'delete', $transaction['Transaction']['id']), array('confirm' => 'Are you sure?')); ?>
+                            <?php
+                            echo $this->Html->link(
+                                    $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-edit')), array(
+                                'controller' => 'transactions', 'action'     => 'edit', $transaction['Transaction']['id']), array(
+                                'class'  => 'btn btn-warning',
+                                'escape' => false,
+                            ));
+                            ?>
+                            <?php
+                            echo $this->Form->postlink(
+                                    $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-trash')), array(
+                                'controller' => 'transactions', 'action'     => 'delete', $transaction['Transaction']['id']), array(
+                                'confirm' => 'Are you sure?',
+                                'class'   => 'btn btn-danger',
+                                'escape'  => false,
+                            ));
+                            ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

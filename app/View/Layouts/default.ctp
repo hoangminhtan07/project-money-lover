@@ -25,9 +25,12 @@ $cakeVersion     = __d('cake_dev', 'CakePHP %s', Configure::version())
         </title>
         <link rel="shortcut icon" type="image/x-icon" href="<?php echo $this->webroot; ?>img/wallet.png">
         <?php
-        echo $this->Html->script('bootstrap.min');
         echo $this->Html->script('jquery-1.11.3.min');
+        echo $this->Html->script('bootstrap.min');
+        echo $this->Html->script('formValidation');
+        echo $this->Html->script('frameworkBootstrap');
         echo $this->Html->css('bootstrap.min');
+        echo $this->Html->css('formValidation');
         echo $this->Html->css('web.cake');
         echo $this->fetch('meta');
         echo $this->fetch('css');

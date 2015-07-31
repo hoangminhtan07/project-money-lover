@@ -42,3 +42,11 @@ h3,legend {
 h2 {
     color: red;
 }
+
+.data{
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}

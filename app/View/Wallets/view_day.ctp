@@ -7,6 +7,13 @@
     </div>
     <div class="col-md-8">
         <h2 style="text-align: center"> Date Range</h2>
+        <div class="col-md-offset-10">
+            <select id="choose">
+                <option></option>
+                <option>View By Day</option>
+                <option>View By Categories</option>
+            </select>
+        </div>
         <?php foreach ($transactions as $date => $transaction): ?>
             <h4><?php echo $date; ?></h4>
             <table class="table table-hover">
