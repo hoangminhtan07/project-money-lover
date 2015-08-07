@@ -44,24 +44,18 @@ class Transaction extends AppModel
     /**
      *  Add Transaction
      * 
-     * @param array $data
-     * @param int $walletId
-     * @param int $categoryId
+     * @param array
      * @return array
      */
-    public function add($data, $walletId, $categoryId)
+    public function add($data)
     {
         $this->create();
-        return $this->save(array('Transaction' => array(
-                        'wallet_id'   => $walletId,
-                        'category_id' => $categoryId,
-                        'amount'      => $data['amount'],
-                        'note'        => $data['note'],
-        )));
+        $this->validator()->remove('amount', 'naturalNumber');
+        return $this->save($data);
     }
 
     /**
-     * get list transaction by walletId
+     * Get list transactions by walletId
      * 
      * @param int $walletId
      * @return array
@@ -72,6 +66,57 @@ class Transaction extends AppModel
             'conditions' => array(
                 'wallet_id' => $walletId,
             ),
+        ));
+        return $data;
+    }
+
+    /**
+     *  Get list transactions (group by date) by walletId from fday to tday
+     * 
+     * @param int $walletId
+     * @param int $categoryId
+     * @param string fday
+     * @param string tday
+     * @return array
+     */
+    public function getlistTransactionsByDate($walletId, $categoryId, $fday, $tday)
+    {
+        if ($categoryId == '00') {
+            $data = $this->find('all', array(
+                'conditions' => array(
+                    'wallet_id'              => $walletId,
+                    'Transaction.created <=' => $tday,
+                    'Transaction.created >=' => $fday,
+                ),
+                'group'      => 'Transaction.created',
+            ));
+            return $data;
+        }
+        $data = $this->find('all', array(
+            'conditions' => array(
+                'wallet_id'              => $walletId,
+                'category_id'            => $categoryId,
+                'Transaction.created <=' => $tday,
+                'Transaction.created >=' => $fday,
+            ),
+            'group'      => 'Transaction.created',
+        ));
+        return $data;
+    }
+
+    /**
+     *  Get list transactions (group by date) by walletId 
+     * 
+     * @param int $walletId
+     * @return array
+     */
+    public function getlistTransactionsByCategory($walletId)
+    {
+        $data = $data = $this->find('all', array(
+            'conditions' => array(
+                'wallet_id' => $walletId,
+            ),
+            'order'      => 'Category.name',
         ));
         return $data;
     }
@@ -88,29 +133,25 @@ class Transaction extends AppModel
     {
         $data = $this->find('first', array(
             'conditions' => array(
-                'Transaction.wallet_id'      => $walletId,
-                'Transaction.id' => $transactionId,
+                'Transaction.wallet_id' => $walletId,
+                'Transaction.id'        => $transactionId,
             )
         ));
         return $data;
     }
 
     /**
+     *  Edit Transaction
      * 
      * @param array $data
-     * @param int $categoryId
      * @param int $transactionId
      * @return array
      */
-    public function edit($data, $categoryId, $transactionId)
+    public function edit($data, $transactionId)
     {
         $this->id = $transactionId;
-        return $this->save(array(
-                    'Transaction' => array(
-                        'category_id' => $categoryId,
-                        'amount'      => $data['amount'],
-                        'note'        => $data['note'],
-        )));
+        $this->validator()->remove('amount', 'naturalNumber');
+        return $this->save($data);
     }
 
     /**

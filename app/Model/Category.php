@@ -123,6 +123,24 @@ class Category extends AppModel
     }
 
     /**
+     *  Get list Categories by purpose
+     * 
+     * @param int $userId
+     * @param boolean $purpose
+     * @return type
+     */
+    public function getListCategoryByPurpose($userId, $purpose)
+    {
+        $data = $this->find('all', array(
+            'conditions' => array(
+                $this->alias . '.user_id' => $userId,
+                'Category.purpose'        => $purpose,
+            ),
+        ));
+        return $data;
+    }
+
+    /**
      * Get category by id
      * 
      * @param int $id
@@ -163,7 +181,7 @@ class Category extends AppModel
     public function deleteCategoriesByUserId($userId)
     {
         return $this->deleteAll(array(
-                    'Category.user_id' => $userId
+                    'Category.user_id' => $userId,
         ));
     }
 

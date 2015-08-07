@@ -5,6 +5,9 @@ class CategoriesController extends AppController
 
     public $uses = array('Category', 'User', 'Wallet', 'Transaction');
 
+    const earned = 1;
+    const spent  = 0;
+
     /**
      *  Index: display all category
      */
@@ -16,13 +19,18 @@ class CategoriesController extends AppController
         $userId = $this->Auth->user('id');
 
         //get list categories by userId
-        $categoryList = $this->Category->getListCategoriesByUser($userId);
-        if (empty($categoryList)) {
+        $categoriesSpent  = $this->Category->getListCategoryByPurpose($userId, self::spent);
+        $categoriesEarned = $this->Category->getListCategoryByPurpose($userId, self::earned);
+
+        if (empty($categoriesEarned) && empty($categoriesSpent)) {
             $this->Session->setFlash(__('You have not caterory yet. Please creat new Category.'), 'alert_box', array('class' => 'alert-danger'));
         }
 
         //set view
-        $this->set('categories', $categoryList);
+        $this->set(array(
+            'categoriesSpent'  => $categoriesSpent,
+            'categoriesEarned' => $categoriesEarned,
+        ));
     }
 
     /**
@@ -47,6 +55,7 @@ class CategoriesController extends AppController
             $this->Session->setFlash(__('Category has been save.'), 'alert_box', array('class' => 'alert-success'));
         } else {
             $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
+            return;
         }
         $this->redirect(array('action' => 'index'));
     }
@@ -58,11 +67,6 @@ class CategoriesController extends AppController
      */
     public function edit($categoryId)
     {
-        //check request
-        if (!$this->request->is(array('post', 'put'))) {
-            return;
-        }
-
         //check params
         if (empty($categoryId)) {
             throw new ErrorException();
@@ -80,6 +84,17 @@ class CategoriesController extends AppController
             $this->redirect(array('action' => 'index'));
         }
 
+        $data = $this->Category->getCategoryById($categoryId);
+
+        if (empty($this->request->data)) {
+            $this->request->data = $data;
+        }
+
+        //check request
+        if (!$this->request->is(array('post', 'put'))) {
+            return;
+        }
+
         //get data request
         $data = $this->request->data['Category'];
 
@@ -87,6 +102,9 @@ class CategoriesController extends AppController
         $edit = $this->Category->edit($data, $categoryId);
         if ($edit) {
             $this->Session->setFlash(__('Category has been saved.'), 'alert_box', array('class' => 'alert-success'));
+        } else {
+            $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
+            return;
         }
         $this->redirect(array('action' => 'index'));
     }
@@ -148,6 +166,7 @@ class CategoriesController extends AppController
             $this->Session->setFlash(__('Category has been deleted'), 'alert_box', array('class' => 'alert-success'));
         } else {
             $this->Session->setFlash(__('Category was not deleted. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
+            return;
         }
         $this->redirect(array('action' => 'index'));
     }

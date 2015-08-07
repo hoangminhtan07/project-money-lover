@@ -76,8 +76,13 @@ class Wallet extends AppModel
     public function add($data = null, $userId = 0)
     {
         $this->create();
-        $this->saveField('user_id', $userId);
-        return ($this->save($data));
+        return $this->save(array(
+            'Wallet' => array(
+                'user_id' => $userId,
+                'name' => $data['name'],
+                'balance' => $data['balance'],
+            )
+        ));
     }
 
     /**

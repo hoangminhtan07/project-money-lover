@@ -1,11 +1,18 @@
+<?php
+echo $this->Html->script('TransactionsJs/myJs');
+echo $this->Html->script('TransactionsJs/jquery-ui-1.10.1.min');
+echo $this->Html->css('jquery-ui-1.10.1');
+echo $this->Html->css('nigran.datepicker');
+?>
+
 <div class="row">
-    <div class="col-md-3">
-        <h3>Actions</h3>
+    <div class="col-md-2">
+        <h3>Menu</h3>
         <ul>
             <li><?php echo $this->Html->link('Back', array('controller' => 'wallets', 'action' => 'index')) ?></li>
         </ul>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8">
         <?php
         echo $this->Form->create('Transaction', array(
             'inputDefaults' => array(
@@ -30,6 +37,18 @@
                     ));
                     ?>
                 </div>
+                <label class="control-label col-xs-2">Date</label>
+                <div class=" col-xs-3">
+                    <?php
+                    echo $this->Form->input('created', array(
+                        'placeholder' => 'Input date',
+                        'type'        => 'text',
+                        'required'    => false,
+                        'label'       => false,
+                        'class'       => 'form-control date_input',
+                    ));
+                    ?>
+                </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-xs-3">Earned Purpose</label>
@@ -43,10 +62,8 @@
                     ));
                     ?>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-xs-3">Amount</label>
-                <div class=" col-xs-8">
+                <label class="control-label col-xs-2">Amount</label>
+                <div class=" col-xs-3">
                     <?php
                     echo $this->Form->input('amount', array(
                         'required' => false,

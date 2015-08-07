@@ -1,4 +1,9 @@
-<?php echo $this->Html->script('myJs'); ?>
+<?php
+echo $this->Html->script('myJs');
+echo $this->Html->css('formValidation');
+echo $this->Html->script('frameworkBootstrap');
+echo $this->Html->script('formValidation');
+?>
 <div class="row">
     <div class="col-md-3"></div>
     <div class="col-md-6" style="margin-top: 88px">

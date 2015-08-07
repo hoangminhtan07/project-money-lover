@@ -7,6 +7,9 @@ class TransactionsController extends AppController
     private $expense = 0;
     public $uses     = array('Transaction', 'User', 'Category', 'Wallet');
 
+    const earned = 1;
+    const spent  = 0;
+
     /**
      *   Add transaction
      */
@@ -17,8 +20,8 @@ class TransactionsController extends AppController
         $userId = $this->Auth->user('id');
 
         //get list name category of user
-        $getListNameCategorySpent  = $this->Category->getListNameCategoryByPurpose($userId, '0');
-        $getListNameCategoryEarned = $this->Category->getListNameCategoryByPurpose($userId, '1');
+        $getListNameCategorySpent  = $this->Category->getListNameCategoryByPurpose($userId, self::spent);
+        $getListNameCategoryEarned = $this->Category->getListNameCategoryByPurpose($userId, self::earned);
         $this->set('listCategorySpent', $getListNameCategorySpent);
         $this->set('listCategoryEarned', $getListNameCategoryEarned);
 
@@ -43,6 +46,12 @@ class TransactionsController extends AppController
         $categorySpentId  = $data['categorySpentId'];
         $categoryEarnedId = $data['categoryEarnedId'];
         $amount           = $data['amount'];
+        if (empty($data['created'])) {
+            $data['created'] = date('Y-m-d H:i:s');
+        } else {
+            $data['created'] = str_replace('-', '/', $data['created']);
+            $data['created'] = date('Y-m-d', strtotime($data['created']));
+        }
 
         if (empty($categorySpentId) && !empty($categoryEarnedId)) {
             $categoryId = $categoryEarnedId;
@@ -58,15 +67,17 @@ class TransactionsController extends AppController
         }
 
         //check category belong to user
-
         $checkCategoryUser = $this->Category->checkUserCategory($userId, $categoryId);
         if (!$checkCategoryUser) {
             $this->Session->setFlash(__('Error, try again.'), 'alert_box', array('class' => 'alert-danger'));
             return;
         }
 
+        $data['category_id'] = $categoryId;
+        $data['wallet_id']   = $walletId;
+
         //save data
-        $transaction = $this->Transaction->add($data, $walletId, $categoryId);
+        $transaction = $this->Transaction->add($data);
         if ($transaction) {
 
             //update balance to default wallet
@@ -74,6 +85,7 @@ class TransactionsController extends AppController
             $this->Session->setFlash(__('Transaction has been saved.'), 'alert_box', array('class' => 'alert-success'));
         } else {
             $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
+            return;
         }
         $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
     }
@@ -85,23 +97,23 @@ class TransactionsController extends AppController
      */
     public function edit($transactionId)
     {
-        //get userId
-        $userId = $this->Auth->user('id');
-
-        //get list name category of user
-        $getListNameCategorySpent  = $this->Category->getListNameCategoryByPurpose($userId, '0');
-        $getListNameCategoryEarned = $this->Category->getListNameCategoryByPurpose($userId, '1');
-        $this->set('listCategorySpent', $getListNameCategorySpent);
-        $this->set('listCategoryEarned', $getListNameCategoryEarned);
-
         //check params
         if (empty($transactionId)) {
             throw new ErrorException();
         }
 
+        //get userId
+        $userId = $this->Auth->user('id');
+
+        //get list name category of user
+        $getListNameCategorySpent  = $this->Category->getListNameCategoryByPurpose($userId, self::spent);
+        $getListNameCategoryEarned = $this->Category->getListNameCategoryByPurpose($userId, self::earned);
+        $this->set('listCategorySpent', $getListNameCategorySpent);
+        $this->set('listCategoryEarned', $getListNameCategoryEarned);
+
         //get current walletId
         $walletId = $this->User->getCurrentWalletIdByUserId($userId);
-        
+
         //check transaction belong to wallet
         $checkWalletTransaction = $this->Transaction->checkWalletTransaction($walletId, $transactionId);
         if (empty($checkWalletTransaction)) {
@@ -109,11 +121,16 @@ class TransactionsController extends AppController
             $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
         }
 
+        $data = $this->Transaction->getTransactionById($transactionId);
+        if (empty($this->request->data)) {
+            $this->request->data = $data;
+        }
+
         //check request
         if (!$this->request->is(array('put', 'post'))) {
             return;
         }
-        
+
         // Validate inputs
         $this->Transaction->set($this->request->data);
         $valid = $this->Transaction->validates();
@@ -132,6 +149,7 @@ class TransactionsController extends AppController
             $categoryId = $categoryEarnedId;
         } elseif (empty($categoryEarnedId) && !empty($categorySpentId)) {
             $categoryId = $categorySpentId;
+            $amount     = -$amount;
         } elseif (empty($categoryEarnedId) && empty($categorySpentId)) {
             $this->Session->setFlash(__('Please chose a transaction.'), 'alert_box', array('class' => 'alert-danger'));
             return;
@@ -140,34 +158,24 @@ class TransactionsController extends AppController
             return;
         }
 
-        //save edited transaction
         $this->Transaction->bindCategory();
-        $oldData     = $this->Transaction->getTransactionById($transactionId);
-        $newData     = $this->Category->getCategoryById($categoryId);
-        $transaction = $this->Transaction->edit($data, $categoryId, $transactionId);
-        if ($transaction) {
-            $this->Session->setFlash(__('Transaction has been saved.'), 'alert_box', array('class' => 'alert-success'));
+        $oldData = $this->Transaction->getTransactionById($transactionId);
 
-            //save balance in current wallet
-            if ($oldData['Category']['purpose'] == false && $newData['Category']['purpose'] == false) {
-                $amount = ($oldData['Transaction']['amount'] - $amount);
-                $this->Wallet->transactionMoney($walletId, $amount);
-            }
-            if ($oldData['Category']['purpose'] == true && $newData['Category']['purpose'] == true) {
-                $amount = ($amount - $oldData['Transaction']['amount']);
-                $this->Wallet->transactionMoney($walletId, $amount);
-            }
-            if ($oldData['Category']['purpose'] == false && $newData['Category']['purpose'] == true) {
-                $amount = ($amount + $oldData['Transaction']['amount']);
-                $this->Wallet->transactionMoney($walletId, $amount);
-            }
-            if ($oldData['Category']['purpose'] == true && $newData['Category']['purpose'] == false) {
-                $amount = -($amount + $oldData['Transaction']['amount']);
-                $this->Wallet->transactionMoney($walletId, $amount);
-            }
-        } else {
+        $data['category_id'] = $categoryId;
+        $data['amount']      = $amount;
+
+        //save edited transaction
+        $transaction = $this->Transaction->edit($data, $transactionId);
+        if (!$transaction) {
             $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
+            return;
         }
+
+        //save balance in current wallet
+        $amount = $amount - $oldData['Transaction']['amount'];
+        $this->Wallet->transactionMoney($walletId, $amount);
+
+        $this->Session->setFlash(__('Transaction has been saved.'), 'alert_box', array('class' => 'alert-success'));
         $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
     }
 
@@ -202,12 +210,8 @@ class TransactionsController extends AppController
         }
 
         //get amount to save before delete
-        $data = $this->Transaction->getTransactionById($transactionId);
-        if ($data['Category']['purpose'] == false) {
-            $amount = $data['Transaction']['amount'];
-        } else {
-            $amount = -$data['Transaction']['amount'];
-        }
+        $data   = $this->Transaction->getTransactionById($transactionId);
+        $amount = -$data['Transaction']['amount'];
 
         $del = $this->Transaction->deleteTransactionById($transactionId);
         if ($del) {
@@ -217,6 +221,7 @@ class TransactionsController extends AppController
             $this->Wallet->transactionMoney($walletId, $amount);
         } else {
             $this->Session->setFlash(__('Error. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
+            return;
         }
         $this->redirect(array('controller' => 'wallets', 'action' => 'index'));
     }
@@ -262,11 +267,17 @@ class TransactionsController extends AppController
         }
 
         //get data request
-        $formMonth = $this->request->data['Transaction']['form'];
-        $toMonth   = $this->request->data['Transaction']['to'];
+
+        $data = $this->request->data['Static'];
+
+        $fdate = str_replace('-', '/', $data['fdate']);
+        $fdate = date('Y-m-d', strtotime($fdate));
+
+        $tdate = str_replace('-', '/', $data['tdate']);
+        $tdate = date('Y-m-d', strtotime($tdate . "+1 dates"));
 
         //get list cates to display month report
-        $cates = $this->cateArrangement($transactions, $formMonth['month'], $toMonth['month']);
+        $cates = $this->cateArrangement($transactions, $fdate, $tdate);
 
         //calculate sumIncome and sumExpense formMonth toMonth
         $sumIncome  = 0;
@@ -287,13 +298,20 @@ class TransactionsController extends AppController
         ));
     }
 
-    //generate new cates array to display month report
-    private function cateArrangement($trans, $formMonth, $toMonth)
+    /**
+     *  Generate new cates array to display report
+     * 
+     * @param array $trans
+     * @param string $fdate
+     * @param string $tdate
+     * @return array
+     */
+    private function cateArrangement($trans, $fdate, $tdate)
     {
         $newCates = array();
         foreach ($trans as $key => $value) {
-            $month = date('m', strtotime($value['Transaction']['created']));
-            if ($formMonth <= $month && $month <= $toMonth) {
+            $date = date('Y-m-d', strtotime($value['Transaction']['created']));
+            if ($fdate <= $date && $date <= $tdate) {
                 $cateId = $value['Category']['id'];
                 if (!array_key_exists($cateId, $newCates)) {
                     $amount = 0;

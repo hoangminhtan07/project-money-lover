@@ -46,7 +46,14 @@ h2 {
 .data{
 }
 
+.date_input{
+}
+
 .nopadding {
-   padding: 0 !important;
-   margin: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+#dateForm {
+    margin-bottom: 30px
 }

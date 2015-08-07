@@ -174,6 +174,7 @@ class UsersController extends AppController
             $this->Session->setFlash(__('User has been created. Please follow instruction in sent email.'), 'alert_box', array('class' => 'alert-success'));
         } else {
             $this->Session->setFlash(__('Unable to create user. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
+            return;
         }
         $this->redirect(array('action' => 'index'));
     }
@@ -215,8 +216,6 @@ class UsersController extends AppController
         }
 
         //get data
-        $data = $this->request->data;
-        debug($data); die;
         //$email = $this->request->data['User']['email'];
         $email = $this->request->data['email'];
         //generate token for email
@@ -290,7 +289,7 @@ class UsersController extends AppController
             $this->Session->setFlash(__('User deleted'), 'alert_box', array('class' => 'alert-success'));
             $this->redirect($this->Auth->logout());
         } else {
-            $this->Session->setFlash(__('User was not deleted'), 'alert_box', array('class' => 'alert-danger'));
+            $this->Session->setFlash(__('User was not deleted. Please try again.'), 'alert_box', array('class' => 'alert-danger'));
         }
         $this->redirect(array('action' => 'index'));
     }
