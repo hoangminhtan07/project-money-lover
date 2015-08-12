@@ -77,11 +77,11 @@ class Wallet extends AppModel
     {
         $this->create();
         return $this->save(array(
-            'Wallet' => array(
-                'user_id' => $userId,
-                'name' => $data['name'],
-                'balance' => $data['balance'],
-            )
+                    'Wallet' => array(
+                        'user_id' => $userId,
+                        'name'    => $data['name'],
+                        'balance' => $data['balance'],
+                    )
         ));
     }
 
@@ -210,9 +210,9 @@ class Wallet extends AppModel
      */
     public function deleteWalletById($walletId)
     {
-        $dataSource  = $this->getDataSource();
+        $dataSource = $this->getDataSource();
         $dataSource->begin();
-        
+
         //delete all transactions before delete wallet
         $transaction = ClassRegistry::init('Transaction');
         $transaction->deleteTransactionsByWalletId($walletId);

@@ -1,6 +1,7 @@
+<?php echo $this->Html->script('UsersJs/myJs'); ?>
 <div class="row">
     <div class="col-md-3">
-        <h3>Actions</h3>
+        <h3>Menu</h3>
         <ul>
             <li><?php echo $this->Form->postlink('Delete User', array('action' => 'delete'), array('confirm' => 'Are you sure?')); ?></li>
             <li><?php echo $this->Html->link('Change Password', array('action' => 'changePassword')); ?></li>

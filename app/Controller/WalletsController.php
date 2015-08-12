@@ -3,7 +3,8 @@
 class WalletsController extends AppController
 {
 
-    public $uses = array('Wallet', 'User', 'Transaction', 'Category');
+    public $uses       = array('Wallet', 'User', 'Transaction', 'Category');
+    public $components = array('Paginator');
 
     /**
      *  View all transactions on user's current wallet
@@ -29,10 +30,17 @@ class WalletsController extends AppController
         //set view
         $this->set('wallet', $wallet);
 
+        $this->paginate = array(
+            'conditions' => array(
+                'wallet_id' => $walletId,
+            ),
+            'limit'      => 3,
+        );
+
         //get list transactions bind category by walletId
         $this->Transaction->bindCategory();
-        $transactions = $this->Transaction->getListTransactionsByWalletId($walletId);
-
+        $transactions = $this->paginate('Transaction');
+        //$this->set('transactions', $transactions);
         //set view
         $this->set('transactions', $transactions);
     }
@@ -61,7 +69,7 @@ class WalletsController extends AppController
         }
 
         $tdate = str_replace('-', '/', $tdate);
-        $tdate = date('Y-m-d', strtotime($tdate . "+1 dates"));
+        $tdate = date('Y-m-d', strtotime($tdate . "+1 days"));
 
         //get userId
         $userId = $this->Auth->user('id');
@@ -288,7 +296,7 @@ class WalletsController extends AppController
         foreach ($trans as $key => $value) {
             $cateId = $value['Category']['id'];
             if (!array_key_exists($cateId, $newCates)) {
-                $newCates[$cateId] = $value['Category']['name'];
+                $newCates[$cateId] = array($value['Category']['name'], $value['Category']['purpose']);
             }
         }
         return $newCates;

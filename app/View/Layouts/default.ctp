@@ -1,21 +1,3 @@
-<?php
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.View.Layouts
- * @since         CakePHP(tm) v 0.10.0.1076
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-$cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
-$cakeVersion     = __d('cake_dev', 'CakePHP %s', Configure::version())
-?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -27,6 +9,7 @@ $cakeVersion     = __d('cake_dev', 'CakePHP %s', Configure::version())
         <?php
         echo $this->Html->script('jquery-1.11.3.min');
         echo $this->Html->script('bootstrap.min');
+        echo $this->Html->script('mainJs');
         echo $this->Html->css('bootstrap.min');
         echo $this->Html->css('web.cake');
         echo $this->fetch('meta');
@@ -36,9 +19,31 @@ $cakeVersion     = __d('cake_dev', 'CakePHP %s', Configure::version())
     </head>
     <body>
         <header>
-            <h1><?php echo 'Project Money-Lover'; ?></h1>
+            <a href="money.server.dev">
+                <image id="img-head" src="<?php echo $this->webroot; ?>img/wallet-logo.png" alt="money.server.dev" class="img-logo">
+            </a>
+            <div id="head-text">Project Money-Lover</div>
         </header>
-        <div class="container">
+        <div id="leftBackground"></div>
+        <nav id="navTop" class="navbar navbar-new navbar-default">
+            <div class="container-fluid">
+                <div>
+                    <ul class="nav navbar-nav">
+                        <?php
+                        echo $this->Html->tag('li', $this->Html->link('&bnsp;', Router::fullBaseUrl(), array(
+                                    'class' => 'navbar-header nav-home'
+                        )));
+                        ?>
+                        <?php echo $this->Html->tag('li', $this->Html->link('User Edit', array('controller' => 'users', 'action' => 'edit'))); ?>
+                        <?php echo $this->Html->tag('li', $this->Html->link('Add Tran', array('controller' => 'transactions', 'action' => 'add'))); ?>
+                        <?php echo $this->Html->tag('li', $this->Html->link('Wallets', array('controller' => 'wallets', 'action' => 'view'))); ?>
+                        <?php echo $this->Html->tag('li', $this->Html->link('Categories', array('controller' => 'categories', 'action' => 'index'))); ?>
+                        <?php echo $this->Html->tag('li', $this->Html->link('Statistics', array('controller' => 'transactions', 'action' => 'statistic'))); ?>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid">
             <div id="content">
                 <div style="text-align: right">
                     <?php if (AuthComponent::user()): ?>
@@ -52,20 +57,9 @@ $cakeVersion     = __d('cake_dev', 'CakePHP %s', Configure::version())
 
                 <?php echo $this->Session->flash(); ?>
                 <?php echo $this->Session->flash('auth'); ?>
-
                 <?php echo $this->fetch('content'); ?>
             </div>
-            <div id="footer">
-                <?php
-                echo $this->Html->link(
-                        $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')), 'http://www.cakephp.org/', array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
-                );
-                ?>
-                <p>
-                    <?php echo $cakeVersion; ?>
-                </p>
-            </div>
-            <footer>
+            <footer class="nav-up">
                 <p class="foot"><?php echo 'Hayate07'; ?></p>
             </footer>
         </div>

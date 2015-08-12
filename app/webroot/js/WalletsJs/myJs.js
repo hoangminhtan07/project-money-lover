@@ -26,8 +26,8 @@ $(document).ready(function () {
 
     //get day to use in TransactionController
     $('.btn-info').on('click', function () {
-        var fday = $('#from_day').val(),
-                tday = $('#to_day').val();
+        var fday = $('#from_date').val(),
+                tday = $('#to_date').val();
         fday = formatDate(fday);
         tday = formatDate(tday);
         var currentUrl = window.location.href;
@@ -59,4 +59,10 @@ $(document).ready(function () {
         return [year, month, day].join('-');
     }
 
+});
+
+$(window).load(function () {
+    setTimeout(function () {
+        $('.alert').fadeOut(3888, 'swing')
+    });
 });

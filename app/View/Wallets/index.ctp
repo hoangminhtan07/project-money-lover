@@ -36,129 +36,104 @@
         <div class="col-md-offset-7 col-md-1">
             <?php
             echo $this->Html->link(
-                    $this->Html->tag('i', ' Detail ', array('class' => 'glyphicon glyphicon-menu-right')), array('action' => 'viewByDateRange','cate-00'), array(
+                    $this->Html->tag('i', ' Detail ', array('class' => 'glyphicon glyphicon-menu-right')), array('action' => 'viewByDateRange', 'cate-00'), array(
                 'class'  => 'btn btn-success btn-xs',
                 'escape' => false));
             ?>
         </div>
 
-        <?php if (isset($transByDay)): ?>
-            <?php foreach ($transByDay as $date => $transactions): ?>
-                <h4><?php echo $date; ?></h4>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Purpose</th>
-                            <th>Amount</th>
-                            <th style="width: 300px">Note</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($transactions as $tran): ?>
-                            <tr>
-                                <td><?php echo $tran['Category']['name']; ?></td>
-                                <?php if ($tran['Category']['purpose'] == 0): ?>
-                                    <td><?php echo 'Spent'; ?></td>
-                                <?php else: ?>
-                                    <td><?php echo 'Earned'; ?></td>
-                                <?php endif; ?>
-                                <td>
-                                    <?php
-                                    $val = -$tran['Transaction']['amount'];
-                                    echo $val;
-                                    ?>
-                                </td>
-                                <td><?php echo $tran['Transaction']['note']; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <br>
-                <?php
-            endforeach;
-        elseif (isset($transByCategory)):
-            ?>
-            <?php foreach ($transByCategory as $name => $transactions): ?>
-                <h4><?php echo $name; ?></h4>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Purpose</th>
-                            <th >Date</th>
-                            <th>Amount</th>
-                            <th style="width: 300px">Note</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($transactions as $tran): ?>
-                            <tr>
-                                <?php if ($tran['Category']['purpose'] == 0): ?>
-                                    <td><?php echo 'Spent'; ?></td>
-                                <?php else: ?>
-                                    <td><?php echo 'Earned'; ?></td>
-                                <?php endif; ?>
-                                <td><?php echo $tran['Transaction']['created']; ?></td>
-                                <td><?php echo $tran['Transaction']['amount']; ?></td>
-                                <td><?php echo $tran['Transaction']['note']; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <br>
-                <?php
-            endforeach;
-        else:
-            ?>
-            <table class="table table-hover">
-                <thead>
+        <table class="table table-hover" style="height: 190px">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Purpose</th>
+                    <th>Amount</th>
+                    <th>Note</th>
+                    <th>Created</th>
+                    <th>Modified</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($transactions as $transaction): ?>
                     <tr>
-                        <th>Category</th>
-                        <th>Purpose</th>
-                        <th>Amount</th>
-                        <th>Note</th>
-                        <th>Created</th>
-                        <th>Modified</th>
-                        <th>Actions</th>
+                        <td> <?php echo $transaction['Category']['name']; ?></td>
+                        <?php if ($transaction['Category']['purpose'] == 0): ?>
+                            <td><?php echo 'Spent'; ?></td>
+                        <?php else: ?>
+                            <td><?php echo 'Earned'; ?></td>
+                        <?php endif; ?>
+                        <td><?php echo number_format(abs($transaction['Transaction']['amount'])); ?></td>
+                        <td><?php echo $transaction['Transaction']['note']; ?></td>
+                        <td><?php echo $transaction['Transaction']['created']; ?></td>
+                        <td><?php echo $transaction['Transaction']['modified']; ?></td>
+                        <td class="actions">
+                            <?php
+                            echo $this->Html->link(
+                                    $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-edit')), array(
+                                'controller' => 'transactions', 'action'     => 'edit', $transaction['Transaction']['id']), array(
+                                'class'  => 'btn btn-warning',
+                                'escape' => false,
+                            ));
+                            ?>
+                            <?php
+                            echo $this->Form->postlink(
+                                    $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-trash')), array(
+                                'controller' => 'transactions', 'action'     => 'delete', $transaction['Transaction']['id']), array(
+                                'confirm' => 'Are you sure?',
+                                'class'   => 'btn btn-danger',
+                                'escape'  => false,
+                            ));
+                            ?>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($transactions as $transaction): ?>
-                        <tr>
-                            <td> <?php echo $transaction['Category']['name']; ?></td>
-                            <?php if ($transaction['Category']['purpose'] == 0): ?>
-                                <td><?php echo 'Spent'; ?></td>
-                            <?php else: ?>
-                                <td><?php echo 'Earned'; ?></td>
-                            <?php endif; ?>
-                            <td><?php echo abs($transaction['Transaction']['amount']); ?></td>
-                            <td><?php echo $transaction['Transaction']['note']; ?></td>
-                            <td><?php echo $transaction['Transaction']['created']; ?></td>
-                            <td><?php echo $transaction['Transaction']['modified']; ?></td>
-                            <td class="actions">
-                                <?php
-                                echo $this->Html->link(
-                                        $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-edit')), array(
-                                    'controller' => 'transactions', 'action'     => 'edit', $transaction['Transaction']['id']), array(
-                                    'class'  => 'btn btn-warning',
-                                    'escape' => false,
-                                ));
-                                ?>
-                                <?php
-                                echo $this->Form->postlink(
-                                        $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-trash')), array(
-                                    'controller' => 'transactions', 'action'     => 'delete', $transaction['Transaction']['id']), array(
-                                    'confirm' => 'Are you sure?',
-                                    'class'   => 'btn btn-danger',
-                                    'escape'  => false,
-                                ));
-                                ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
 
+        <?php
+        $paginator = $this->Paginator;
+        // pagination section
+        echo "<div class='pager'>";
+
+        // the 'first' page button
+        echo $paginator->first("First", array(
+            'separator'    => '',
+            'currentClass' => 'active',
+            'tag'          => 'li',
+            'after'        => '</ul>',
+            'modulus'      => 2,
+        ));
+
+        if ($paginator->hasPrev()) {
+            echo $paginator->prev("<<", array(
+                'class' => false,
+                'tag'   => 'li',
+            ));
+        }
+
+        // the 'number' page buttons
+        echo $paginator->numbers(array(
+            'separator'    => '',
+            'currentClass' => 'active',
+            'tag'          => 'li',
+            'modulus'      => 2,
+        ));
+
+        // for the 'next' button
+        if ($paginator->hasNext()) {
+            echo $paginator->next(">>", array(
+                'class' => false,
+                'tag'   => 'li',
+            ));
+        }
+
+        // the 'last' page button
+        echo $paginator->last("Last", array(
+            'tag' => 'li',
+        ));
+
+        echo "</div>";
+        ?>
     </div>
 </div>

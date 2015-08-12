@@ -22,12 +22,28 @@ echo $this->Html->css('nigran.datepicker');
                 if (strpos(Router::url(), 'cate-00') !== false) : echo 'selected';
                 endif;
                 ?> >All</option>
-                        <?php foreach ($listCateOfWallet as $cateId => $cateName): ?>
-                    <option value="<?php echo $cateId ?>" <?php
-                    if (strpos(Router::url(), "cate-$cateId") !== false) : echo 'selected';
-                    endif;
-                    ?> ><?php echo $cateName; ?></option>
-                        <?php endforeach; ?>
+
+                <optgroup label="Spent">
+                    <?php foreach ($listCateOfWallet as $cateId => $cateName): ?>
+                        <?php if ($cateName['1'] == false): ?>
+                            <option value="<?php echo $cateId ?>" <?php
+                            if (strpos(Router::url(), "cate-$cateId") !== false) : echo 'selected';
+                            endif;
+                            ?> ><?php echo $cateName['0']; ?></option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                </optgroup>
+                <optgroup label="Earned">
+                    <?php foreach ($listCateOfWallet as $cateId => $cateName): ?>
+                        <?php if ($cateName['1'] == true): ?>
+                            <option value="<?php echo $cateId ?>" <?php
+                            if (strpos(Router::url(), "cate-$cateId") !== false) : echo 'selected';
+                            endif;
+                            ?> ><?php echo $cateName['0']; ?></option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                </optgroup>
+
             </select>
         </div>
         <form id="dateForm" class="form-inline col-md-6">
@@ -80,7 +96,7 @@ echo $this->Html->css('nigran.datepicker');
                         <?php else: ?>
                             <td><?php echo 'Earned'; ?></td>
                         <?php endif; ?>
-                        <td><?php echo abs($tran['Transaction']['amount']); ?></td>
+                            <td><?php echo number_format(abs($tran['Transaction']['amount'])); ?></td>
                         <td><?php echo $tran['Transaction']['note']; ?></td>
                     </tr>
 

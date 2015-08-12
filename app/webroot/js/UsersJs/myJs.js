@@ -1,24 +1,16 @@
 $(document).ready(function () {
 
     //validation of forgotPassword modal
-    $('#forgotPasswordForm').formValidation({
-        framework: 'bootstrap',
-        excluded: [':disabled'],
-        icon: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
+    $("#forgotPasswordForm").validate({
+        rules: {
             email: {
-                validators: {
-                    emailAddress: {
-                        message: 'Please enter an email-address'
-                    }
-                }
+                required: true,
+                email: true
             }
         }
     });
+
+
 
     //get data of form forgotPassword modal
     $('.data').on('click', function () {
@@ -26,3 +18,11 @@ $(document).ready(function () {
         $("form").attr('action', action);
     });
 });
+
+$(window).load(function () {
+    setTimeout(function () {
+        $('.alert').fadeOut(3888, 'swing')
+    });
+});
+
+

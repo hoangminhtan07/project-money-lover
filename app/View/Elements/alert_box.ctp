@@ -1,5 +1,4 @@
-
-<div class="alert <?php echo $class; ?>">
+<div id="customer-alert" class="alert <?php echo $class; ?>">
     <?php echo $message; ?>
     <a href="#" class="close" onclick="$(this).parent().fadeOut();
             return false;">&times;

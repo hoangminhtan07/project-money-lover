@@ -1,3 +1,4 @@
+<?php echo $this->Html->script('CategoriesJs/myJs'); ?>
 <div class="row">
     <div class="col-md-2">
         <h3>Menu</h3>
@@ -33,11 +34,12 @@
                                 ));
                                 ?>
                                 <?php
-                                echo $this->Html->link(
+                                echo $this->Form->postlink(
                                         $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-trash')), array(
-                                    'action' => 'delete', $category['Category']['id']), array(
-                                    'class'  => 'btn btn-danger',
-                                    'escape' => false,
+                                    'controller' => 'categories', 'action'     => 'delete', $category['Category']['id']), array(
+                                    'confirm' => 'Are you sure?',
+                                    'class'   => 'btn btn-danger',
+                                    'escape'  => false,
                                 ));
                                 ?>
                             </td>
@@ -71,11 +73,12 @@
                                 ));
                                 ?>
                                 <?php
-                                echo $this->Html->link(
+                                echo $this->Form->postlink(
                                         $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-trash')), array(
-                                    'action' => 'delete', $category['Category']['id']), array(
-                                    'class'  => 'btn btn-danger',
-                                    'escape' => false,
+                                    'controller' => 'categories', 'action'     => 'delete', $category['Category']['id']), array(
+                                    'confirm' => 'Are you sure?',
+                                    'class'   => 'btn btn-danger',
+                                    'escape'  => false,
                                 ));
                                 ?>
                             </td>

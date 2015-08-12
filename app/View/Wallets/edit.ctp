@@ -1,6 +1,7 @@
+<?php echo $this->Html->script('WalletsJs/myJs'); ?>
 <div class="row">
     <div class="col-md-3">
-        <h3>Actions</h3>
+        <h3>Menu</h3>
         <ul>
             <li><?php echo $this->Html->link('Back', array('controller' => 'wallets', 'action' => 'view')); ?></li>
         </ul>
@@ -13,26 +14,43 @@
                     'class' => 'form-group',
                 ),
             ),
+            'class'         => 'form-horizontal',
         ));
         ?>
         <fieldset>
-            <legend>New Wallet</legend>
-            <?php
-            echo $this->Form->input('name', array(
-                'label'    => 'Wallet Name',
-                'required' => false,
-                'class'    => 'form-control',
-            ));
-            echo $this->Form->input('balance', array(
-                'required' => false,
-                'class'    => 'form-control',
-            ));
-            echo $this->Form->end(array(
-                'label' => 'Submit',
-                'class' => 'btn btn-primary',
-            ));
-            ?>
+            <legend>Edit Wallet</legend>
+            <div class="form-group">
+                <label class="control-label col-xs-3">Wallet Name</label>        
+                <div class="col-xs-9">
+                    <?php
+                    echo $this->Form->input('name', array(
+                        'label'    => false,
+                        'required' => false,
+                        'class'    => 'form-control',
+                    ));
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3">Balance</label>        
+                <div class="col-xs-9">
+                    <?php
+                    echo $this->Form->input('balance', array(
+                        'label'    => false,
+                        'required' => false,
+                        'class'    => 'form-control',
+                    ));
+                    ?>
+                </div>
+            </div>
+            <div class="col-xs-offset-3">
+                <?php
+                echo $this->Form->end(array(
+                    'label' => 'Submit',
+                    'class' => 'btn btn-primary',
+                ));
+                ?>
+            </div>
         </fieldset>
-
     </div>
 </div>

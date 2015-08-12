@@ -1,6 +1,7 @@
+<?php echo $this->Html->script('CategoriesJs/myJs'); ?>
 <div class="row">
     <div class="col-md-3">
-        <h3>Actions</h3>
+        <h3>Menu</h3>
         <ul>
             <li><?php echo $this->Html->link('Back', array('action' => 'index')); ?></li>
         </ul>
@@ -20,7 +21,7 @@
             <legend>New Category</legend>
             <div class="form-group">
                 <label class="control-label col-xs-3">Category Name</label>        
-                <div class="col-xs-6">
+                <div class="col-xs-8">
                     <?php
                     echo $this->Form->input('name', array(
                         'class'    => 'form-control',
@@ -46,7 +47,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label col-xs-3">Note</label>
-                <div class=" col-xs-6">
+                <div class=" col-xs-8">
                     <?php
                     echo $this->Form->input('note', array(
                         'label' => false,

@@ -1,6 +1,7 @@
+<?php echo $this->Html->script('UsersJs/myJs'); ?>
 <div class="row">
     <div class="col-md-3">
-        <h3>Actions</h3>
+        <h3>Menu</h3>
         <ul>
             <li><?php echo $this->Html->link('Back', array('action' => 'edit')); ?></li>
         </ul>
@@ -18,31 +19,54 @@
         ?>
         <fieldset>
             <legend>Change Password</legend>
-            <?php
-            echo $this->Form->input('current_password', array(
-                'type'     => 'password',
-                'required' => false,
-                'label'    => 'Current Password',
-                'class'    => 'form-control',
-            ));
-            echo $this->Form->input('password', array(
-                'required' => false,
-                'label'    => 'New Password',
-                'class'    => 'form-control',
-            ));
-            echo $this->Form->input('retype_password', array(
-                'required' => false,
-                'type'     => 'password',
-                'label'    => 'Retype Password',
-                'class'    => 'form-control',
-            ));
-            ?>
-            <?php
-            echo $this->Form->end(array(
-                'label' => 'Submit',
-                'class' => 'btn btn-primary',
-            ));
-            ?>
+            <div class="form-group">
+                <label class="control-label col-md-3">Current Password</label>
+                <div class="col-md-9">
+                    <?php
+                    echo $this->Form->input('current_password', array(
+                        'type'     => 'password',
+                        'required' => false,
+                        'label'    => false,
+                        'class'    => 'form-control',
+                    ));
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">New Password</label>
+                <div class="col-md-9">
+                    <?php
+                    echo $this->Form->input('password', array(
+                        'required' => false,
+                        'label'    => false,
+                        'class'    => 'form-control',
+                    ));
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Retype Password</label>
+                <div class="col-md-9">
+                    <?php
+                    echo $this->Form->input('retype_password', array(
+                        'required' => false,
+                        'type'     => 'password',
+                        'label'    => false,
+                        'class'    => 'form-control',
+                    ));
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-3">
+                    <?php
+                    echo $this->Form->end(array(
+                        'label' => 'Submit',
+                        'class' => 'btn btn-primary',
+                    ));
+                    ?>
+                </div>
+            </div>
         </fieldset>
     </div>
 </div>

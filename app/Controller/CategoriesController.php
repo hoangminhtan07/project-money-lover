@@ -120,7 +120,7 @@ class CategoriesController extends AppController
         if (!$this->request->is('post', 'put')) {
             throw new BadRequestException('Bad request');
         }
-
+        
         //check params
         if (empty($categoryId)) {
             throw new ErrorException();

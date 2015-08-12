@@ -1,8 +1,7 @@
 <?php
-echo $this->Html->script('myJs');
-echo $this->Html->css('formValidation');
-echo $this->Html->script('frameworkBootstrap');
-echo $this->Html->script('formValidation');
+echo $this->Html->script('UsersJs/additional-methods.min');
+echo $this->Html->script('UsersJs/jquery.validate.min');
+echo $this->Html->script('UsersJs/myJs');
 ?>
 <div class="row">
     <div class="col-md-3"></div>
@@ -91,8 +90,10 @@ echo $this->Html->script('formValidation');
                 <p>Enter your email address to reset your password:</p>
                 <form id="forgotPasswordForm" method="post">
                     <fieldset>
-                        <div class="form-group">
-                            <input class="form-control input-lg" placeholder="E-mail Address" name="email" type="text">
+                        <!--<div id="div-input-modal" class="form-group has-success has-feedback">-->
+                        <div id="div-input-modal">
+                            <input class="form-control input-lg" placeholder="E-mail Address" id="email" name="email" type="text">
+                            <!--<span id="span-icon" class="glyphicon glyphicon-ok form-control-feedback"></span>-->
                         </div>
                         <div class="text-right">
                             <?php

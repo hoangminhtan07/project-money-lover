@@ -1,6 +1,7 @@
+<?php echo $this->Html->script('WalletsJs/myJs'); ?>
 <div class="row">
     <div class="col-md-3">
-        <h3>Actions</h3>
+        <h3>Menu</h3>
         <ul>
             <li><?php echo $this->Html->link('Back', array('action' => 'view')); ?></li>
         </ul>
