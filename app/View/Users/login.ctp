@@ -1,7 +1,7 @@
 <?php
-echo $this->Html->script('UsersJs/additional-methods.min');
-echo $this->Html->script('UsersJs/jquery.validate.min');
-echo $this->Html->script('UsersJs/myJs');
+echo $this->Html->script('additional-methods.min');
+echo $this->Html->script('jquery.validate.min');
+echo $this->Html->script('users');
 ?>
 <div class="row">
     <div class="col-md-3"></div>
@@ -91,7 +91,7 @@ echo $this->Html->script('UsersJs/myJs');
                 <form id="forgotPasswordForm" method="post">
                     <fieldset>
                         <!--<div id="div-input-modal" class="form-group has-success has-feedback">-->
-                        <div id="div-input-modal">
+                        <div id="div-input-modal" class="form-group">
                             <input class="form-control input-lg" placeholder="E-mail Address" id="email" name="email" type="text">
                             <!--<span id="span-icon" class="glyphicon glyphicon-ok form-control-feedback"></span>-->
                         </div>

@@ -1,7 +1,6 @@
-
 <?php
-echo $this->Html->script('TransactionsJs/myJs');
-echo $this->Html->script('TransactionsJs/jquery-ui-1.10.1.min');
+echo $this->Html->script('transactions');
+echo $this->Html->script('jquery-ui-1.10.1.min');
 echo $this->Html->css('jquery-ui-1.10.1');
 echo $this->Html->css('nigran.datepicker');
 ?>

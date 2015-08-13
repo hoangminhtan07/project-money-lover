@@ -1,4 +1,3 @@
-<?php echo $this->Html->script('UsersJs/myJs'); ?>
 <h3 class="text-center">Welcome to Project Money Lover</h3>
 <?php if (AuthComponent::user()): ?>
     <div class="text-center index-button">

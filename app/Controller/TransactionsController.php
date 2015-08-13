@@ -7,8 +7,8 @@ class TransactionsController extends AppController
     private $expense = 0;
     public $uses     = array('Transaction', 'User', 'Category', 'Wallet');
 
-    const earned = 1;
-    const spent  = 0;
+    const EARNED = 1;
+    const SPENT  = 0;
 
     /**
      *   Add transaction
@@ -20,8 +20,8 @@ class TransactionsController extends AppController
         $userId = $this->Auth->user('id');
 
         //get list name category of user
-        $getListNameCategorySpent  = $this->Category->getListNameCategoryByPurpose($userId, self::spent);
-        $getListNameCategoryEarned = $this->Category->getListNameCategoryByPurpose($userId, self::earned);
+        $getListNameCategorySpent  = $this->Category->getListNameCategoryByPurpose($userId, self::SPENT);
+        $getListNameCategoryEarned = $this->Category->getListNameCategoryByPurpose($userId, self::EARNED);
         $this->set('listCategorySpent', $getListNameCategorySpent);
         $this->set('listCategoryEarned', $getListNameCategoryEarned);
 
@@ -106,8 +106,8 @@ class TransactionsController extends AppController
         $userId = $this->Auth->user('id');
 
         //get list name category of user
-        $getListNameCategorySpent  = $this->Category->getListNameCategoryByPurpose($userId, self::spent);
-        $getListNameCategoryEarned = $this->Category->getListNameCategoryByPurpose($userId, self::earned);
+        $getListNameCategorySpent  = $this->Category->getListNameCategoryByPurpose($userId, self::SPENT);
+        $getListNameCategoryEarned = $this->Category->getListNameCategoryByPurpose($userId, self::EARNED);
         $this->set('listCategorySpent', $getListNameCategorySpent);
         $this->set('listCategoryEarned', $getListNameCategoryEarned);
 
@@ -125,6 +125,8 @@ class TransactionsController extends AppController
         if (empty($this->request->data)) {
             $this->request->data = $data;
         }
+
+        $oldAmount = $data['Transaction']['amount'];
 
         //check request
         if (!$this->request->is(array('put', 'post'))) {
@@ -158,9 +160,6 @@ class TransactionsController extends AppController
             return;
         }
 
-        $this->Transaction->bindCategory();
-        $oldData = $this->Transaction->getTransactionById($transactionId);
-
         $data['category_id'] = $categoryId;
         $data['amount']      = $amount;
 
@@ -172,7 +171,7 @@ class TransactionsController extends AppController
         }
 
         //save balance in current wallet
-        $amount = $amount - $oldData['Transaction']['amount'];
+        $amount = $amount - $oldAmount;
         $this->Wallet->transactionMoney($walletId, $amount);
 
         $this->Session->setFlash(__('Transaction has been saved.'), 'alert_box', array('class' => 'alert-success'));

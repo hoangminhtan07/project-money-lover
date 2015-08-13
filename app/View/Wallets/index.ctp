@@ -1,5 +1,4 @@
-<?php echo $this->Html->script('WalletsJs/myJs'); ?>
-
+<?php echo $this->Html->script('wallets'); ?>
 <div class="row">
     <div class="col-md-2">
         <h3>Menu</h3>

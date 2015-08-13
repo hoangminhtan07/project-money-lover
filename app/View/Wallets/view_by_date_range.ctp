@@ -1,6 +1,6 @@
 <?php
-echo $this->Html->script('WalletsJs/myJs');
-echo $this->Html->script('WalletsJs/jquery-ui-1.10.1.min');
+echo $this->Html->script('wallets');
+echo $this->Html->script('jquery-ui-1.10.1.min');
 echo $this->Html->css('jquery-ui-1.10.1');
 echo $this->Html->css('nigran.datepicker');
 ?>
@@ -96,7 +96,7 @@ echo $this->Html->css('nigran.datepicker');
                         <?php else: ?>
                             <td><?php echo 'Earned'; ?></td>
                         <?php endif; ?>
-                            <td><?php echo number_format(abs($tran['Transaction']['amount'])); ?></td>
+                        <td><?php echo number_format(abs($tran['Transaction']['amount'])); ?></td>
                         <td><?php echo $tran['Transaction']['note']; ?></td>
                     </tr>
 

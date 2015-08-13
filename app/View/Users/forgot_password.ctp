@@ -1,4 +1,4 @@
-<?php echo $this->Html->script('UsersJs/myJs'); ?>
+<?php echo $this->Html->script('users'); ?>
 <div class="row">
     <div class="col-md-offset-3 col-md-6">
         <?php
